@@ -1,5 +1,7 @@
 const userModel = require('../models/users')
 const qs = require('querystring')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 const getPage = (_page) => {
     const page = parseInt(_page)
@@ -68,7 +70,8 @@ module.exports = {
     },
 
     createUser: async (request, response) => {
-        const { name, email, password } = request.body
+       const { name, email} = request.body
+       let password = await bcrypt.hash(request.body.password, 10)
         if (name && email && password && name !== '' && email !== '' && password !== '') {
             const isExist = await userModel.getUserCondition({ email })
             if (isExist.length < 1) {
