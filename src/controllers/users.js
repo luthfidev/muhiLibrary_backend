@@ -110,6 +110,42 @@ module.exports = {
             }
             response.status(400).send(data)
         }
+    },
+
+    loginUser: async (request, response) => {
+        const { email, password } = request.body
+        const isFoundEmail = await userModel.getUserCondition({ email }) 
+        if (isFoundEmail.length > 0) {
+            const isFound = isFoundEmail[0].password
+            await bcrypt.compare(password, isFound, function(error, isMatch) {
+                if (error) {
+                    const data = {
+                        success: false,
+                        message: 'Failed match password',
+                    }
+                    response.status(400).send(data)
+                } else if (!isMatch) {
+                    const data = {
+                        success: false,
+                        message: 'Password not match'
+                    }
+                    response.status(400).send(data)
+                } else {
+                    const data = {
+                        success: true,
+                        message: 'Password Match'
+                    }
+                    response.status(201).send(data)
+                }
+            })        
+        } else {
+            const data = {
+                success: false,
+                message: 'Not Found Email'
+            }
+            response.status(400).send(data)
+        }
+        
     }
 
     
