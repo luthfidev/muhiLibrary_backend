@@ -23,6 +23,9 @@ app.get('/', (request, response) => {
 const users = require('./src/routes/users')
 app.use('/users', users)
 
+const books = require('./src/routes/books')
+app.use('/books', books)
+
 app.get('*', (request, response) => {
     response.status(400).send('Page not found')
 })
