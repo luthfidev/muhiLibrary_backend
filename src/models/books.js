@@ -27,7 +27,7 @@ module.exports = {
             })
         })
     },
-
+   
     createBook: (data) => {
         const sql = 'INSERT INTO books SET ?'
         return new Promise((resolve, reject) => {

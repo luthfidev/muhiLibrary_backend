@@ -3,7 +3,7 @@ const { validationResult } = require('express-validator')
 
 module.exports = {
 
-    getAllBooks: async (request, response, next) => {
+    getAllBooks: async (request, response) => {
         const bookData = await bookModel.getAllBooks()
 
         const data = {
@@ -20,6 +20,35 @@ module.exports = {
             }
         }
         response.status(200).send(data)
+    },
+
+    searchBooks: async (request, response) => {
+        const { title } = request.params
+        const bookData = await bookModel.getAllBooks()
+        var results = await bookData.filter(result => result.title === title)
+        if (results.length > 0) {
+            const data = {
+                success: true,
+                message: 'List search Book',
+                data: results,
+                pageInfo: {
+                    page: 1,
+                    totalPage: 5,
+                    perPage: 1,
+                    totalData: 10,
+                    nextLink: 'Next',
+                    prevLink: 'Prev'
+                }
+            }
+            response.status(200).send(data)
+        } else {
+            const data = {
+                success: false,
+                message: 'Book title not found'
+            }
+            response.status(400).send(data)
+        }
+
     },
 
     createBook: async (request, response) => {
