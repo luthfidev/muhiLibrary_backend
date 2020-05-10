@@ -1,6 +1,19 @@
 const db = require('../utils/db')
 
 module.exports = {
+
+    getBookByCondition: (data) => {
+        const sql = 'SELECT * FROM books WHERE ?'
+        return new Promise((resolve, reject) => {
+            db.query(sql, data, (error, results) => {
+                if (error) {
+                    reject(Error(error))
+                }
+                resolve(results)
+            })
+        })
+    },
+
     getAllBooks: () => {
         const sql = `SELECT title, description, image, authors.name_author, genres.name_genre, date_added FROM 
                      books JOIN authors on authors.id_author = books.author_id 
@@ -25,5 +38,30 @@ module.exports = {
                 resolve(true)
             })
         })
+    },
+
+    updateBook: (data) => {
+        const sql = 'UPDATE books SET ? WHERE ?'
+        return new Promise((resolve, reject) => {
+            db.query(sql, data, (error, results) => {
+                if (error) {
+                    reject(Error(error))
+                }
+                resolve(results.affectedRows)
+            })
+        })
+    },
+
+    deleteBook: (data) => {
+        const sql = 'DELETE FROM books WHERE ?'
+        return new Promise((resolve, reject) => {
+            db.query(sql, data, (error, results) => {
+                if(error) {
+                    reject(Error(error))
+                }
+                resolve(results.affectedRows)
+            })
+        })
     }
+
 }
