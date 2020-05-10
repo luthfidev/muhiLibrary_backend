@@ -6,6 +6,9 @@ const app = express()
 const bodyparser = require('body-parser')
 app.use(bodyparser.urlencoded({ extended: false }))
 
+const cors = require('cors')
+app.use(cors())
+
 app.get('/', (request, response) => {
     const data = {
         name: 'Welcome to Muhi Library',
