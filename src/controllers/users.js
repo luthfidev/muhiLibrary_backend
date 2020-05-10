@@ -2,6 +2,7 @@ const userModel = require('../models/users')
 const qs = require('querystring')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+const jwt = require('jsonwebtoken')
 
 const getPage = (_page) => {
     const page = parseInt(_page)
@@ -131,11 +132,14 @@ module.exports = {
                     }
                     response.status(400).send(data)
                 } else {
+                    const token = jwt.sign({ id: isFoundEmail.id }, process.env.TOKEN_SECRET)
+                    // response.header('auth-token', token).send(token)
                     const data = {
                         success: true,
                         message: 'Password Match'
                     }
-                    response.status(201).send(data)
+                    response.status(201).header('auth-token', token).send(data)
+                    console.log(token)
                 }
             })        
         } else {
