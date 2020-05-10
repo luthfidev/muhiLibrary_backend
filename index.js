@@ -3,6 +3,7 @@ const { APP_PORT } = process.env
 
 const express = require('express')
 const app = express()
+app.use('/uploads', express.static('uploads'))
 const bodyparser = require('body-parser')
 app.use(bodyparser.urlencoded({ extended: false }))
 
@@ -15,12 +16,6 @@ app.get('/', (request, response) => {
         version: '1.0.0'
     }
     response.send(data)
-})
-
-app.get('/', (request, response) => {
-    response.send({
-        msg: 'Backend is running'
-    })
 })
 
 const users = require('./src/routes/users')
