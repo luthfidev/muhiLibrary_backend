@@ -2,6 +2,8 @@ APP_PORT    = 5000
 APP_URL     = http://localhost:5000
 
 DB_HOST     = localhost
-DB_USER     = 
-DB_PASS     = 
+DB_USER     = 'must be filled'
+DB_PASS     = 'must be filled'
 DB_NAME     = muhiLibrary
+
+TOKEN_SECRET = 'must be filled'
