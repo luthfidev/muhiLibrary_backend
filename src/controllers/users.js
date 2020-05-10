@@ -71,7 +71,7 @@ module.exports = {
 
     createUser: async (request, response) => {
        const { name, email} = request.body
-       let password = await bcrypt.hash(request.body.password, 10)
+       let password = await bcrypt.hash(request.body.password, saltRounds)
         if (name && email && password && name !== '' && email !== '' && password !== '') {
             const isExist = await userModel.getUserCondition({ email })
             if (isExist.length < 1) {
