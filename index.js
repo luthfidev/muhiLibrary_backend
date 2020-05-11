@@ -24,6 +24,9 @@ app.use('/users', users)
 const books = require('./src/routes/books')
 app.use('/books', books)
 
+const authors = require('./src/routes/authors')
+app.use('/authors', authors)
+
 app.get('*', (request, response) => {
     response.status(400).send('Page not found')
 })
