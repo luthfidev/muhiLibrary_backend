@@ -7,8 +7,6 @@ const upload = require('../helper/uploadImage')
 
 router.post('/addstatus', bookController.createStatusBook)
 
-router.post('/addauthor', bookController.createAuthorBook)
-
 router.get('/search/:title', bookController.searchBooks)
 router.get('/', bookController.getAllBooks)
 router.post('/', upload.single('image'), verify, validator.createBook, bookController.createBook)

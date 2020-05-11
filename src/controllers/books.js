@@ -77,29 +77,6 @@ module.exports = {
 
     },
 
-    createAuthorBook: async (request, response) => {
-        const { name, description } = request.body
-        const authorBookData = {
-            name,
-            description
-        }
-        const results = await bookModel.createAuthorBook(authorBookData)
-        if (results) {
-            const data = {
-                success: true,
-                message: 'Create author book has ben success',
-                data: authorBookData
-            }
-            response.status(201).send(data)
-        } else {
-            const data = {
-                success: false,
-                message: 'Failed create author book'
-            }
-            response.status(401).send(data)
-        }
-    },
-
     createBook: async (request, response) => {
         const { title, description, genre_id, author_id, release_date, status_id } = request.body
         const  image  = request.file.path 
