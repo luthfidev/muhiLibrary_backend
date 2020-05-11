@@ -53,8 +53,55 @@ module.exports = {
 
     },
 
+    createStatusBook: async (request, response) => {
+        const { name, description } = request.body
+        const statusBookData = {
+            name,
+            description
+        }
+        const results = await bookModel.createStatusBook(statusBookData)
+        if (results) {
+            const data = {
+                success: true,
+                message: 'Create status book has ben success',
+                data: statusBookData
+            }
+            response.status(201).send(data)
+        } else {
+            const data = {
+                success: false,
+                message: 'Failed create status book'
+            }
+            response.status(401).send(data)
+        }
+
+    },
+
+    createAuthorBook: async (request, response) => {
+        const { name, description } = request.body
+        const authorBookData = {
+            name,
+            description
+        }
+        const results = await bookModel.createAuthorBook(authorBookData)
+        if (results) {
+            const data = {
+                success: true,
+                message: 'Create author book has ben success',
+                data: authorBookData
+            }
+            response.status(201).send(data)
+        } else {
+            const data = {
+                success: false,
+                message: 'Failed create author book'
+            }
+            response.status(401).send(data)
+        }
+    },
+
     createBook: async (request, response) => {
-        const { title, description, genre_id, author_id } = request.body
+        const { title, description, genre_id, author_id, release_date, status_id } = request.body
         const  image  = request.file.path 
         const Error = await validationResult(request)
         if (!Error.isEmpty()) {
@@ -70,7 +117,9 @@ module.exports = {
             description,
             image,
             genre_id,
-            author_id
+            author_id,
+            release_date,
+            status_id
         }
         const results = await bookModel.createBook(bookData)
         if (results) {

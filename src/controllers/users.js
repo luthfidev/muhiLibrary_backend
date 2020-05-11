@@ -226,7 +226,7 @@ module.exports = {
                     }
                     response.status(400).send(data)
                 } else {
-                    const token = jwt.sign({ id: isFoundEmail.id }, process.env.TOKEN_SECRET)
+                    const token = jwt.sign({ id: isFoundEmail.id, role: isFoundEmail.role_id }, process.env.TOKEN_SECRET)
                     // response.header('auth-token', token).send(token)
                     const data = {
                         success: true,

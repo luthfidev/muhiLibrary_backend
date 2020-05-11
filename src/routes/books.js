@@ -5,6 +5,9 @@ const validator = require('../helper/validator')
 const verify = require('../helper/verifyToken')
 const upload = require('../helper/uploadImage')
 
+router.post('/addstatus', bookController.createStatusBook)
+
+router.post('/addauthor', bookController.createAuthorBook)
 
 router.get('/search/:title', bookController.searchBooks)
 router.get('/', bookController.getAllBooks)
