@@ -1,5 +1,7 @@
 const bookModel = require('../models/books')
 const { validationResult } = require('express-validator')
+const fs = require('fs')
+
 
 module.exports = {
 
@@ -52,7 +54,8 @@ module.exports = {
     },
 
     createBook: async (request, response) => {
-        const { title, description, image, genre_id, author_id } = request.body
+        const { title, description, genre_id, author_id } = request.body
+        const  image  = request.file.path 
         const Error = await validationResult(request)
         if (!Error.isEmpty()) {
             const data = {
