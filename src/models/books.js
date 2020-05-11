@@ -15,9 +15,9 @@ module.exports = {
     },
 
     getAllBooks: () => {
-        const sql = `SELECT title, description, image, authors.name_author, genres.name_genre, date_added FROM 
-                     books JOIN authors on authors.id_author = books.author_id 
-                           JOIN genres on genres.id_genre = books.genre_id`
+        const sql = `SELECT title, description, image, authors.name, genres.name, created_at FROM 
+                     books JOIN authors on authors.id = books.author_id 
+                           JOIN genres on genres.id = books.genre_id`
         return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {
                 if (error) {

@@ -43,6 +43,23 @@ module.exports = {
         })
     },
 
+    getDetailUser: (id) => {
+        const sql = `SELECT roles.name, 
+                            users.email, users.password, 
+                            user_details.picture, user_details.name, user_details.birthdate, user_details.gender 
+                            FROM users JOIN roles on roles.id = users.role_id 
+                                       JOIN user_details on user_details.user_id = users.id
+                            WHERE users.id = ${id}`
+        return new Promise((resolve, reject) => {
+            db.query(sql, (error, results) => {
+                if (error) {
+                    reject(Error(error))
+                }
+                resolve(results)
+            })
+        })
+    },
+
     createUser: (data) => {
         const sql = 'INSERT INTO users SET ?'
         return new Promise((resolve, reject) => {

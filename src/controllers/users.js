@@ -1,4 +1,5 @@
 const userModel = require('../models/users')
+const { validationResult } = require('express-validator')
 const qs = require('querystring')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
@@ -70,16 +71,73 @@ module.exports = {
         response.status(200).send(data)
     },
 
+    getDetailUser: async (request, response) => {
+        const { id } = request.params
+        const isFoundId = await userModel.getUserCondition({ id }) 
+        if (isFoundId.length > 0) {
+            const userData = await userModel.getDetailUser(id)
+            if (userData) {
+                const data = {
+                    success: true,
+                    message: `Detail user`,
+                    data: userData,
+                }
+                response.status(200).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed load detail user'
+                }
+                response.status(401).send(data)
+            }
+        } else {
+            const data = {
+                success: false,
+                message: 'Biodata not found'
+            }
+            response.status(400).send(data)
+        }
+    },
+
+    searchUsers: async (request, response) => {
+        const { name } = request.params
+        const bookData = await bookModel.getAllBooks()
+        var results = await bookData.filter(result => result.title === title)
+        if (results.length > 0) {
+            const data = {
+                success: true,
+                message: 'List search Book',
+                data: results,
+                pageInfo: {
+                    page: 1,
+                    totalPage: 5,
+                    perPage: 1,
+                    totalData: 10,
+                    nextLink: 'Next',
+                    prevLink: 'Prev'
+                }
+            }
+            response.status(200).send(data)
+        } else {
+            const data = {
+                success: false,
+                message: 'Book title not found'
+            }
+            response.status(400).send(data)
+        }
+
+    },
+
     createUser: async (request, response) => {
-       const { name, email} = request.body
+       const { email, role_id} = request.body
        let password = await bcrypt.hash(request.body.password, saltRounds)
-        if (name && email && password && name !== '' && email !== '' && password !== '') {
+        if (email && password && role_id && email !== '' && password !== '' && role_id !=='') {
             const isExist = await userModel.getUserCondition({ email })
             if (isExist.length < 1) {
                 const userData = {
-                    name,
                     email,
-                    password
+                    password,
+                    role_id
                 }
                 const results = await userModel.createUser(userData)
                 if (results) {
@@ -111,6 +169,42 @@ module.exports = {
             }
             response.status(400).send(data)
         }
+    },
+
+    createUserDetail: async (request, response) => {
+        const { user_id, name, birthdate, gender } = request.body
+        const  picture  = request.file.path 
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error
+            }
+            response.status(422).send(data)
+            return
+        }
+        const userData = {
+            user_id,
+            name,
+            picture,
+            birthdate,
+            gender
+        }
+        const results = await userModel.createUserDetail(userData)
+        if (results) {
+            const data = {
+                success: true,
+                message: `Biodata ${name} was created`
+            }
+            response.status(201).send(data)
+        } else {
+            const data = {
+                success: false,
+                message: 'Failed create biodata'
+            }
+            response.status(400).send(data)
+        }
+
     },
 
     loginUser: async (request, response) => {
@@ -148,8 +242,7 @@ module.exports = {
                 message: 'Not Found Email'
             }
             response.status(400).send(data)
-        }
-        
+        } 
     }
 
     
