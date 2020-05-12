@@ -2,7 +2,7 @@ const db = require('../utils/db')
 
 module.exports = {
 
-    getAuthorByCondition: (data) => {
+    getGenreByCondition: (data) => {
         const sql = 'SELECT * FROM genres WHERE ?'
         return new Promise((resolve, reject) => {
             db.query(sql, data, (error, results) => {
@@ -39,15 +39,15 @@ module.exports = {
     },
 
     updateGenre: (data) => {
-        const sql = 'UPDATE authors SET ? WHERE ?'
-        return new Promise((resolve, reject) => {
-            db.query(sql, data, (error, results) => {
-                if (error) {
-                    reject(Error(error))
-                }
-                resolve(results.affectedRows)
-            })
-        })
+      const sql = 'UPDATE genres SET ? WHERE ?'
+      return new Promise((resolve, reject) => {
+          db.query(sql, data, (error, results) => {
+              if (error) {
+                  reject(Error(error))
+              }
+              resolve(results.affectedRows)
+          })
+      }) 
     },
 
     deleteGenre: (data) => {
