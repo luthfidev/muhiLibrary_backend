@@ -50,31 +50,6 @@ module.exports = {
             }
             response.status(400).send(data)
         }
-
-    },
-
-    createStatusBook: async (request, response) => {
-        const { name, description } = request.body
-        const statusBookData = {
-            name,
-            description
-        }
-        const results = await bookModel.createStatusBook(statusBookData)
-        if (results) {
-            const data = {
-                success: true,
-                message: 'Create status book has ben success',
-                data: statusBookData
-            }
-            response.status(201).send(data)
-        } else {
-            const data = {
-                success: false,
-                message: 'Failed create status book'
-            }
-            response.status(401).send(data)
-        }
-
     },
 
     createBook: async (request, response) => {
