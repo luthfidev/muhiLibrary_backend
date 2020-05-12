@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const usersController = require('../controllers/users')
-const validator = require('../helper/validator')
-const verify = require('../helper/verifyToken')
-const upload = require('../helper/uploadImage')
+const validator = require('../utils/validator')
+const verify = require('../utils/verifyToken')
+const upload = require('../utils/multer')
 
 router.get('/', verify, usersController.getAllUsers)
 router.post('/', usersController.createUser)
