@@ -159,7 +159,7 @@ module.exports = {
 
     deleteBook: async (request, response) => {
         const { id } = request.params
-        const _id = { id_book: parseInt(id) }
+        const _id = { id: parseInt(id) }
         const CheckId = await bookModel.getBookByCondition(_id)
         if (CheckId.length > 0) {
             const results = await bookModel.deleteBook(_id)
