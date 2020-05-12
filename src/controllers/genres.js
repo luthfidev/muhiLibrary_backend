@@ -25,7 +25,7 @@ module.exports = {
     createGenre: async (request, response) => {
         const { name } = request.body
         const genreData = {
-            name, 
+            name
         }
         const results = await genreModel.createGenre(genreData)
         if (results) {
