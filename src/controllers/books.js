@@ -131,7 +131,7 @@ module.exports = {
             }
             const bookData = [
                 { title, description, image, genre_id, author_id },
-                { id_book: parseInt(id) }
+                { id: parseInt(id) }
             ]
             const results = await bookModel.updateBook(bookData)
             if (results) {
