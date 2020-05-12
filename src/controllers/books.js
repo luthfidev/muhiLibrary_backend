@@ -118,7 +118,7 @@ module.exports = {
     updateBook: async (request, response) => {
         const { id } = request.params
         const { title, description, image, genre_id, author_id } = request.body
-        const CheckId = await bookModel.getBookByCondition({ id_book: parseInt(id) })
+        const CheckId = await bookModel.getBookByCondition({ id: parseInt(id) })
         if (CheckId.length > 0) {
         const Error = await validationResult(request)
             if (!Error.isEmpty()) {
