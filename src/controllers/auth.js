@@ -1,6 +1,5 @@
 const authModel = require('../models/auth')
 const bcrypt = require('bcrypt')
-const saltRounds = 10
 const jwt = require('jsonwebtoken')
 
 
@@ -25,11 +24,15 @@ module.exports = {
                     }
                     response.status(400).send(data)
                 } else {
-                    const token = jwt.sign({ id: isFound.id, role: isFound.role_id },process.env.TOKEN_SECRET, { expiresIn: '1h', algorithm: process.env.TOKEN_ALG } )
-                    // response.header('auth-token', token).send(token)
+                    const token = jwt.sign({ id: isFound[0].id, email: isFound[0].email, role: isFound[0].nameRole },process.env.TOKEN_SECRET, { expiresIn: '1h', algorithm: process.env.TOKEN_ALG } )
                     const data = {
                         success: true,
                         message: 'Password Match',
+                        userData: {
+                            email: isFound[0].email,
+                            name: isFound[0].nameUser,
+                            role: isFound[0].nameRole
+                        },
                         token: token
                     }
                     response.status(201).header('auth-token', token).send(data)
@@ -43,5 +46,6 @@ module.exports = {
             }
             response.status(400).send(data)
         } 
-    }
+    },
+
 }
