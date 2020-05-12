@@ -1,9 +1,7 @@
 const userModel = require('../models/users')
 const { validationResult } = require('express-validator')
 const qs = require('querystring')
-const bcrypt = require('bcrypt')
-const saltRounds = 10
-const jwt = require('jsonwebtoken')
+
 
 const getPage = (_page) => {
     const page = parseInt(_page)
@@ -206,45 +204,6 @@ module.exports = {
         }
 
     },
-
-    loginUser: async (request, response) => {
-        const { email, password } = request.body
-        const isFoundEmail = await userModel.getUserCondition({ email }) 
-        if (isFoundEmail.length > 0) {
-            const isFound = isFoundEmail[0].password
-            await bcrypt.compare(password, isFound, function(error, isMatch) {
-                if (error) {
-                    const data = {
-                        success: false,
-                        message: 'Failed match password',
-                    }
-                    response.status(400).send(data)
-                } else if (!isMatch) {
-                    const data = {
-                        success: false,
-                        message: 'Password not match'
-                    }
-                    response.status(400).send(data)
-                } else {
-                    const token = jwt.sign({ id: isFoundEmail.id, role: isFoundEmail.role_id }, process.env.TOKEN_SECRET)
-                    // response.header('auth-token', token).send(token)
-                    const data = {
-                        success: true,
-                        message: 'Password Match'
-                    }
-                    response.status(201).header('auth-token', token).send(data)
-                    console.log(token)
-                }
-            })        
-        } else {
-            const data = {
-                success: false,
-                message: 'Not Found Email'
-            }
-            response.status(400).send(data)
-        } 
-    }
-
     
 
 }
