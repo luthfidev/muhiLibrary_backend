@@ -5,7 +5,7 @@ const storage = multer.diskStorage({
         callback(null, './uploads/')
     },
     filename: function(request, file, callback) {
-        callback(null, Date.now() + file.originalname)
+        callback(null, Date.now() + '_' + file.originalname)
     }
 })
 const fileFilter = (request, file, callback) => {
