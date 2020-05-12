@@ -1,6 +1,8 @@
 const userModel = require('../models/users')
 const { validationResult } = require('express-validator')
 const qs = require('querystring')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 
 const getPage = (_page) => {
