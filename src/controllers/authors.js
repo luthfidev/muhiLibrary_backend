@@ -28,12 +28,12 @@ module.exports = {
             name,
             description
         }
-        const results = await authorModel.createAuthorBook(authorkData)
+        const results = await authorModel.createAuthorBook(authorData)
         if (results) {
             const data = {
                 success: true,
                 message: 'Create author book has ben success',
-                data: authorBookData
+                data: authorData
             }
             response.status(201).send(data)
         } else {
@@ -73,6 +73,34 @@ module.exports = {
             const data = {
                 success: false,
                 message: `Author with id ${id} not found`
+            }
+            response.status(400).send(data)
+        }
+    },
+
+    deleteAuthor: async (request, response) => {
+        const { id } = request.params
+        const _id = { id: parseInt(id) }
+        const checkId = await authorModel.getAuthorByCondition(_id)
+        if (checkId.length > 0) {
+            const results = await authorModel.deleteAuthor(_id)
+            if (results) {
+                const data = {
+                    success: true,
+                    message: `Author with id ${id} is deleted`
+                }
+                response.status(200).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed delete author'
+                }
+                response.status(400).send(data)
+            }
+        } else {
+            const data = {
+                success: false,
+                message: 'No author for delete'
             }
             response.status(400).send(data)
         }

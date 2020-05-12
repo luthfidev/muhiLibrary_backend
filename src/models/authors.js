@@ -49,6 +49,18 @@ module.exports = {
                 resolve(results.affectedRows)
             })
         })
+    },
+
+    deleteAuthor: (data) => {
+        const sql = 'DELETE FROM authors WHERE ?'
+        return new Promise((resolve, reject) => {
+            db.query(sql, data, (error, results) => {
+                if (error) {
+                    reject(Error(error))
+                }
+                resolve(results.affectedRows)
+            })
+        })
     }
 
 }
