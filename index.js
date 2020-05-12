@@ -30,6 +30,9 @@ app.use('/authors', authors)
 const genres = require('./src/routes/genres')
 app.use('/genres', genres)
 
+const bookstatuses = require('./src/routes/bookStatuses')
+app.use('/bookstatuses', bookstatuses)
+
 app.get('*', (request, response) => {
     response.status(400).send('Page not found')
 })
