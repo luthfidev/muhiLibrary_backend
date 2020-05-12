@@ -18,6 +18,9 @@ app.get('/', (request, response) => {
     response.send(data)
 })
 
+const auth = require('./src/routes/auth')
+app.use('/auth', auth)
+
 const users = require('./src/routes/users')
 app.use('/users', users)
 
