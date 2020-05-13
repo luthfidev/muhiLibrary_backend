@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const bookController = require('../controllers/books')
-
 const validator = require('../utils/validator')
 const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
