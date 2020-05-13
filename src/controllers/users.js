@@ -130,7 +130,7 @@ module.exports = {
 
     createUser: async (request, response) => {
        const { email, role_id} = request.body
-       let password = await bcrypt.hash(request.body.password, saltRounds)
+       const password = await bcrypt.hash(request.body.password, saltRounds)
         if (email && password && role_id && email !== '' && password !== '' && role_id !=='') {
             const isExist = await userModel.getUserCondition({ email })
             if (isExist.length < 1) {
