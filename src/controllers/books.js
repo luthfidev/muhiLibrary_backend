@@ -1,55 +1,40 @@
 const bookModel = require('../models/books')
 const { validationResult } = require('express-validator')
 const fs = require('fs')
-
+const paging = require('../utils/pagingnation')
 
 module.exports = {
 
     getAllBooks: async (request, response) => {
-        const bookData = await bookModel.getAllBooks()
+        const { page, limit, search, sort } = request.query
+        const condition = {
+            search,
+            sort
+        }
+        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
+        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+        const totalData = await bookModel.getBooksCount(sliceStart, sliceEnd, condition)
+        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
+        
+        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
+        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+
+        const bookData = await bookModel.getAllBooks(sliceStart, sliceEnd, condition)
 
         const data = {
             success: true,
             message: 'List All Book',
             data: bookData,
             pageInfo: {
-                page: 1,
-                totalPage: 5,
-                perPage: 1,
-                totalData: 10,
-                nextLink: 'Next',
-                prevLink: 'Prev'
+                page: paging.getPerPage(page),
+                totalPage,
+                perPage: paging.getPerPage(page),
+                totalData,
+                nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
+                prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
             }
         }
         response.status(200).send(data)
-    },
-
-    searchBooks: async (request, response) => {
-        const { title } = request.params
-        const bookData = await bookModel.getAllBooks()
-        var results = await bookData.filter(result => result.title === title)
-        if (results.length > 0) {
-            const data = {
-                success: true,
-                message: 'List search Book',
-                data: results,
-                pageInfo: {
-                    page: 1,
-                    totalPage: 5,
-                    perPage: 1,
-                    totalData: 10,
-                    nextLink: 'Next',
-                    prevLink: 'Prev'
-                }
-            }
-            response.status(200).send(data)
-        } else {
-            const data = {
-                success: false,
-                message: 'Book title not found'
-            }
-            response.status(400).send(data)
-        }
     },
 
     createBook: async (request, response) => {
@@ -138,11 +123,12 @@ module.exports = {
         const _id = { id: parseInt(id) }
         const CheckId = await bookModel.getBookByCondition(_id)
         if (CheckId.length > 0) {
+            fs.unlinkSync(CheckId[0].image) 
             const results = await bookModel.deleteBook(_id)
             if (results) {
                 const data = {
                     success: true,
-                    message: `Book with id ${id} is deleted`
+                    message: `Book with id ${id} is deleted `
                 }
                 response.status(200).send(data)
             } else {

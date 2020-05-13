@@ -2,8 +2,12 @@ const db = require('../utils/db')
 
 module.exports = {
  
-    getUsersCount: () => {
-        const sql = 'SELECT COUNT(*) as total FROM users'
+    getUsersCount: (start, end, data) => {
+        const sql = `SELECT COUNT(users.id) as total
+                                        FROM users JOIN roles on roles.id = users.role_id 
+                                        JOIN user_details on user_details.user_id = users.id
+                                         WHERE user_details.name LIKE '%${data.search || ''}%' ORDER BY user_details.name ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
+
         return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {
                 if (error) {
@@ -25,15 +29,15 @@ module.exports = {
             })
         })
     },
-
-    getAllUsers: (start, end) => {
+  
+    getAllUsers: (start, end, data) => {
         const sql = `SELECT users.id,
                             roles.name, 
                             users.email, users.password, 
                             user_details.picture, user_details.name, user_details.birthdate, user_details.gender 
                             FROM users JOIN roles on roles.id = users.role_id 
                                        JOIN user_details on user_details.user_id = users.id
-                            LIMIT ${end} OFFSET ${start}`
+                           WHERE user_details.name LIKE '%${data.search || ''}%' ORDER BY user_details.name ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
         return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {
                 if (error) {
@@ -42,7 +46,7 @@ module.exports = {
                 resolve(results)
             })
         })
-    },
+    }, 
 
     getDetailUser: (id) => {
         const sql = `SELECT roles.name, 

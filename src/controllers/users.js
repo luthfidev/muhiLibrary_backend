@@ -1,68 +1,40 @@
-const userModel = require('../models/users')
 const { validationResult } = require('express-validator')
 const qs = require('querystring')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+const userModel = require('../models/users')
+const paging = require('../utils/pagingnation')
 
 
-const getPage = (_page) => {
-    const page = parseInt(_page)
-    if (page && page > 0) {
-        return page
-    } else {
-        return 1
-    }
-}
-const getPerPage = (_perPage) => {
-    const perPage = parseInt(_perPage)
-    if (perPage && perPage > 0) {
-        return perPage
-    } else {
-        return 5
-    }
-}
-const getNextLink = (page, totalPage, currentQuery) => {
-    if (page < totalPage) {
-        const generatePage = {
-            page: page + 1
-        }
-        return qs.stringify({ ...currentQuery, ...generatePage })
-    } else {
-        return null
-    }
-}
-const getPrevLink = (page, currentQuery) => {
-    if (page > 1) {
-        const generatePage = {
-            page: page -1
-        }
-        return qs.stringify({ ...currentQuery, ...generatePage })
-    } else {
-        return null
-    }
-}
+
 
 module.exports = {
 
     getAllUsers: async (request, response) => {
-        const { page, limit } = request.query
-        const totalData = await userModel.getUsersCount()
-        const sliceStart = getPage(page) * getPerPage(limit) - getPerPage(limit)
-        const sliceEnd = (getPage(page) * getPerPage(limit))
-        const totalPage = Math.ceil(totalData / getPerPage(limit))
-        const nextLink = getNextLink(getPage(page), totalPage, request.query)
-        const prevLink = getPrevLink(getPage(page), request.query)
+        const { page, limit, search, sort } = request.query
+        const condition = {
+            search,
+            sort
+        }
+        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
+        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+        const totalData = await userModel.getUsersCount(sliceStart, sliceEnd, condition)
+        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
+        
+        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
+        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
 
-        const userData = await userModel.getAllUsers(sliceStart, sliceEnd)
+        const userData = await userModel.getAllUsers(sliceStart, sliceEnd, condition)
+        
 
         const data = {
             success: true,
             message: 'List all user data',
             data: userData,
             pageInfo: {
-                page: getPage(page),
+                page: paging.getPage(page),
                 totalPage,
-                perPage: getPerPage(limit),
+                perPage: paging.getPerPage(limit),
                 totalData,
                 nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
                 prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
@@ -97,35 +69,6 @@ module.exports = {
             }
             response.status(400).send(data)
         }
-    },
-
-    searchUsers: async (request, response) => {
-        const { name } = request.params
-        const bookData = await bookModel.getAllBooks()
-        var results = await bookData.filter(result => result.title === title)
-        if (results.length > 0) {
-            const data = {
-                success: true,
-                message: 'List search Book',
-                data: results,
-                pageInfo: {
-                    page: 1,
-                    totalPage: 5,
-                    perPage: 1,
-                    totalData: 10,
-                    nextLink: 'Next',
-                    prevLink: 'Prev'
-                }
-            }
-            response.status(200).send(data)
-        } else {
-            const data = {
-                success: false,
-                message: 'Book title not found'
-            }
-            response.status(400).send(data)
-        }
-
     },
 
     createUser: async (request, response) => {
