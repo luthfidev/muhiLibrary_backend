@@ -5,5 +5,7 @@ DB_HOST     = db4free.net
 DB_USER     = 'must be filled'
 DB_PASS     = 'must be filled'
 DB_NAME     = muhiLibrary
+DB_PORT     = 3306
 
 TOKEN_SECRET = 'must be filled'
+TOKEN_ALG    = HS256
