@@ -1,22 +1,37 @@
 const bookStatusModel = require('../models/bookStatuses')
+const paging = require('../utils/pagingnation')
 
 
 module.exports = {
     getAllBookStatuses: async (request, response) => {
-        const bookStatusData = await bookStatusModel.getAllBookStatuses()
+
+        const { page, limit, search, sort } = request.query
+        const condition = {
+            search,
+            sort
+        }
+        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
+        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+        const totalData = await bookStatusModel.getBookStatusesCount(sliceStart, sliceEnd, condition)
+        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
+        
+        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
+        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+
+        const bookStatusData = await bookStatusModel.getAllBookStatuses(sliceStart, sliceEnd, condition)
 
         const data = {
             success: true,
             message: 'List all Book status',
             data: bookStatusData,
             pageInfo: {
-                page: 1,
-                totalPage: 5,
-                perPage: 1,
-                totalPage: 1,
-                totalData: 10,
-                nextLink: 'Next',
-                PrevLink: 'Prev'
+                page: paging.getPerPage(page),
+                totalPage,
+                perPage: paging.getPerPage(page),
+                totalPage,
+                totalData,
+                PrevLink: prevLink && `http://localhost:5000/bookstatuses?${nextLink}`,
+                nextLink: nextLink && `http://localhost:5000/bookstatuses?${nextLink}`
             }
         }
         response.status(200).send(data)
