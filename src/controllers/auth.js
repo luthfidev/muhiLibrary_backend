@@ -1,13 +1,15 @@
 const authModel = require('../models/auth')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { validationResult } = require('express-validator')
+const saltRounds = 10
 
 
 module.exports = {
 
     loginUser: async (request, response) => {
         const { email, password } = request.body
-        const isFound = await authModel.getAuthCondition({ email }) 
+        const isFound = await authModel.getAuthCondition({ email })
         if (isFound.length > 0) {
             const isFoundPassword = isFound[0].password
             await bcrypt.compare(password, isFoundPassword, function(error, isMatch) {
@@ -47,5 +49,47 @@ module.exports = {
             response.status(400).send(data)
         } 
     },
+
+    registerUser: async (request, response) => {
+        const { email, password } = request.body
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error
+            }
+            response.status(422).send(data)
+            return
+        }
+        const passwordHash = await bcrypt.hash(password , saltRounds)
+        const isExist = await authModel.getAuthCondition({ email })
+        if (isExist.length < 1) {
+            const registerData = {
+                email,
+                password: passwordHash
+            }
+            const results = await authModel.registerUser(registerData)
+            if (results) {
+                const data = {
+                    success: true,
+                    message: 'Register success',
+                    data: registerData
+                }
+                response.status(201).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed register'            
+                }
+                response.status(400).send(data)
+            }
+        } else {
+            const data = {
+                success: false,
+                message: 'Email is exist'
+            }
+            response.status(400).send(data)
+        }
+    }
 
 }
