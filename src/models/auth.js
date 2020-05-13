@@ -14,5 +14,17 @@ module.exports = {
                 resolve(results)
             })
         })
-    }
+    },
+
+    registerUser: (data) => {
+        const sql = 'INSERT INTO users SET ?'
+        return new Promise((resolve, reject) => {
+            db.query(sql, data, (error, results) => {
+                if (error) {
+                    reject(Error(error))
+                }
+                resolve(true)
+            })
+        })
+    },
 }
