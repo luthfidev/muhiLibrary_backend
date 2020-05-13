@@ -1,21 +1,36 @@
+const { validationResult } = require('express-validator')
 const authorModel = require('../models/authors')
+const paging = require('../utils/pagingnation')
 
 module.exports = {
 
     getAllAuthors: async (request, response) => {
-        const authorData = await authorModel.getAllAuthors()
+        const { page, limit, search, sort } = request.query
+        const condition = {
+            search,
+            sort
+        }
+        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
+        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+        const totalData = await authorModel.getAuthorsCount(sliceStart, sliceEnd, condition)
+        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
+        
+        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
+        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+       
+        const authorData = await authorModel.getAllAuthors(sliceStart, sliceEnd, condition)
 
         const data = {
             success: true,
             message: 'List authors',
             data: authorData,
             pageInfo: {
-                page: 1,
-                totalPage: 5,
-                perPage: 1,
-                totalData: 10,
-                nextLink: 'Next',
-                prevLink: 'Prev'
+                page: paging.getPerPage(page),
+                totalPage,
+                perPage: paging.getPerPage(page),
+                totalData,
+                nextLink: nextLink && `http://localhost:5000/authors?${nextLink}`,
+                prevLink: nextLink && `http://localhost:5000/authors?${nextLink}`
 
             }
         }
@@ -24,6 +39,15 @@ module.exports = {
 
     createAuthor: async (request, response) => {
         const { name, description } = request.body
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error
+            }
+            response.status(422).send(data)
+            return
+        }
         const authorData = {
             name,
             description
@@ -48,6 +72,15 @@ module.exports = {
     updateAuthor: async (request, response) => {
         const { id } = request.params
         const { name, description } = request.body
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error
+            }
+            response.status(422).send(data)
+            return
+        }
         const checkId = await authorModel.getAuthorByCondition({ id: parseInt(id) })
         if (checkId.length > 0) {
             const authorData = [
