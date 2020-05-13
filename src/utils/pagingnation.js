@@ -1,3 +1,5 @@
+const qs = require('querystring')
+
 module.exports = {
 
     getPage: (_page) => {
