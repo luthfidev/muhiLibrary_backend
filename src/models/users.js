@@ -27,7 +27,8 @@ module.exports = {
     },
 
     getAllUsers: (start, end) => {
-        const sql = `SELECT roles.name, 
+        const sql = `SELECT users.id,
+                            roles.name, 
                             users.email, users.password, 
                             user_details.picture, user_details.name, user_details.birthdate, user_details.gender 
                             FROM users JOIN roles on roles.id = users.role_id 
