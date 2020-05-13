@@ -41,5 +41,14 @@ exports.createUserDetail = [
     check('gender').not().isEmpty().withMessage('Gender is required')
                    .isAlphanumeric().withMessage('Must be Alphanumeric')
                    .isLength({max: 6}).withMessage('Max Character 6')
+],
+
+exports.registerUser = [ 
+    check('email').not().isEmpty().withMessage('Email is required')
+                  .isEmail().withMessage('Pleace correct your email'),
+
+    check('password').not().isEmpty().withMessage('Password is required')
+                     .isLength({ max: 10 }).withMessage('Max password 10 character')
+
 ]
 
