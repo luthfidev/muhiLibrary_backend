@@ -15,7 +15,9 @@ module.exports = {
 
     getAllTransactions: () => {
         const sql = `SELECT transactions.id, transactions.transaction_date, 
-                           users.email, user_details.name, books.title, genres.name as genreName, authors.name as authorName, transaction_statuses.name as statusName FROM 
+                           users.email, user_details.name, books.title, genres.name as genreName, 
+                            authors.name as authorName, 
+                            transaction_statuses.name as statusName FROM 
                             transactions JOIN transaction_statuses ON transaction_statuses.id = transactions.status_id
                                         JOIN users ON users.id = transactions.user_id
                                         JOIN books ON books.id = transactions.book_id
