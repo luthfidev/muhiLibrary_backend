@@ -7,9 +7,9 @@ const upload = require('../utils/multer')
 
 
 router.get('/', verify, checkRole('admin'), usersController.getAllUsers)
-router.post('/', checkRole('admin'), usersController.createUser)
-router.get('/:id', checkRole('admin'), usersController.getDetailUser)
-router.post('/biodata', checkRole('admin' && 'user'), upload.single('picture'), validator.createUserDetail, usersController.createUserDetail)
+router.post('/', verify, checkRole('admin'), usersController.createUser)
+router.get('/:id', verify, checkRole('admin'), usersController.getDetailUser)
+router.post('/biodata', verify, checkRole('admin' && 'user'), upload.single('picture'), validator.createUserDetail, usersController.createUserDetail)
 
 
 module.exports = router
