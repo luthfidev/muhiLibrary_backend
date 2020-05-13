@@ -1,21 +1,36 @@
 const genreModel = require('../models/genres')
+const paging = require('../utils/pagingnation')
 
 module.exports = {
 
     getAllGenres: async (request, response) => {
-        const genreData = await genreModel.getAllGenres()
+
+        const { page, limit, search, sort } = request.query
+        const condition = {
+            search,
+            sort
+        }
+        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
+        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+        const totalData = await genreModel.getGenresCount(sliceStart, sliceEnd, condition)
+        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
+        
+        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
+        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+
+        const genreData = await genreModel.getAllGenres(sliceStart, sliceEnd, condition)
 
         const data = {
             success: true,
             message: 'List all genres',
             data: genreData,
             pageInfo: {
-                page: 1,
-                totalPage: 5,
-                perPage: 1,
-                totalData: 10,
-                nextLink: 'Next',
-                prevLink: 'Prev'
+                page: paging.getPerPage(page),
+                totalPage,
+                perPage: paging.getPerPage(page),
+                totalData,
+                prevLink: prevLink && `http://localhost:5000/authors?${nextLink}`,
+                nextLink: nextLink && `http://localhost:5000/authors?${nextLink}`
 
             }
         }

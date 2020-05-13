@@ -29,8 +29,8 @@ module.exports = {
                 totalPage,
                 perPage: paging.getPerPage(page),
                 totalData,
-                nextLink: nextLink && `http://localhost:5000/authors?${nextLink}`,
-                prevLink: nextLink && `http://localhost:5000/authors?${nextLink}`
+                prevLink: prevLink && `http://localhost:5000/authors?${nextLink}`,
+                nextLink: nextLink && `http://localhost:5000/authors?${nextLink}`
 
             }
         }
