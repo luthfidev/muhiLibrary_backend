@@ -118,6 +118,7 @@ module.exports = {
     createUserDetail: async (request, response) => {
         const { name, birthdate, gender } = request.body
         const  picture  = request.file.path 
+      
         const Error = await validationResult(request)
        // console.log(request.user.id)
         if (!Error.isEmpty() && !picture) {
