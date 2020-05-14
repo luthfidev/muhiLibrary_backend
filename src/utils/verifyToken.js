@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 const verifyToken = (request, response, next) => {
-    const token = request.header('auth-token')
+    const token = request.header('Authorization')
     const data = {
         success: false,
         message: 'Access Denied'
