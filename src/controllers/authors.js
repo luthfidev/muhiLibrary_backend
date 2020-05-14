@@ -25,9 +25,9 @@ module.exports = {
             message: 'List authors',
             data: authorData,
             pageInfo: {
-                page: paging.getPerPage(page),
+                page: paging.getPage(page),
                 totalPage,
-                perPage: paging.getPerPage(page),
+                perPage: paging.getPerPage(limit),
                 totalData,
                 prevLink: prevLink && `http://localhost:5000/authors?${nextLink}`,
                 nextLink: nextLink && `http://localhost:5000/authors?${nextLink}`

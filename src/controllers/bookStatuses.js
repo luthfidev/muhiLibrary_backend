@@ -25,9 +25,9 @@ module.exports = {
             message: 'List all Book status',
             data: bookStatusData,
             pageInfo: {
-                page: paging.getPerPage(page),
+                page: paging.getPage(page),
                 totalPage,
-                perPage: paging.getPerPage(page),
+                perPage: paging.getPerPage(limit),
                 totalPage,
                 totalData,
                 PrevLink: prevLink && `http://localhost:5000/bookstatuses?${nextLink}`,

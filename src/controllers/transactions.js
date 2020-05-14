@@ -22,7 +22,6 @@ module.exports = {
        // const userData = await userModel.getAllUsers(sliceStart, sliceEnd, condition)
 
         const transactionData = await transactionModel.getAllTransactions(sliceStart, sliceEnd, condition)
-
         const data = {
            success: true,
            message: 'List all transaction',
@@ -30,7 +29,7 @@ module.exports = {
            pageInfo: {
                page: paging.getPage(page),
                totalPage,
-               perPage: paging.getPage(limit),
+               perPage: paging.getPerPage(limit),
                totalData,
                nextLink: nextLink && `http://localhost:5000/transactions?${nextLink}`,
                prevLink: prevLink && `http://localhost:5000/transactions?${prevLink}`

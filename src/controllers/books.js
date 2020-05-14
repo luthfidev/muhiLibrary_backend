@@ -20,15 +20,15 @@ module.exports = {
         const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
 
         const bookData = await bookModel.getAllBooks(sliceStart, sliceEnd, condition)
-
+        
         const data = {
             success: true,
             message: 'List All Book',
             data: bookData,
             pageInfo: {
-                page: paging.getPerPage(page),
+                page: paging.getPage(page),
                 totalPage,
-                perPage: paging.getPerPage(page),
+                perPage: paging.getPerPage(limit),
                 totalData,
                 nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
                 prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
