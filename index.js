@@ -36,6 +36,9 @@ app.use('/genres', genres)
 const bookstatuses = require('./src/routes/bookStatuses')
 app.use('/bookstatuses', bookstatuses)
 
+const transactionstatuses = require('./src/routes/transactionstatuses')
+app.use('/transactionstatuses', transactionstatuses)
+
 const transactions = require('./src/routes/transactions')
 app.use('/transactions', transactions)
 
