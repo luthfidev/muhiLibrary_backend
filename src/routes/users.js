@@ -6,12 +6,21 @@ const checkRole = require('../utils/roles')
 const upload = require('../utils/multer')
 
 router.use(verify)
-
-router.get('/', checkRole('admin'), usersController.getAllUsers)
-router.post('/', checkRole('admin'), usersController.createUser)
-router.delete('/:id', checkRole('admin'), usersController.deleteUser)
-router.get('/detail/:id', usersController.getDetailUser)
-router.post('/biodata', upload.single('picture'),  validator.createUserDetail, usersController.createUserDetail)
+      .get('/', 
+           checkRole('admin'), 
+           usersController.getAllUsers)
+      .post('/', 
+            checkRole('admin'), 
+            usersController.createUser)
+      .delete('/:id', 
+            checkRole('admin'), 
+            usersController.deleteUser)
+      .get('/detail/:id', 
+            usersController.getDetailUser)
+      .post('/biodata', 
+            upload.single('picture'),  
+            validator.createUserDetail, 
+            usersController.createUserDetail)
 
 module.exports = router
 

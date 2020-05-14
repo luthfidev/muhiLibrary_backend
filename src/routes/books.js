@@ -6,11 +6,22 @@ const checkRole = require('../utils/roles')
 const upload = require('../utils/multer')
 
 router.use(verify)
-
-router.get('/', bookController.getAllBooks)
-router.post('/', checkRole('admin'), upload.single('image'), validator.createBook, bookController.createBook)
-router.patch('/:id', checkRole('admin'), upload.single('image'), validator.updateBook, bookController.updateBook)
-router.delete('/:id', checkRole('admin'), bookController.deleteBook)
-router.get('/detail/:id', bookController.getDetailBook)
+      .get('/',
+            bookController.getAllBooks)
+      .post('/', 
+            checkRole('admin'), 
+            validator.book, 
+            upload.single('image'), 
+            bookController.createBook)
+      .patch('/:id', 
+            checkRole('admin'), 
+            validator.book, 
+            upload.single('image'), 
+            bookController.updateBook)
+      .delete('/:id', 
+            checkRole('admin'), 
+            bookController.deleteBook)
+      .get('/detail/:id', 
+            bookController.getDetailBook)
 
 module.exports = router

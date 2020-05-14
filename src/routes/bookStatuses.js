@@ -2,13 +2,19 @@ const router = require('express').Router()
 const bookStatuses = require('../controllers/bookStatuses')
 const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
+const validator = require('../utils/validator')
 
 router.use(verify)
-router.use(checkRole('admin'))
-
-router.get('/', bookStatuses.getAllBookStatuses)
-router.post('/', bookStatuses.createBookStatus)
-router.patch('/:id', bookStatuses.updateBookStatus)
-router.delete('/:id', bookStatuses.deleteBookStatus)
+      .use(checkRole('admin'))
+      .get('/', 
+            bookStatuses.getAllBookStatuses)
+      .post('/',
+            validator.bookstatus, 
+            bookStatuses.createBookStatus)
+      .patch('/:id',
+            validator.bookstatus, 
+            bookStatuses.updateBookStatus)
+      .delete('/:id', 
+            bookStatuses.deleteBookStatus)
 
 module.exports = router

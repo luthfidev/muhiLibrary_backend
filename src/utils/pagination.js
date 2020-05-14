@@ -11,7 +11,6 @@ module.exports = {
         }
     
     },
-    
     getPerPage: (_perPage) => {
         const perPage = parseInt(_perPage)
         if (perPage && perPage > 0) {

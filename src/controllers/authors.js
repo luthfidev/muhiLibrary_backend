@@ -37,11 +37,12 @@ module.exports = {
 
     createAuthor: async (request, response) => {
         const { name, description } = request.body
+       
         const Error = await validationResult(request)
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error
+                message: Error.array().map(i => `${i.msg}`)
             }
             response.status(400).send(data)
             return

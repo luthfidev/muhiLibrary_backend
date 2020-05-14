@@ -36,6 +36,17 @@ module.exports = {
 
     createTransactionStatus: async (request, response) => {
         const { name, description } = request.body
+
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error.array().map(i => `${i.msg}`)
+            }
+            response.status(400).send(data)
+            return
+        }
+
         const transactionStatusData = {
             transaction_date, 
             name,

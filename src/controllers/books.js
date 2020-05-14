@@ -53,7 +53,7 @@ module.exports = {
             if (!Error.isEmpty()) {
                 const data = {
                     success: false,
-                    message: Error
+                    message: Error.array().map(i => `${i.msg}`)
                 }
                 response.status(400).send(data)
                 return

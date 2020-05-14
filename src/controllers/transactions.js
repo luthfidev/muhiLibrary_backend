@@ -38,6 +38,16 @@ module.exports = {
 
     createTransaction: async (request, response) => {
         const { transaction_date, user_id, book_id, status_id } = request.body
+        
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error.array().map(i => `${i.msg}`)
+            }
+            response.status(400).send(data)
+            return
+        }
         const transactionData = {
             transaction_date, 
             user_id, 
