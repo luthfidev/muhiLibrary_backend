@@ -1,7 +1,7 @@
-const bookModel = require('../models/books')
 const { validationResult } = require('express-validator')
 const fs = require('fs')
 const paging = require('../utils/pagingnation')
+const bookModel = require('../models/books')
 
 module.exports = {
 
@@ -40,6 +40,7 @@ module.exports = {
     createBook: async (request, response) => {
         const { title, description, genre_id, author_id, release_date, status_id } = request.body
         const  image  = request.file.path 
+        console.log(image)
         const Error = await validationResult(request)
         if (!Error.isEmpty()) {
             const data = {
@@ -121,9 +122,10 @@ module.exports = {
     deleteBook: async (request, response) => {
         const { id } = request.params
         const _id = { id: parseInt(id) }
-        const CheckId = await bookModel.getBookByCondition(_id)
-        if (CheckId.length > 0) {
-            fs.unlinkSync(CheckId[0].image) 
+        const checkId = await bookModel.getBookByCondition(_id)
+       
+        if (checkId.length > 0) {
+            fs.unlinkSync(checkId[0].image) 
             const results = await bookModel.deleteBook(_id)
             if (results) {
                 const data = {
@@ -146,5 +148,5 @@ module.exports = {
             response.status(400).send(data)
         }
     }
-
+        
 }
