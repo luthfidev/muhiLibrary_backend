@@ -4,6 +4,7 @@ const saltRounds = 10
 const fs = require('fs')
 const userModel = require('../models/users')
 const paging = require('../utils/pagingnation')
+const multer = require('multer')
 
 
 
@@ -114,67 +115,54 @@ module.exports = {
         }
     },
 
-    createUserDetail: async (request, response) => {
-        try {
-            const avatar = request.file;
-            if (!avatar) {
-                response.status(400).send({
-                    status: false,
-                    message: 'No file is selected.'
-                });
-            } else {
-                // send response
-            /*     response.send({
-                    status: true,
-                    message: 'File is uploaded.',
-                    data: {
-                        name: avatar.originalname,
-                        mimetype: avatar.mimetype,
-                        size: avatar.size
-                    }
-                }) */
-           
  
-                const { name, birthdate, gender } = request.body
-                const  picture  = request.file.path
-                
-                const Error = await validationResult(request)
-            // console.log(request.user.id)
-                if (!Error.isEmpty()) {
-                    const data = {
-                        success: false,
-                        message: Error
-                    }
-                    response.status(422).send(data)
-                    return
+    createUserDetail: async (request, response) => {
+    
+        if (!request.file) {
+           
+            const data = {
+                success: false,
+                message: `Please upload a file`
+            }
+            response.status(400).send(data)
+        } else {
+              
+            const { name, birthdate, gender } = request.body
+            const  picture  = request.file.path
+            
+            const Error = await validationResult(request)
+            if (!Error.isEmpty()) {
+                const data = {
+                    success: false,
+                    message: Error
                 }
-                const userData = {
-                    user_id: request.user.id,
-                    name,
-                    picture,
-                    birthdate,
-                    gender
+                response.status(422).send(data)
+                return
+            }
+            const userData = {
+                user_id: request.user.id,
+                name,
+                picture,
+                birthdate,
+                gender
+            }
+            const results = await userModel.createUserDetail(userData)
+            if (results) {
+                const data = {
+                    success: true,
+                    message: `Biodata ${name} was created`
                 }
-                const results = await userModel.createUserDetail(userData)
-                if (results) {
-                    const data = {
-                        success: true,
-                        message: `Biodata ${name} was created`
-                    }
-                    response.status(201).send(data)
-                } else {
-                    const data = {
-                        success: false,
-                        message: 'Failed create biodata'
-                    }
-                    response.status(400).send(data)
+                response.status(201).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed create biodata'
                 }
-            }      
-        } catch (err) {
-            response.status(500).send(err);
+                response.status(400).send(data)
+            }
         }
+    },      
 
-    },
 
     deleteUser: async (request, response) => {
         const { id } = request.params
