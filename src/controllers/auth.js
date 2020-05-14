@@ -37,7 +37,7 @@ module.exports = {
                         },
                         token: token
                     }
-                    response.status(201).header('auth-token', token).send(data)
+                    response.status(200).header('auth-token', token).send(data)
                     //console.log(token)
                 }
             })        
