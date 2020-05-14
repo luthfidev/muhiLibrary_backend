@@ -10,15 +10,20 @@ module.exports = {
         const condition = {
             search,
             sort
+            
         }
+       
         const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
-        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
-        const totalData = await bookModel.getBooksCount(sliceStart, sliceEnd, condition)
-        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
         
+        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+        
+        const totalData = await bookModel.getBooksCount(condition)
+        
+        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
         const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
+        
         const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
-
+        console.log(paging.getPage(2))
         const bookData = await bookModel.getAllBooks(sliceStart, sliceEnd, condition)
         
         const data = {

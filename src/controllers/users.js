@@ -19,7 +19,7 @@ module.exports = {
         }
         const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
         const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
-        const totalData = await userModel.getUsersCount(sliceStart, sliceEnd, condition)
+        const totalData = await userModel.getUsersCount(condition)
         const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
         
         const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
@@ -115,11 +115,8 @@ module.exports = {
         }
     },
 
- 
     createUserDetail: async (request, response) => {
-    
         if (!request.file) {
-           
             const data = {
                 success: false,
                 message: `Please upload a file`
@@ -170,7 +167,7 @@ module.exports = {
         const checkId = await userModel.getUserDetailCondition(_id)
         console.log(checkId)
         if (checkId.length > 0) {
-            fs.unlinkSync(checkId[0].picture) 
+            fs.unlinkSync(checkId[0].picture)
             const results = await userModel.deleteDetailUser(_id)
             if (results) {
                 const data = {

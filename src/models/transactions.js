@@ -21,7 +21,7 @@ module.exports = {
                      JOIN genres ON genres.id = books.genre_id
                      JOIN authors ON authors.id = books.author_id
                      JOIN user_details ON user_details.user_id = users.id
-                     WHERE books.title LIKE '%${data.search || ''}%' ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
+                     WHERE books.title LIKE '%${data.search || ''}%' ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
 
             return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {

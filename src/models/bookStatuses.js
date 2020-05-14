@@ -2,11 +2,10 @@ const db = require('../utils/db')
 
 module.exports = {
 
-    getBookStatusesCount: (start, end, data) => {
+    getBookStatusesCount: (data) => {
         const sql = `SELECT COUNT(*) as total FROM book_statuses
                         WHERE name LIKE '%${data.search || ''}%' 
-                        ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'} 
-                        LIMIT ${end} OFFSET ${start}`
+                        ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
         return new Promise((resolve, reject) => {
             db.query(sql, data, (error, results) => {
                 if (error) {

@@ -2,11 +2,11 @@ const db = require('../utils/db')
 
 module.exports = {
  
-    getUsersCount: (start, end, data) => {
+    getUsersCount: (data) => {
         const sql = `SELECT COUNT(users.id) as total
                                         FROM users JOIN roles on roles.id = users.role_id 
                                         JOIN user_details on user_details.user_id = users.id
-                                         WHERE user_details.name LIKE '%${data.search || ''}%' ORDER BY user_details.name ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
+                                         WHERE user_details.name LIKE '%${data.search || ''}%' ORDER BY user_details.name ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
 
         return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {

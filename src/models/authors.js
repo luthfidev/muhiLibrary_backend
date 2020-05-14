@@ -3,13 +3,12 @@ const db = require('../utils/db')
 
 module.exports = {
 
-    getAuthorsCount: (start, end, data) => {
+    getAuthorsCount: (data) => {
         const sql = `SELECT COUNT(*) as total FROM authors
                         WHERE name LIKE '%${data.search || ''}%' 
-                        ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'} 
-                        LIMIT ${end} OFFSET ${start}`
+                        ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
         return new Promise((resolve, reject) => {
-            db.query(sql, data, (error, results) => {
+            db.query(sql, (error, results) => {
                 if (error) {
                     reject(Error(error).total)
                 }

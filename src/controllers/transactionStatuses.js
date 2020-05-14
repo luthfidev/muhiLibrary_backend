@@ -11,7 +11,7 @@ module.exports = {
         }
         const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
         const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
-        const totalData = await transactionStatusModel.getTransactionStatusesCount(sliceStart, sliceEnd, condition)
+        const totalData = await transactionStatusModel.getTransactionStatusesCount(condition)
         const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
         
         const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
