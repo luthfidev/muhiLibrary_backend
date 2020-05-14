@@ -1,5 +1,4 @@
 const { validationResult } = require('express-validator')
-const qs = require('querystring')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 const fs = require('fs')
@@ -116,39 +115,63 @@ module.exports = {
     },
 
     createUserDetail: async (request, response) => {
-        const { name, birthdate, gender } = request.body
-        const  picture  = request.file.path 
-      
-        const Error = await validationResult(request)
-       // console.log(request.user.id)
-        if (!Error.isEmpty() && !picture) {
-            const data = {
-                success: false,
-                message: Error
-            }
-            response.status(422).send(data)
-            return
-        }
-        const userData = {
-            user_id: request.user.id,
-            name,
-            picture,
-            birthdate,
-            gender
-        }
-        const results = await userModel.createUserDetail(userData)
-        if (results) {
-            const data = {
-                success: true,
-                message: `Biodata ${name} was created`
-            }
-            response.status(201).send(data)
-        } else {
-            const data = {
-                success: false,
-                message: 'Failed create biodata'
-            }
-            response.status(400).send(data)
+        try {
+            const avatar = request.file;
+            if (!avatar) {
+                response.status(400).send({
+                    status: false,
+                    message: 'No file is selected.'
+                });
+            } else {
+                // send response
+            /*     response.send({
+                    status: true,
+                    message: 'File is uploaded.',
+                    data: {
+                        name: avatar.originalname,
+                        mimetype: avatar.mimetype,
+                        size: avatar.size
+                    }
+                }) */
+           
+ 
+                const { name, birthdate, gender } = request.body
+                const  picture  = request.file.path
+                
+                const Error = await validationResult(request)
+            // console.log(request.user.id)
+                if (!Error.isEmpty()) {
+                    const data = {
+                        success: false,
+                        message: Error
+                    }
+                    response.status(422).send(data)
+                    return
+                }
+                const userData = {
+                    user_id: request.user.id,
+                    name,
+                    picture,
+                    birthdate,
+                    gender
+                }
+                const results = await userModel.createUserDetail(userData)
+                if (results) {
+                    const data = {
+                        success: true,
+                        message: `Biodata ${name} was created`
+                    }
+                    response.status(201).send(data)
+                } else {
+                    const data = {
+                        success: false,
+                        message: 'Failed create biodata'
+                    }
+                    response.status(400).send(data)
+                }
+            }      
+        } catch (err) {
+            response.status(500).send(err);
         }
 
     },

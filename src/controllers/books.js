@@ -38,41 +38,54 @@ module.exports = {
     },
 
     createBook: async (request, response) => {
-        const { title, description, genre_id, author_id, release_date, status_id } = request.body
-        const  image  = request.file.path 
-        console.log(image)
-        const Error = await validationResult(request)
-        if (!Error.isEmpty()) {
-            const data = {
-                success: false,
-                message: Error
+
+        try {
+            const images = request.file;     
+            if (!images) {
+                response.status(400).send({
+                    status: false,
+                    message: 'No file is selected.'
+                });
+            } else {
+              
+                const { title, description, genre_id, author_id, release_date, status_id } = request.body
+                const  image  = request.file.path 
+                const Error = await validationResult(request)
+                if (!Error.isEmpty()) {
+                    const data = {
+                        success: false,
+                        message: Error
+                    }
+                    response.status(422).send(data)
+                    return
+                }
+                const bookData = {
+                    title,
+                    description,
+                    image,
+                    genre_id,
+                    author_id,
+                    release_date,
+                    status_id
+                }
+                const results = await bookModel.createBook(bookData)
+                if (results) {
+                    const data = {
+                        success: true,
+                        message: 'create book has been success',
+                        data: bookData
+                    }
+                    response.status(201).send(data)
+                } else {
+                    const data = {
+                        success: false,
+                        message: 'Failed create book'
+                    }
+                    response.status(400).send(data)
+                }
             }
-            response.status(422).send(data)
-            return
-        }
-        const bookData = {
-            title,
-            description,
-            image,
-            genre_id,
-            author_id,
-            release_date,
-            status_id
-        }
-        const results = await bookModel.createBook(bookData)
-        if (results) {
-            const data = {
-                success: true,
-                message: 'create book has been success',
-                data: bookData
-            }
-            response.status(201).send(data)
-        } else {
-            const data = {
-                success: false,
-                message: 'Failed create book'
-            }
-            response.status(400).send(data)
+        } catch (err) {
+            response.status(500).send(err);
         }
     },
 
