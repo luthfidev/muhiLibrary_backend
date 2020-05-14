@@ -43,6 +43,8 @@ exports.createUserDetail = [
     check('gender').not().isEmpty().withMessage('Gender is required')
                    .isAlphanumeric().withMessage('Must be Alphanumeric')
                    .isLength({max: 6}).withMessage('Max Character 6')
+    /* check('picture').not().isEmpty().withMessage('Image is required'), */
+    
 ],
 
 exports.registerUser = [ 

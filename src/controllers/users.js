@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator')
 const qs = require('querystring')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+const fs = require('fs')
 const userModel = require('../models/users')
 const paging = require('../utils/pagingnation')
 
@@ -115,10 +116,11 @@ module.exports = {
     },
 
     createUserDetail: async (request, response) => {
-        const { user_id, name, birthdate, gender } = request.body
+        const { name, birthdate, gender } = request.body
         const  picture  = request.file.path 
         const Error = await validationResult(request)
-        if (!Error.isEmpty()) {
+       // console.log(request.user.id)
+        if (!Error.isEmpty() && !picture) {
             const data = {
                 success: false,
                 message: Error
@@ -127,7 +129,7 @@ module.exports = {
             return
         }
         const userData = {
-            user_id,
+            user_id: request.user.id,
             name,
             picture,
             birthdate,
@@ -149,6 +151,36 @@ module.exports = {
         }
 
     },
+
+    deleteUser: async (request, response) => {
+        const { id } = request.params
+        const _id = { id: parseInt(id) }
+        const checkId = await userModel.getUserDetailCondition(_id)
+        console.log(checkId)
+        if (checkId.length > 0) {
+            fs.unlinkSync(checkId[0].picture) 
+            const results = await userModel.deleteDetailUser(_id)
+            if (results) {
+                const data = {
+                    success: true,
+                    message: `User with id ${id} is deleted`
+                }
+                response.status(200).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed delete book'
+                }
+                response.status(400).send(data)
+            }
+        } else {
+            const data = {
+                success: false,
+                message: 'Not data for delete'
+            }
+            response.status(400).send(data)
+        }
+    }
     
 
 }

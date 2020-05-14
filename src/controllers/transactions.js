@@ -1,21 +1,39 @@
 const transactionModel = require('../models/transactions')
+const paging = require('../utils/pagingnation')
+
 
 module.exports = {
 
     getAllTransactions: async (request, response) => {
-        const transactionData = await transactionModel.getAllTransactions()
+
+        const { page, limit, search, sort } = request.query
+        const condition = {
+            search,
+            sort
+        }
+        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
+        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+        const totalData = await transactionModel.getTransactionsCount(sliceStart, sliceEnd, condition)
+        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
+        
+        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
+        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+
+       // const userData = await userModel.getAllUsers(sliceStart, sliceEnd, condition)
+
+        const transactionData = await transactionModel.getAllTransactions(sliceStart, sliceEnd, condition)
 
         const data = {
            success: true,
            message: 'List all transaction',
            data: transactionData,
            pageInfo: {
-               page: 1,
-               totalPage: 5,
-               perPage: 1,
-               totalData: 10,
-               nextLink: 'Next',
-               prevLink: 'Prev'
+               page: paging.getPage(page),
+               totalPage,
+               perPage: paging.getPage(limit),
+               totalData,
+               nextLink: nextLink && `http://localhost:5000/transactions?${nextLink}`,
+               prevLink: prevLink && `http://localhost:5000/transactions?${prevLink}`
            }
         }
         response.status(200).send(data)

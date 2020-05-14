@@ -28,6 +28,7 @@ module.exports = {
             })
         })
     },
+    
     getAllGenres: (start, end, data) => {
         const sql = `SELECT * FROM genres
                                 WHERE name LIKE '%${data.search || ''}%' 
