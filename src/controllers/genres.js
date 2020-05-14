@@ -1,33 +1,31 @@
 const genreModel = require('../models/genres')
-const paging = require('../utils/pagingnation')
+const pagination = require('../utils/pagination')
 
 module.exports = {
 
     getAllGenres: async (request, response) => {
-
         const { page, limit, search, sort } = request.query
         const condition = {
             search,
             sort
         }
-        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
-        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+
+        const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
+        const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
         const totalData = await genreModel.getGenresCount(condition)
-        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
-        
-        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
-        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+        const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
+        const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
+        const nextLink = pagination.getNextLink(pagination.getPage(page), totalPage, request.query)
 
         const genreData = await genreModel.getAllGenres(sliceStart, sliceEnd, condition)
-
         const data = {
             success: true,
             message: 'List all genres',
             data: genreData,
             pageInfo: {
-                page: paging.getPage(page),
+                page: pagination.getPage(page),
                 totalPage,
-                perPage: paging.getPerPage(limit),
+                perPage: pagination.getPerPage(limit),
                 totalData,
                 prevLink: prevLink && `http://localhost:5000/authors?${nextLink}`,
                 nextLink: nextLink && `http://localhost:5000/authors?${nextLink}`
@@ -42,6 +40,7 @@ module.exports = {
         const genreData = {
             name
         }
+
         const results = await genreModel.createGenre(genreData)
         if (results) {
             const data = {
@@ -81,7 +80,7 @@ module.exports = {
                    success: false,
                    message: 'Failed updated genre'
                }
-               response.status(401).send(data)
+               response.status(400).send(data)
            }
        } else {
            const data = {

@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 const fs = require('fs')
 const userModel = require('../models/users')
-const paging = require('../utils/pagingnation')
-const multer = require('multer')
+const pagination = require('../utils/pagination')
+
 
 
 
@@ -17,25 +17,23 @@ module.exports = {
             search,
             sort
         }
-        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
-        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+
+        const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
+        const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
         const totalData = await userModel.getUsersCount(condition)
-        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
-        
-        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
-        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+        const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
+        const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
+        const nextLink = pagination.getNextLink(pagination.getPage(page), totalPage, request.query)
 
         const userData = await userModel.getAllUsers(sliceStart, sliceEnd, condition)
-        
-
         const data = {
             success: true,
             message: 'List all user data',
             data: userData,
             pageInfo: {
-                page: paging.getPage(page),
+                page: pagination.getPage(page),
                 totalPage,
-                perPage: paging.getPerPage(limit),
+                perPage: pagination.getPerPage(limit),
                 totalData,
                 nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
                 prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
@@ -46,14 +44,16 @@ module.exports = {
 
     getDetailUser: async (request, response) => {
         const { id } = request.params
+
         const isFoundId = await userModel.getUserCondition({ id }) 
         if (isFoundId.length > 0) {
+
             const userData = await userModel.getDetailUser(id)
             if (userData) {
                 const data = {
                     success: true,
                     message: `Detail user`,
-                    data: userData,
+                    data: userData
                 }
                 response.status(200).send(data)
             } else {
@@ -61,7 +61,7 @@ module.exports = {
                     success: false,
                     message: 'Failed load detail user'
                 }
-                response.status(401).send(data)
+                response.status(400).send(data)
             }
         } else {
             const data = {
@@ -74,8 +74,10 @@ module.exports = {
 
     createUser: async (request, response) => {
        const { email, role_id} = request.body
+
        const password = await bcrypt.hash(request.body.password, saltRounds)
         if (email && password && role_id && email !== '' && password !== '' && role_id !=='') {
+
             const isExist = await userModel.getUserCondition({ email })
             if (isExist.length < 1) {
                 const userData = {
@@ -83,6 +85,7 @@ module.exports = {
                     password,
                     role_id
                 }
+
                 const results = await userModel.createUser(userData)
                 if (results) {
                     const data = {
@@ -123,7 +126,6 @@ module.exports = {
             }
             response.status(400).send(data)
         } else {
-              
             const { name, birthdate, gender } = request.body
             const  picture  = request.file.path
             
@@ -143,6 +145,7 @@ module.exports = {
                 birthdate,
                 gender
             }
+
             const results = await userModel.createUserDetail(userData)
             if (results) {
                 const data = {
@@ -164,10 +167,12 @@ module.exports = {
     deleteUser: async (request, response) => {
         const { id } = request.params
         const _id = { id: parseInt(id) }
+
         const checkId = await userModel.getUserDetailCondition(_id)
         console.log(checkId)
         if (checkId.length > 0) {
             fs.unlinkSync(checkId[0].picture)
+
             const results = await userModel.deleteDetailUser(_id)
             if (results) {
                 const data = {
@@ -190,6 +195,5 @@ module.exports = {
             response.status(400).send(data)
         }
     }
-    
 
 }

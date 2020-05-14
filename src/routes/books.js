@@ -11,5 +11,6 @@ router.get('/', bookController.getAllBooks)
 router.post('/', checkRole('admin'), upload.single('image'), validator.createBook, bookController.createBook)
 router.patch('/:id', checkRole('admin'), upload.single('image'), validator.updateBook, bookController.updateBook)
 router.delete('/:id', checkRole('admin'), bookController.deleteBook)
+router.get('/detail/:id', bookController.getDetailBook)
 
 module.exports = router

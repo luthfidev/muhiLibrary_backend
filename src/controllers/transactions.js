@@ -1,5 +1,5 @@
 const transactionModel = require('../models/transactions')
-const paging = require('../utils/pagingnation')
+const pagination = require('../utils/pagination')
 
 
 module.exports = {
@@ -11,15 +11,13 @@ module.exports = {
             search,
             sort
         }
-        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
-        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
-        const totalData = await transactionModel.getTransactionsCount(condition)
-        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
-        
-        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
-        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
 
-       // const userData = await userModel.getAllUsers(sliceStart, sliceEnd, condition)
+        const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
+        const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
+        const totalData = await transactionModel.getTransactionsCount(condition)
+        const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
+        const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
+        const nextLink = pagination.getNextLink(pagination.getPage(page), totalPage, request.query)
 
         const transactionData = await transactionModel.getAllTransactions(sliceStart, sliceEnd, condition)
         const data = {
@@ -27,9 +25,9 @@ module.exports = {
            message: 'List all transaction',
            data: transactionData,
            pageInfo: {
-               page: paging.getPage(page),
+               page: pagination.getPage(page),
                totalPage,
-               perPage: paging.getPerPage(limit),
+               perPage: pagination.getPerPage(limit),
                totalData,
                nextLink: nextLink && `http://localhost:5000/transactions?${nextLink}`,
                prevLink: prevLink && `http://localhost:5000/transactions?${prevLink}`
@@ -45,6 +43,7 @@ module.exports = {
             user_id, 
             book_id, 
             status_id
+            
         }
         const results = await transactionModel.createTransaction(transactionData)
         if (results) {

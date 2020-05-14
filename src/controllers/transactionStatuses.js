@@ -1,5 +1,5 @@
 const transactionStatusModel = require('../models/transactionStatuses')
-const paging = require('../utils/pagingnation')
+const pagination = require('../utils/pagination')
 
 module.exports = {
 
@@ -9,13 +9,13 @@ module.exports = {
             search,
             sort
         }
-        const sliceStart = paging.getPage(page) * paging.getPerPage(limit) - paging.getPerPage(limit)
-        const sliceEnd = (paging.getPage(page) * paging.getPerPage(limit))
+
+        const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
+        const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
         const totalData = await transactionStatusModel.getTransactionStatusesCount(condition)
-        const totalPage = Math.ceil(totalData / paging.getPerPage(limit))
-        
-        const prevLink = paging.getPrevLink(paging.getPage(page), request.query)
-        const nextLink = paging.getNextLink(paging.getPage(page), totalPage, request.query)
+        const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
+        const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
+        const nextLink = pagination.getNextLink(pagination.getPage(page), totalPage, request.query)
 
         const transactionData = await transactionStatusModel.getAllTransactionStatuses(sliceStart, sliceEnd, condition)
         const data = {
@@ -23,9 +23,9 @@ module.exports = {
            message: 'List all status transactions',
            data: transactionData,
            pageInfo: {
-               page: paging.getPage(page),
+               page: pagination.getPage(page),
                totalPage,
-               perPage: paging.getPerPage(limit),
+               perPage: pagination.getPerPage(limit),
                totalData,
                nextLink: nextLink && `http://localhost:5000/transactionsstatus?${nextLink}`,
                prevLink: prevLink && `http://localhost:5000/transactionsstatus?${prevLink}`
@@ -41,6 +41,7 @@ module.exports = {
             name,
             description
         }
+
         const results = await transactionStatusModel.createTransaction(transactionStatusData)
         if (results) {
             const data = {
@@ -61,12 +62,14 @@ module.exports = {
     updateTransactionStatus: async (request, response) => {
         const { id } = request.params
         const { name, description } = request.body
+
         const checkId = await transactionStatusModel.getTransactionStatusByCondition({ id: parseInt(id) })
         if (checkId.length > 0) {
             const transactionStatusData = [
                 { name, description },
                 { id: parseInt(id) }
             ]
+
             const results = await transactionModel.updateTransactionStatus(transactionStatusData)
             if (results) {
                 const data = {
@@ -94,8 +97,10 @@ module.exports = {
     deleteTransactionStatus: async (request, response) => {
         const { id } = request.params
         const _id = { id: parseInt(id) }
+
         const checkId = await transactionStatusModel.getTransactionStatusByCondition(_id)
         if (checkId.length > 0) {
+
             const results = await transactionStatusModel.deleteTransactionStatus(_id)
             if (results) {
                 const data = {
@@ -118,6 +123,5 @@ module.exports = {
             response.status(400).send(data)
         }
     }
-
 
 }

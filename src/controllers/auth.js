@@ -1,8 +1,8 @@
-const authModel = require('../models/auth')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const saltRounds = 10
+const authModel = require('../models/auth')
 
 
 module.exports = {
@@ -26,7 +26,12 @@ module.exports = {
                     }
                     response.status(400).send(data)
                 } else {
-                    const token = jwt.sign({ id: isFound[0].id, email: isFound[0].email, role: isFound[0].nameRole },process.env.TOKEN_SECRET, { expiresIn: '24h', algorithm: process.env.TOKEN_ALG } )
+                    const token = jwt.sign({ id: isFound[0].id, 
+                                             email: isFound[0].email, 
+                                             role: isFound[0].nameRole }, 
+                                             process.env.TOKEN_SECRET, 
+                                                { expiresIn: '24h', 
+                                                  algorithm: process.env.TOKEN_ALG } )
                     const data = {
                         success: true,
                         message: 'Password Match',
@@ -38,7 +43,6 @@ module.exports = {
                         token: token
                     }
                     response.status(200).header('Authorization', token).send(data)
-                    //console.log(token)
                 }
             })        
         } else {
@@ -58,7 +62,7 @@ module.exports = {
                 success: false,
                 message: Error
             }
-            response.status(422).send(data)
+            response.status(400).send(data)
             return
         }
         const passwordHash = await bcrypt.hash(password , saltRounds)
@@ -86,7 +90,7 @@ module.exports = {
         } else {
             const data = {
                 success: false,
-                message: 'Email is exist'
+                message: 'Email is exist, please use another email'
             }
             response.status(400).send(data)
         }

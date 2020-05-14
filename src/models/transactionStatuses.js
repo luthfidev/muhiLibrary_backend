@@ -4,8 +4,8 @@ module.exports = {
 
     getTransactionStatusesCount: (data) => {
         const sql = `SELECT COUNT(*) as total FROM transaction_statuses
-                        WHERE name LIKE '%${data.search || ''}%' 
-                        ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
+                     WHERE name LIKE '%${data.search || ''}%' 
+                     ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
         return new Promise((resolve, reject) => {
             db.query(sql, data, (error, results) => {
                 if (error) {
@@ -30,9 +30,9 @@ module.exports = {
 
     getAllTransactionStatuses: (start, end, data) => {
         const sql = `SELECT * FROM transaction_statuses
-                                WHERE name LIKE '%${data.search || ''}%' 
-                                ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'} 
-                                LIMIT ${end} OFFSET ${start}` 
+                     WHERE name LIKE '%${data.search || ''}%' 
+                     ORDER BY name ${parseInt(data.sort) ? 'DESC' : 'ASC'} 
+                     LIMIT ${end} OFFSET ${start}` 
         return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {
                 if (error) {
