@@ -12,12 +12,12 @@ const fileFilter = (request, file, callback) => {
     if (file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
         callback(null, true)  
     } else {
-        callback(new Error('File format should be PNG,JPG'), false)
+        callback(('File format should be PNG,JPG'), false)
     }
 }
 module.exports = upload = multer({ 
     storage:  storage, 
-    limits: { fileSize: 1024 * 1024 * 5 },
+    limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: fileFilter
 }) 
 
