@@ -26,7 +26,7 @@ module.exports = {
                     }
                     response.status(400).send(data)
                 } else {
-                    const token = jwt.sign({ id: isFound[0].id, email: isFound[0].email, role: isFound[0].nameRole },process.env.TOKEN_SECRET, { expiresIn: '1h', algorithm: process.env.TOKEN_ALG } )
+                    const token = jwt.sign({ id: isFound[0].id, email: isFound[0].email, role: isFound[0].nameRole },process.env.TOKEN_SECRET, { expiresIn: '24h', algorithm: process.env.TOKEN_ALG } )
                     const data = {
                         success: true,
                         message: 'Password Match',
