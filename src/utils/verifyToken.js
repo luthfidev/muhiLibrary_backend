@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const verifyToken = (request, response, next) => {
     const bearerHeader = request.header('Authorization')
     if (typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(' ')
+        const bearer = bearerHeader.split('Bearer ')
         const bearerToken = bearer[1]
         token = bearerToken
     }
