@@ -51,7 +51,7 @@ module.exports = {
                             name: isFound[0].nameUser,
                             role: isFound[0].nameRole
                         },
-                        token: token
+                        token: "Bearer " + token
                     }
                     response.status(200).header('Authorization', token).send(data)
                 }

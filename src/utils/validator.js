@@ -80,7 +80,7 @@ exports.createUserDetail = [
             .not().isEmpty().withMessage('Name is required')
             .isAlphanumeric().withMessage('Name must be alphanumeric')
             .isLength({max: 25}).withMessage('Max character 25'),
-    check('birtdate')
+    check('birthdate')
             .not().isEmpty().withMessage('Birthdate is required'),   
     check('gender')
             .not().isEmpty().withMessage('Gender is required')
