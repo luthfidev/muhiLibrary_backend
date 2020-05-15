@@ -13,7 +13,7 @@ module.exports = {
         })
     },
 
-    getTransactionsCount: (start, end, data) => {
+    getTransactionsCount: (data) => {
         const sql = `SELECT COUNT(transactions.id) as total FROM transactions 
                      JOIN transaction_statuses ON transaction_statuses.id = transactions.status_id
                      JOIN users ON users.id = transactions.user_id
