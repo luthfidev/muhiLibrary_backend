@@ -88,10 +88,19 @@ exports.createUserDetail = [
             .isLength({max: 6}).withMessage('Max Character 6')    
 ],
 
-exports.registerUser = [ 
+exports.signUp = [ 
     check('email')
             .not().isEmpty().withMessage('Email is required')
-            .isEmail().withMessage('Pleace correct your email'),
+            .isEmail().withMessage('Please correct your email'),
+    check('password')
+            .not().isEmpty().withMessage('Password is required')
+            .isLength({ max: 10 }).withMessage('Max password 10 character')
+],
+
+exports.signIn = [ 
+    check('email')
+            .not().isEmpty().withMessage('Email is required')
+            .isEmail().withMessage('Please correct your email'),
     check('password')
             .not().isEmpty().withMessage('Password is required')
             .isLength({ max: 10 }).withMessage('Max password 10 character')

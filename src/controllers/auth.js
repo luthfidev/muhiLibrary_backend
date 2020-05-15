@@ -7,8 +7,19 @@ const authModel = require('../models/auth')
 
 module.exports = {
 
-    loginUser: async (request, response) => {
+    signIn: async (request, response) => {
         const { email, password } = request.body
+        
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error.array().map(i => `${i.msg}`)
+            }
+            response.status(400).send(data)
+            return
+        }
+
         const isFound = await authModel.getAuthCondition({ email })
         if (isFound.length > 0) {
             const isFoundPassword = isFound[0].password
@@ -54,7 +65,7 @@ module.exports = {
         } 
     },
 
-    registerUser: async (request, response) => {
+    signUp: async (request, response) => {
         const { email, password } = request.body
         const Error = await validationResult(request)
         if (!Error.isEmpty()) {

@@ -3,10 +3,11 @@ const authController = require('../controllers/auth')
 const validator = require('../utils/validator')
 
 
-router.post('/signin', 
-            authController.loginUser)
-      .post('/register', 
-            validator.registerUser, 
-            authController.registerUser)
+router.post('/signin',
+            validator.signIn,  
+            authController.signIn)
+      .post('/signup', 
+            validator.signUp, 
+            authController.signUp)
 
 module.exports = router

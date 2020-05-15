@@ -20,7 +20,7 @@ module.exports = {
         })
     },
 
-    registerUser: (data) => {
+    signUp: (data) => {
         const sql = 'INSERT INTO users SET ?'
         return new Promise((resolve, reject) => {
             db.query(sql, data, (error, results) => {
