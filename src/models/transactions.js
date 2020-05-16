@@ -35,6 +35,7 @@ module.exports = {
     },
 
     getAllTransactions: (start, end, data) => {
+        console.log(start, end)
         const sql = `SELECT transactions.id, 
                             transactions.transaction_date, 
                             users.email, 

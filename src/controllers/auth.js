@@ -14,7 +14,7 @@ module.exports = {
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error.array().map(i => `${i.msg}`)
+                message: Error.array().map(item => ({[item.param]: item.msg}))
             }
             response.status(400).send(data)
             return
@@ -71,7 +71,7 @@ module.exports = {
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error.array().map(i => `${i.msg}`)
+                message: Error.array().map(item => ({[item.param]: item.msg}))
             }
             response.status(400).send(data)
             return
@@ -83,12 +83,12 @@ module.exports = {
                 email,
                 password: passwordHash
             }
-            const results = await authModel.registerUser(registerData)
+            const results = await authModel.signUp(registerData)
             if (results) {
                 const data = {
                     success: true,
                     message: 'Register success',
-                    data: registerData
+                    data: registerData.email
                 }
                 response.status(201).send(data)
             } else {

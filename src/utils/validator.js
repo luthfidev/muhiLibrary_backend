@@ -3,29 +3,24 @@ const { check } = require('express-validator')
 exports.author = [
     check('name')
             .not().isEmpty().withMessage('Name is required')
-            .isAlpha().withMessage('Name must be alpha')
             .isLength({max: 25}).withMessage('Max character 25'),
     check('description')
             .not().isEmpty().withMessage('Description is required')
-            .isAlpha().withMessage('Description must be alpha')
             .isLength({max: 100}).withMessage('Max character 100'),
 ],
 
 exports.genre = [
     check('name')
             .not().isEmpty().withMessage('Title is required')
-            .isAlpha().withMessage('Name must be alpha')
             .isLength({max: 25}).withMessage('Max character 25')
 ],
 
 exports.bookstatus = [
     check('name')
             .not().isEmpty().withMessage('Name is required')
-            .isAlpha().withMessage('Name must be alpha')
             .isLength({max: 25}).withMessage('Max character 25'),
     check('description')
             .not().isEmpty().withMessage('Description is required')
-            .isAlpha().withMessage('Description must be alpha')
             .isLength({max: 100}).withMessage('Max character 100'),
 ],
 
@@ -61,7 +56,7 @@ exports.book = [
 ],
 
 exports.transaction = [
-    check('transactoin_date')
+    check('transaction_date')
             .not().isEmpty().withMessage('Transaction date is required'),
     check('user_id')
             .not().isEmpty().withMessage('User id is required')
@@ -75,17 +70,15 @@ exports.transaction = [
             .isLength({max: 1}).withMessage('Max Number 1')
 ],
 
-exports.createUserDetail = [
+exports.updateUserDetail = [
     check('name')
             .not().isEmpty().withMessage('Name is required')
-            .isAlphanumeric().withMessage('Name must be alphanumeric')
             .isLength({max: 25}).withMessage('Max character 25'),
     check('birthdate')
             .not().isEmpty().withMessage('Birthdate is required'),   
     check('gender')
             .not().isEmpty().withMessage('Gender is required')
-            .isAlphanumeric().withMessage('Must be Alphanumeric')
-            .isLength({max: 6}).withMessage('Max Character 6')    
+            .optional().isIn(['Male', 'Female']).withMessage('Please choose Male or Female')
 ],
 
 exports.signUp = [ 

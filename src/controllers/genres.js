@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator')
 const genreModel = require('../models/genres')
 const pagination = require('../utils/pagination')
 
@@ -42,11 +43,12 @@ module.exports = {
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error.array().map(i => `${i.msg}`)
+                message: Error.array()
             }
             response.status(400).send(data)
             return
         }
+
         const genreData = {
             name
         }
@@ -71,6 +73,15 @@ module.exports = {
     updateGenre: async (request, response) => {
        const { id } = request.params
        const { name } = request.body
+       const Error = await validationResult(request)
+       if (!Error.isEmpty()) {
+           const data = {
+               success: false,
+               message: Error.array()
+           }
+           response.status(400).send(data)
+           return
+       }
        const checkId = await genreModel.getGenreByCondition({ id: parseInt(id) })
        if (checkId.length > 0) {
            const genreData = [

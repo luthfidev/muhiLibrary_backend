@@ -32,7 +32,7 @@ module.exports = {
     },
 
     getUserDetailCondition: (data) => {
-        const sql =  `SELECT users.id, 
+        const sql =  `SELECT users.id as userid, 
                              users.email, 
                              users.password, 
                              user_details.picture, 
@@ -42,9 +42,9 @@ module.exports = {
                              roles.name as role FROM users 
                      JOIN roles on roles.id = users.role_id 
                      JOIN user_details on user_details.user_id = users.id
-                     WHERE users.id ?`
+                     WHERE users.id = ?`
         return new Promise((resolve, reject) => {
-            db.query(sql, data, (error, results) => {
+            db.query(sql, data.id, (error, results) => {
                 if (error) {
                     reject(Error(error))
                 }
@@ -110,7 +110,7 @@ module.exports = {
         })
     },
 
-    createUserDetail: (data) => {
+    updateUserDetail: (data) => {
         const sql = `REPLACE INTO user_details SET ? `
         return new Promise((resolve, reject) => {
             db.query(sql, data, (error, results) => {
@@ -123,7 +123,7 @@ module.exports = {
     },
 
     deleteDetailUser: (data) => {
-        const sql = 'DELETE FROM user_details WHERE ?'
+        const sql = 'DELETE FROM users WHERE ?'
         return new Promise((resolve, reject) => {
             db.query(sql, data, (error, results) => {
                 if (error) {

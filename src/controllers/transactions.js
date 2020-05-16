@@ -1,4 +1,6 @@
+const { validationResult } = require('express-validator')
 const transactionModel = require('../models/transactions')
+const userModel = require('../models/users')
 const pagination = require('../utils/pagination')
 
 
@@ -39,42 +41,61 @@ module.exports = {
     createTransaction: async (request, response) => {
         const { transaction_date, user_id, book_id, status_id } = request.body
         
-        const Error = await validationResult(request)
-        if (!Error.isEmpty()) {
-            const data = {
-                success: false,
-                message: Error.array().map(i => `${i.msg}`)
+        const isFound = await userModel.getUserCondition({ id: user_id })
+        if (isFound.length > 0) {
+            const Error = await validationResult(request)
+            if (!Error.isEmpty()) {
+                const data = {
+                    success: false,
+                    message: Error.array()
+                }
+                response.status(400).send(data)
+                return
             }
-            response.status(400).send(data)
-            return
-        }
-        const transactionData = {
-            transaction_date, 
-            user_id, 
-            book_id, 
-            status_id
-            
-        }
-        const results = await transactionModel.createTransaction(transactionData)
-        if (results) {
-            const data = {
-                success: true,
-                message: 'Create transactoin has been success',
-                data: transactionData
+            const transactionData = {
+                transaction_date, 
+                user_id, 
+                book_id, 
+                status_id
+                
             }
-            response.status(201).send(data)
+
+            const results = await transactionModel.createTransaction(transactionData)
+            if (results) {
+                const data = {
+                    success: true,
+                    message: 'Create transactoin has been success',
+                    data: transactionData
+                }
+                response.status(201).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed create transaction'
+                }
+                response.status(400).send(data)
+            }
         } else {
             const data = {
                 success: false,
-                message: 'Failed create transaction'
+                message: 'User not found'
             }
             response.status(400).send(data)
-        }
+        } 
     },
 
     updateTransaction: async (request, response) => {
         const { id } = request.params
         const { transaction_date, user_id, book_id, status_id } = request.body
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error.array()
+            }
+            response.status(400).send(data)
+            return
+        }
         const checkId = await transactionModel.getTransactionByCondition({ id: parseInt(id) })
         if (checkId.length > 0) {
             const transactionData = [

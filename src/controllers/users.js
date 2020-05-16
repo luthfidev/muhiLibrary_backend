@@ -5,10 +5,6 @@ const fs = require('fs')
 const userModel = require('../models/users')
 const pagination = require('../utils/pagination')
 
-
-
-
-
 module.exports = {
 
     getAllUsers: async (request, response) => {
@@ -75,50 +71,52 @@ module.exports = {
     createUser: async (request, response) => {
        const { email, role_id} = request.body
 
-       const password = await bcrypt.hash(request.body.password, saltRounds)
-        if (email && password && role_id && email !== '' && password !== '' && role_id !=='') {
+       const Error = await validationResult(request)
+       if (!Error.isEmpty()) {
+           const data = {
+               success: false,
+               message: Error.array().map(item => ({[item.param]: item.msg}))
+            }
+            response.status(400).send(data)
+            return
+        }
+        
+        const password = await bcrypt.hash(request.body.password, saltRounds)
+        
+        const isExist = await userModel.getUserCondition({ email })
+        if (isExist.length < 1) {
+            const userData = {
+                email,
+                password,
+                role_id
+            }
 
-            const isExist = await userModel.getUserCondition({ email })
-            if (isExist.length < 1) {
-                const userData = {
-                    email,
-                    password,
-                    role_id
+            const results = await userModel.createUser(userData)
+            if (results) {
+                const data = {
+                    success: true,
+                    message: 'User has been created success',
+                    data: userData
                 }
-
-                const results = await userModel.createUser(userData)
-                if (results) {
-                    const data = {
-                        success: true,
-                        message: 'User has been created success',
-                        data: userData
-                    }
-                    response.status(201).send(data)
-                } else {
-                    const data = {
-                        success: false,
-                        message: 'Failed created user',
-                        data: userData
-                    }
-                    response.status(400).send(data)
-                }
+                response.status(201).send(data)
             } else {
                 const data = {
                     success: false,
-                    message: 'Email is Exist'
+                    message: 'Failed created user',
+                    data: userData
                 }
                 response.status(400).send(data)
             }
         } else {
             const data = {
                 success: false,
-                message: 'All form must be filed'
+                message: 'Email is Exist'
             }
             response.status(400).send(data)
         }
     },
 
-    createUserDetail: async (request, response) => {
+    updateUserDetail: async (request, response) => {
         if (!request.file) {
             const data = {
                 success: false,
@@ -133,7 +131,7 @@ module.exports = {
             if (!Error.isEmpty()) {
                 const data = {
                     success: false,
-                    message: Error.array().map(i => `${i.msg}`)
+                    message: Error.array().map(item => ({[item.param]: item.msg}))
                 }
                 response.status(422).send(data)
                 return
@@ -146,11 +144,11 @@ module.exports = {
                 gender
             }
 
-            const results = await userModel.createUserDetail(userData)
+            const results = await userModel.updateUserDetail(userData)
             if (results) {
                 const data = {
                     success: true,
-                    message: `Biodata ${name} was created`
+                    message: `Biodata ${name} was updated`
                 }
                 response.status(201).send(data)
             } else {
@@ -171,7 +169,7 @@ module.exports = {
         const checkId = await userModel.getUserDetailCondition(_id)
         console.log(checkId)
         if (checkId.length > 0) {
-            fs.unlinkSync(checkId[0].picture)
+         //   fs.unlinkSync(checkId[0].picture)
 
             const results = await userModel.deleteDetailUser(_id)
             if (results) {

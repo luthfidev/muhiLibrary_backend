@@ -10,13 +10,13 @@ router.use(verify)
             bookController.getAllBooks)
       .post('/', 
             checkRole('admin'), 
-            validator.book, 
             upload.single('image'), 
+            validator.book, 
             bookController.createBook)
       .patch('/:id', 
             checkRole('admin'), 
-            validator.book, 
             upload.single('image'), 
+            validator.book, 
             bookController.updateBook)
       .delete('/:id', 
             checkRole('admin'), 

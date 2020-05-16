@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator')
 const bookStatusModel = require('../models/bookStatuses')
 const pagination = require('../utils/pagination')
 
@@ -42,7 +43,7 @@ module.exports = {
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error.array().map(i => `${i.msg}`)
+                message: Error.array()
             }
             response.status(400).send(data)
             return
@@ -71,6 +72,16 @@ module.exports = {
     updateBookStatus: async (request, response) => {
         const { id } = request.params
         const { name, description } = request.body
+
+        const Error = await validationResult(request)
+        if (!Error.isEmpty()) {
+            const data = {
+                success: false,
+                message: Error.array()
+            }
+            response.status(400).send(data)
+            return
+        }
         
         const checkId = await bookStatusModel.getBookStatusByCondition({ id: parseInt(id) })
         if (checkId.length > 0) {

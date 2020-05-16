@@ -7,7 +7,9 @@ module.exports = {
                      JOIN authors ON authors.id = books.author_id 
                      JOIN genres ON genres.id = books.genre_id
                      JOIN book_statuses ON book_statuses.id = books.status_id
-                     WHERE books.title LIKE '%${data.search || ''}%' ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
+                     WHERE books.title LIKE '%${data.search || ''}%' 
+                     OR book_statuses.name LIKE '%${data.search || ''}%' 
+                     ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
 
         return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {
@@ -38,6 +40,7 @@ module.exports = {
                             books.image, 
                             authors.name as authorName, 
                             genres.name as genreName, 
+                            books.release_date as releaseDate, 
                             book_statuses.name as nameStatus, 
                             books.created_at, 
                             books.updated_at FROM books 
@@ -45,6 +48,7 @@ module.exports = {
                      JOIN genres ON genres.id = books.genre_id
                      JOIN book_statuses ON book_statuses.id = books.status_id
                      WHERE books.title LIKE '%${data.search || ''}%' 
+                     OR book_statuses.name LIKE '${data.search || ''}%' 
                      ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
         return new Promise((resolve, reject) => {
             db.query(sql, (error, results) => {

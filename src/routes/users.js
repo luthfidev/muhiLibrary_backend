@@ -10,17 +10,18 @@ router.use(verify)
            checkRole('admin'), 
            usersController.getAllUsers)
       .post('/', 
-            checkRole('admin'), 
+            checkRole('admin'),
+            validator.signUp, 
             usersController.createUser)
       .delete('/:id', 
             checkRole('admin'), 
             usersController.deleteUser)
       .get('/detail/:id', 
             usersController.getDetailUser)
-      .post('/biodata', 
+      .patch('/biodata', 
             upload.single('picture'),  
-            validator.createUserDetail, 
-            usersController.createUserDetail)
+            validator.updateUserDetail, 
+            usersController.updateUserDetail)
 
 module.exports = router
 
