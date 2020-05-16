@@ -1,3 +1,4 @@
+const { APP_URL } = process.env
 const transactionStatusModel = require('../models/transactionStatuses')
 const pagination = require('../utils/pagination')
 
@@ -27,8 +28,8 @@ module.exports = {
                totalPage,
                perPage: pagination.getPerPage(limit),
                totalData,
-               nextLink: nextLink && `http://localhost:5000/transactionsstatus?${nextLink}`,
-               prevLink: prevLink && `http://localhost:5000/transactionsstatus?${prevLink}`
+               nextLink: nextLink && `${APP_URL}transactionsstatus?${nextLink}`,
+               prevLink: prevLink && `${APP_URL}transactionsstatus?${prevLink}`
            }
         }
         response.status(200).send(data)
@@ -41,7 +42,7 @@ module.exports = {
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error.array().map(i => `${i.msg}`)
+                message: Error.array()
             }
             response.status(400).send(data)
             return

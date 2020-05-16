@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator')
+const { APP_URL } = process.env
 const bookStatusModel = require('../models/bookStatuses')
 const pagination = require('../utils/pagination')
 
@@ -29,8 +30,8 @@ module.exports = {
                 perPage: pagination.getPerPage(limit),
                 totalPage,
                 totalData,
-                PrevLink: prevLink && `http://localhost:5000/bookstatuses?${nextLink}`,
-                nextLink: nextLink && `http://localhost:5000/bookstatuses?${nextLink}`
+                PrevLink: prevLink && `${APP_URL}bookstatuses?${nextLink}`,
+                nextLink: nextLink && `${APP_URL}bookstatuses?${nextLink}`
             }
         }
         response.status(200).send(data)

@@ -2,7 +2,9 @@ const { validationResult } = require('express-validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+const { TOKEN_SECRET, TOKEN_ALGORITMA } = process.env
 const authModel = require('../models/auth')
+
 
 
 module.exports = {
@@ -40,9 +42,9 @@ module.exports = {
                     const token = jwt.sign({ id: isFound[0].id, 
                                              email: isFound[0].email, 
                                              role: isFound[0].nameRole }, 
-                                             process.env.TOKEN_SECRET, 
+                                             TOKEN_SECRET, 
                                                 { expiresIn: '24h', 
-                                                  algorithm: process.env.TOKEN_ALG } )
+                                                  algorithm: TOKEN_ALGORITMA } )
                     const data = {
                         success: true,
                         message: 'Password Match',

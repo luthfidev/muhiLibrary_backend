@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 const fs = require('fs')
+const { APP_URL } = process.env
 const userModel = require('../models/users')
 const pagination = require('../utils/pagination')
 
@@ -31,8 +32,8 @@ module.exports = {
                 totalPage,
                 perPage: pagination.getPerPage(limit),
                 totalData,
-                nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
-                prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
+                nextLink: nextLink && `${APP_URL}users?${nextLink}`,
+                prevLink: prevLink && `${APP_URL}users?${prevLink}`
             }
         }
         response.status(200).send(data)

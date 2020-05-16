@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator')
 const fs = require('fs')
+const { APP_URL } = process.env
 const bookModel = require('../models/books')
 const pagination = require('../utils/pagination')
 
@@ -30,8 +31,8 @@ module.exports = {
                 totalPage,
                 perPage: pagination.getPerPage(limit),
                 totalData,
-                nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
-                prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
+                nextLink: nextLink && `${APP_URL}users?${nextLink}`,
+                prevLink: prevLink && `${APP_URL}users?${prevLink}`
             }
         }
         response.status(200).send(data)
@@ -46,13 +47,13 @@ module.exports = {
             }
             response.status(400).send(data)
         } else {    
-            const  image  = request.file.path 
+            const image  = APP_URL + request.file.path 
             
            const Error = await validationResult(request)
             if (!Error.isEmpty()) {
                 const data = {
                     success: false,
-                    message: Error.array().map(i => `${i.msg}`)
+                    message: Error.array
                 }
                 response.status(400).send(data)
                 return

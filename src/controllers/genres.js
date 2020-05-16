@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator')
+const { APP_URL } = process.env
 const genreModel = require('../models/genres')
 const pagination = require('../utils/pagination')
 
@@ -28,8 +29,8 @@ module.exports = {
                 totalPage,
                 perPage: pagination.getPerPage(limit),
                 totalData,
-                prevLink: prevLink && `http://localhost:5000/authors?${nextLink}`,
-                nextLink: nextLink && `http://localhost:5000/authors?${nextLink}`
+                prevLink: prevLink && `${APP_URL}genres?${nextLink}`,
+                nextLink: nextLink && `${APP_URL}genres?${nextLink}`
 
             }
         }
