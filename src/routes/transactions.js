@@ -6,12 +6,15 @@ const validator = require('../utils/validator')
 
 
 router.use(verify)
-      .use(checkRole('admin'))
-      .get('/', 
+      .get('/',
+            checkRole('admin'), 
             transactionController.getAllTransactions)
       .post('/', 
             validator.transaction,
             transactionController.createTransaction)
+      .post('/user', 
+            validator.userTransaction,
+            transactionController.createUserTransaction)
       .patch('/:id', 
             validator.transaction,
             transactionController.updateTransaction)

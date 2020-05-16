@@ -70,6 +70,14 @@ exports.transaction = [
             .isLength({max: 1}).withMessage('Max Number 1')
 ],
 
+exports.userTransaction = [
+    check('transaction_date')
+            .not().isEmpty().withMessage('Transaction date is required'),
+    check('book_id')
+            .not().isEmpty().withMessage('Book id is required')
+            .isNumeric().withMessage('Book must be numeric'),
+],
+
 exports.updateUserDetail = [
     check('name')
             .not().isEmpty().withMessage('Name is required')
