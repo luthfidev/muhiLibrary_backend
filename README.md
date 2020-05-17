@@ -36,14 +36,14 @@ npm start
 
 change .envDefault to .env, and you can modified according to your specifications.
 
-APP_PORT = 5000
-APP_URL = http://localhost:5000
-
-DB_HOST = localhost
-DB_USER = 'must be filled'
-DB_PASS = 'must be filled'
-DB_NAME = muhilibrary
-DB_PORT = 3306
-
-TOKEN_SECRET = 'must be filled'
-TOKEN_ALGORITMA = HS256
+APP_PORT = 5000<br>
+APP_URL = http://localhost:5000<br>
+<br>
+DB_HOST = localhost<br>
+DB_USER = 'must be filled'<br>
+DB_PASS = 'must be filled'<br>
+DB_NAME = muhilibrary<br>
+DB_PORT = 3306<br>
+<br>
+TOKEN_SECRET = 'must be filled'<br>
+TOKEN_ALGORITMA = HS256<br>
