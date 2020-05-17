@@ -14,7 +14,6 @@ module.exports = {
             
         }
 
-        console.log(request.user)
         if (request.user.nameUser === null) {
             const data = {
                 success: false,
@@ -210,6 +209,7 @@ module.exports = {
                         genreName: data.genreName,
                         releaseDate: data.releaseDate,
                         nameStatus: data.nameStatus,
+                        descriptionStatus: data.descriptionStatus,
                         created_at: data.created_at,
                         updated_at: data.updated_at
                     }))
