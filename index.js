@@ -1,14 +1,13 @@
 require('dotenv').config()
 const { APP_URL, APP_PORT } = process.env
-
 const express = require('express')
-const app = express()
-app.use('/uploads', express.static('uploads'))
 const bodyparser = require('body-parser')
-app.use(bodyparser.urlencoded({ extended: true }))
-/* app.use(bodyparser.json()); */
-
 const cors = require('cors')
+const app = express()
+
+
+app.use(bodyparser.urlencoded({ extended: true }))
+app.use('/uploads', express.static('uploads'))
 app.use(cors()) 
 
 app.get('/', (request, response) => {
@@ -20,27 +19,21 @@ app.get('/', (request, response) => {
 })
 
 const auth = require('./src/routes/auth')
-app.use('/auth', auth)
-
 const users = require('./src/routes/users')
-app.use('/users', users)
-
 const books = require('./src/routes/books')
-app.use('/books', books)
-
 const authors = require('./src/routes/authors')
-app.use('/authors', authors)
-
 const genres = require('./src/routes/genres')
-app.use('/genres', genres)
-
 const bookstatuses = require('./src/routes/bookStatuses')
-app.use('/bookstatuses', bookstatuses)
-
 const transactionstatuses = require('./src/routes/transactionstatuses')
-app.use('/transactionstatuses', transactionstatuses)
-
 const transactions = require('./src/routes/transactions')
+
+app.use('/auth', auth)
+app.use('/users', users)
+app.use('/books', books)
+app.use('/authors', authors)
+app.use('/genres', genres)
+app.use('/bookstatuses', bookstatuses)
+app.use('/transactionstatuses', transactionstatuses)
 app.use('/transactions', transactions)
 
 app.get('*', (request, response) => {

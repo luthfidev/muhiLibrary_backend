@@ -198,6 +198,46 @@ module.exports = {
         }
     },
 
+    getTransactionDetail: async (request, response) => {
+        const { id } = request.params
+        const isFoundId = await transactionModel.getTransactionByCondition({ id })
+        if (isFoundId.length > 0) {
+            const transactionData = await transactionModel.getTransactionDetail(id)
+            if (transactionData) {
+                const data = {
+                    success: true,
+                    message: 'Detail book',
+                    data: transactionData.map(data => ({ 
+                        id: data.id, 
+                        transaction_date: data.transaction_date, 
+                        email: data.email,
+                        user_id: data.user_id,
+                        name: data.name,
+                        idBook: data.idBook,
+                        title: data.title,
+                        genreName: data.genreName,
+                        authorName: data.authorName,
+                        releaseDate: data.releaseDate,
+                        statusName: data.statusName,
+                    }))
+                }
+                response.status(200).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed load detail transaction'
+                }
+                response.status(401).send(data)
+            }
+        } else {
+            const data = {
+                success: false,
+                message: 'Transaction not found'
+            }
+            response.status(400).send(data)
+        }
+    },
+
     getTransactionDetailUser: async (request, response) => {
         const userid = request.user.id
         const isFoundId = await transactionModel.getTransactionDetailUser( userid )

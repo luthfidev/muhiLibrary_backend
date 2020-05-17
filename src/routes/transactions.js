@@ -9,6 +9,8 @@ router.use(verify)
       .get('/',
             checkRole('admin'), 
             transactionController.getAllTransactions)
+      .get('/:id',
+            transactionController.getTransactionDetail)
       .get('/userstatus',
             transactionController.getTransactionDetailUser)
       .post('/', 

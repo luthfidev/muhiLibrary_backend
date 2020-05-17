@@ -145,6 +145,7 @@ module.exports = {
                 response.status(422).send(data)
                 return
             }
+            
             const userData = {
                 user_id: request.user.id,
                 name,

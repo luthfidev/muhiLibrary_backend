@@ -35,7 +35,7 @@ module.exports = {
         const sql =  `SELECT users.id as userid, 
                              users.email, 
                              users.password, 
-                             user_details.picture, 
+                             user_details.picture as picture, 
                              user_details.name as nameUser, 
                              user_details.birthdate, 
                              user_details.gender, 

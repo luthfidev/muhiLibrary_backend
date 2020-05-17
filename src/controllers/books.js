@@ -70,7 +70,7 @@ module.exports = {
             if (!Error.isEmpty()) {
                 const data = {
                     success: false,
-                    message: Error.array
+                    message: Error.array()
                 }
                 response.status(400).send(data)
                 return
@@ -105,6 +105,7 @@ module.exports = {
     updateBook: async (request, response) => {
         const { id } = request.params
         const { title, description, genre_id, author_id } = request.body
+        const image  = request.file.path 
         if (!request.file) {
             const data = {
                 success: true,
@@ -112,7 +113,6 @@ module.exports = {
             }
             response.status(400).send(data)
         } else {   
-            const  image  = request.file.path 
             const Error = await validationResult(request)
                 if (!Error.isEmpty()) {
                     const data = {
@@ -122,31 +122,40 @@ module.exports = {
                     response.status(422).send(data)
                     return
                 }
-            const CheckId = await bookModel.getBookByCondition({ id: parseInt(id) })
-            if (CheckId.length > 0) {
-                const bookData = [
-                    { title, description, image, genre_id, author_id },
-                    { id: parseInt(id) }
-                ]
-                const results = await bookModel.updateBook(bookData)
-                if (results) {
-                    const data = {
-                        success: true,
-                        message: 'book has been update',
-                        data: bookData[0]
+            const checkId = await bookModel.getBookByCondition({ id: parseInt(id) })
+            if (checkId.length > 0) {
+                if (checkId[0].image !== image) {
+                    await fs.unlinkSync(checkId[0].image)
+                    const bookData = [
+                        { title, description, image, genre_id, author_id },
+                        { id: parseInt(id) }
+                    ]
+                    const results = await bookModel.updateBook(bookData)
+                    if (results) {
+                        const data = {
+                            success: true,
+                            message: 'book has been update',
+                            data: bookData[0]
+                        }
+                        response.status(201).send(data)
+                    } else {
+                        const data = {
+                            success: false,
+                            message: 'Failed update book'
+                        }
+                        response.status(401).send(data)
                     }
-                    response.status(201).send(data)
                 } else {
                     const data = {
                         success: false,
-                        message: 'Failed update book'
+                        message: `book with ${id} not found`
                     }
-                    response.status(401).send(data)
-                }
+                    response.status(400).send(data)
+                } 
             } else {
                 const data = {
                     success: false,
-                    message: `book with ${id} not found`
+                    message: `No image ${checkId[0].image} for delete, and delete your book to create new book` 
                 }
                 response.status(400).send(data)
             }

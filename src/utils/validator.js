@@ -37,7 +37,6 @@ exports.book = [
             .isLength({max: 40}).withMessage('Max character 40'),
     check('description')
             .not().isEmpty().withMessage('Description is required')
-            .isAlpha().withMessage('Description must be alpha')
             .isLength({max: 100}).withMessage('Max character 100'), 
     check('genre_id')
             .not().isEmpty().withMessage('Genre id is required')
