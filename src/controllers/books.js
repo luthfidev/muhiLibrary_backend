@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator')
 const fs = require('fs')
+const { APP_URL } = process.env
 const bookModel = require('../models/books')
 const pagination = require('../utils/pagination')
 
@@ -13,6 +14,14 @@ module.exports = {
             
         }
 
+        if (request.user.nameUser === null) {
+            const data = {
+                success: false,
+                message: 'Please update your profile'
+            }
+            response.status(400).send(data)
+            return false
+        }
         const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
         const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
         const totalData = await bookModel.getBooksCount(condition)
@@ -24,14 +33,22 @@ module.exports = {
         const data = {
             success: true,
             message: 'List All Book',
-            data: bookData,
+            data: bookData.map(data => ({ 
+                id: data.id, 
+                title: data.title, 
+                image: `${APP_URL}` + data.image,
+                genreName: data.genreName,
+                nameStatus: data.nameStatus,
+                created_at: data.created_at,
+                updated_at: data.updated_at
+            })),
             pageInfo: {
                 page: pagination.getPage(page),
                 totalPage,
                 perPage: pagination.getPerPage(limit),
                 totalData,
-                nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
-                prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
+                nextLink: nextLink && `${APP_URL}users?${nextLink}`,
+                prevLink: prevLink && `${APP_URL}users?${prevLink}`
             }
         }
         response.status(200).send(data)
@@ -46,13 +63,13 @@ module.exports = {
             }
             response.status(400).send(data)
         } else {    
-            const  image  = request.file.path 
+            const image  = request.file.path 
             
            const Error = await validationResult(request)
             if (!Error.isEmpty()) {
                 const data = {
                     success: false,
-                    message: Error.array().map(i => `${i.msg}`)
+                    message: Error.array()
                 }
                 response.status(400).send(data)
                 return
@@ -87,6 +104,7 @@ module.exports = {
     updateBook: async (request, response) => {
         const { id } = request.params
         const { title, description, genre_id, author_id } = request.body
+        const image  = request.file.path 
         if (!request.file) {
             const data = {
                 success: true,
@@ -94,7 +112,6 @@ module.exports = {
             }
             response.status(400).send(data)
         } else {   
-            const  image  = request.file.path 
             const Error = await validationResult(request)
                 if (!Error.isEmpty()) {
                     const data = {
@@ -104,31 +121,40 @@ module.exports = {
                     response.status(422).send(data)
                     return
                 }
-            const CheckId = await bookModel.getBookByCondition({ id: parseInt(id) })
-            if (CheckId.length > 0) {
-                const bookData = [
-                    { title, description, image, genre_id, author_id },
-                    { id: parseInt(id) }
-                ]
-                const results = await bookModel.updateBook(bookData)
-                if (results) {
-                    const data = {
-                        success: true,
-                        message: 'book has been update',
-                        data: bookData[0]
+            const checkId = await bookModel.getBookByCondition({ id: parseInt(id) })
+            if (checkId.length > 0) {
+                if (checkId[0].image !== image) {
+                    await fs.unlinkSync(checkId[0].image)
+                    const bookData = [
+                        { title, description, image, genre_id, author_id },
+                        { id: parseInt(id) }
+                    ]
+                    const results = await bookModel.updateBook(bookData)
+                    if (results) {
+                        const data = {
+                            success: true,
+                            message: 'book has been update',
+                            data: bookData[0]
+                        }
+                        response.status(201).send(data)
+                    } else {
+                        const data = {
+                            success: false,
+                            message: 'Failed update book'
+                        }
+                        response.status(401).send(data)
                     }
-                    response.status(201).send(data)
                 } else {
                     const data = {
                         success: false,
-                        message: 'Failed update book'
+                        message: `book with ${id} not found`
                     }
-                    response.status(401).send(data)
-                }
+                    response.status(400).send(data)
+                } 
             } else {
                 const data = {
                     success: false,
-                    message: `book with ${id} not found`
+                    message: `No image ${checkId[0].image} for delete, and delete your book to create new book` 
                 }
                 response.status(400).send(data)
             }
@@ -174,7 +200,19 @@ module.exports = {
                 const data = {
                     success: true,
                     message: 'Detail book',
-                    data: bookData
+                    data: bookData.map(data => ({ 
+                        id: data.id, 
+                        title: data.title, 
+                        description: data.description,
+                        image: `${APP_URL}` + data.image,
+                        authorName: data.authorName,
+                        genreName: data.genreName,
+                        releaseDate: data.releaseDate,
+                        nameStatus: data.nameStatus,
+                        descriptionStatus: data.descriptionStatus,
+                        created_at: data.created_at,
+                        updated_at: data.updated_at
+                    }))
                 }
                 response.status(200).send(data)
             } else {

@@ -24,20 +24,12 @@ exports.bookstatus = [
             .isLength({max: 100}).withMessage('Max character 100'),
 ],
 
-exports.transactionstatus = [
-    check('name')
-            .not().isEmpty().withMessage('Name is required')
-            .isAlpha().withMessage('Name must be alpha')
-            .isLength({max: 25}).withMessage('Max character 25'),
-],
-
 exports.book = [
     check('title')
             .not().isEmpty().withMessage('Title is required')
             .isLength({max: 40}).withMessage('Max character 40'),
     check('description')
             .not().isEmpty().withMessage('Description is required')
-            .isAlpha().withMessage('Description must be alpha')
             .isLength({max: 100}).withMessage('Max character 100'), 
     check('genre_id')
             .not().isEmpty().withMessage('Genre id is required')
@@ -68,6 +60,14 @@ exports.transaction = [
             .not().isEmpty().withMessage('Status id is required')
             .isNumeric().withMessage('Status id must be numeric')
             .isLength({max: 1}).withMessage('Max Number 1')
+],
+
+exports.userTransaction = [
+    check('transaction_date')
+            .not().isEmpty().withMessage('Transaction date is required'),
+    check('book_id')
+            .not().isEmpty().withMessage('Book id is required')
+            .isNumeric().withMessage('Book must be numeric'),
 ],
 
 exports.updateUserDetail = [

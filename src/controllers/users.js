@@ -2,6 +2,8 @@ const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 const fs = require('fs')
+const jwt = require('jsonwebtoken')
+const { APP_URL, TOKEN_SECRET, TOKEN_ALGORITMA } = process.env
 const userModel = require('../models/users')
 const pagination = require('../utils/pagination')
 
@@ -25,14 +27,21 @@ module.exports = {
         const data = {
             success: true,
             message: 'List all user data',
-            data: userData,
+            data: userData.map(data => ({ 
+                id: data.id, 
+                email: data.email, 
+                name: data.name,
+                gender: data.gender,
+                created_at: data.created_at,
+                updated_at: data.updated_at
+            })),
             pageInfo: {
                 page: pagination.getPage(page),
                 totalPage,
                 perPage: pagination.getPerPage(limit),
                 totalData,
-                nextLink: nextLink && `http://localhost:5000/users?${nextLink}`,
-                prevLink: prevLink && `http://localhost:5000/users?${prevLink}`
+                nextLink: nextLink && `${APP_URL}users?${nextLink}`,
+                prevLink: prevLink && `${APP_URL}users?${prevLink}`
             }
         }
         response.status(200).send(data)
@@ -75,7 +84,7 @@ module.exports = {
        if (!Error.isEmpty()) {
            const data = {
                success: false,
-               message: Error.array().map(item => ({[item.param]: item.msg}))
+               message: Error.array()
             }
             response.status(400).send(data)
             return
@@ -131,11 +140,12 @@ module.exports = {
             if (!Error.isEmpty()) {
                 const data = {
                     success: false,
-                    message: Error.array().map(item => ({[item.param]: item.msg}))
+                    message: Error.array()
                 }
                 response.status(422).send(data)
                 return
             }
+            
             const userData = {
                 user_id: request.user.id,
                 name,
@@ -143,14 +153,28 @@ module.exports = {
                 birthdate,
                 gender
             }
-
+            
             const results = await userModel.updateUserDetail(userData)
             if (results) {
+                const isFoundId = await userModel.getUserDetailCondition({ id: request.user.id }) 
+                const token = jwt.sign({ id: isFoundId[0].userid, 
+                                        email: isFoundId[0].email, 
+                                        role: isFoundId[0].nameRole,
+                                        nameUser: isFoundId[0].nameUser}, 
+                                        TOKEN_SECRET, 
+                                        { expiresIn: '24h', 
+                                            algorithm: TOKEN_ALGORITMA } )
                 const data = {
                     success: true,
-                    message: `Biodata ${name} was updated`
+                    message: `Biodata ${name} was updated`,
+                    userData: {
+                        email: isFoundId[0].email,
+                        name: isFoundId[0].nameUser,
+                        role: isFoundId[0].nameRole
+                     },
+                     token: "Bearer " + token
                 }
-                response.status(201).send(data)
+                response.status(200).header('Authorization', token).send(data)
             } else {
                 const data = {
                     success: false,
