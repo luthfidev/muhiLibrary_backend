@@ -37,8 +37,8 @@ module.exports = {
             data: bookData.map(data => ({ 
                 id: data.id, 
                 title: data.title, 
-                description: data.description,
                 image: `${APP_URL}` + data.image,
+                genreName: data.genreName,
                 nameStatus: data.nameStatus,
                 created_at: data.created_at,
                 updated_at: data.updated_at
