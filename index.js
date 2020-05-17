@@ -24,7 +24,6 @@ const books = require('./src/routes/books')
 const authors = require('./src/routes/authors')
 const genres = require('./src/routes/genres')
 const bookstatuses = require('./src/routes/bookStatuses')
-const transactionstatuses = require('./src/routes/transactionstatuses')
 const transactions = require('./src/routes/transactions')
 
 app.use('/auth', auth)
@@ -33,7 +32,6 @@ app.use('/books', books)
 app.use('/authors', authors)
 app.use('/genres', genres)
 app.use('/bookstatuses', bookstatuses)
-app.use('/transactionstatuses', transactionstatuses)
 app.use('/transactions', transactions)
 
 app.get('*', (request, response) => {
