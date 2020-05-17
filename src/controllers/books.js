@@ -14,6 +14,15 @@ module.exports = {
             
         }
 
+        console.log(request.user)
+        if (request.user.nameUser === null) {
+            const data = {
+                success: false,
+                message: 'Please update your profile'
+            }
+            response.status(400).send(data)
+            return false
+        }
         const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
         const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
         const totalData = await bookModel.getBooksCount(condition)
@@ -25,7 +34,15 @@ module.exports = {
         const data = {
             success: true,
             message: 'List All Book',
-            data: bookData,
+            data: bookData.map(data => ({ 
+                id: data.id, 
+                title: data.title, 
+                description: data.description,
+                image: `${APP_URL}` + data.image,
+                nameStatus: data.nameStatus,
+                created_at: data.created_at,
+                updated_at: data.updated_at
+            })),
             pageInfo: {
                 page: pagination.getPage(page),
                 totalPage,
@@ -47,7 +64,7 @@ module.exports = {
             }
             response.status(400).send(data)
         } else {    
-            const image  = APP_URL + request.file.path 
+            const image  = request.file.path 
             
            const Error = await validationResult(request)
             if (!Error.isEmpty()) {
@@ -175,7 +192,18 @@ module.exports = {
                 const data = {
                     success: true,
                     message: 'Detail book',
-                    data: bookData
+                    data: bookData.map(data => ({ 
+                        id: data.id, 
+                        title: data.title, 
+                        description: data.description,
+                        image: `${APP_URL}` + data.image,
+                        authorName: data.authorName,
+                        genreName: data.genreName,
+                        releaseDate: data.releaseDate,
+                        nameStatus: data.nameStatus,
+                        created_at: data.created_at,
+                        updated_at: data.updated_at
+                    }))
                 }
                 response.status(200).send(data)
             } else {
