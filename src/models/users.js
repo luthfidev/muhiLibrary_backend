@@ -56,14 +56,10 @@ module.exports = {
     getAllUsers: (start, end, data) => {
         const sql = `SELECT users.id, 
                             users.email, 
-                            users.password, 
-                            user_details.picture, 
-                            user_details.name, 
-                            user_details.birthdate, 
+                            user_details.name,    
                             user_details.gender,
                             users.created_at,
-                            users.updated_at, 
-                            roles.name as role FROM users 
+                            users.updated_at FROM users 
                      JOIN roles on roles.id = users.role_id 
                      JOIN user_details on user_details.user_id = users.id
                      WHERE user_details.name LIKE '%${data.search || ''}%' 
