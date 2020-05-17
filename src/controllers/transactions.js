@@ -85,41 +85,6 @@ module.exports = {
         } 
     },
 
-    createUserTransaction: async (request, response) => {
-        const { transaction_date, book_id} = request.body
-            
-        const Error = await validationResult(request)
-        if (!Error.isEmpty()) {
-            const data = {
-                success: false,
-                message: Error.array()
-            }
-            response.status(400).send(data)
-            return
-        }
-        const transactionData = {
-            transaction_date, 
-            user_id: request.user.id,
-            book_id, 
-        }
-
-        const results = await transactionModel.createTransaction(transactionData)
-        if (results) {
-            const data = {
-                success: true,
-                message: 'Create transactoin has been success',
-                data: transactionData
-            }
-            response.status(201).send(data)
-        } else {
-            const data = {
-                success: false,
-                message: 'Failed create transaction'
-            }
-            response.status(400).send(data)
-        }
-    },
-
     updateTransaction: async (request, response) => {
         const { id } = request.params
         const { transaction_date, user_id, book_id, status_id } = request.body
@@ -185,6 +150,77 @@ module.exports = {
             const data = {
                 success: false,
                 message: 'Not data for delete'
+            }
+            response.status(400).send(data)
+        }
+    },
+
+    createUserTransaction: async (request, response) => {
+        const { transaction_date, book_id} = request.body
+            if (request.user.nameUser === null) {
+                const data = {
+                    success: false,
+                    message: 'Please update your profile'
+                }
+                response.status(400).send(data)
+                return false
+            } else {
+            const Error = await validationResult(request)
+            if (!Error.isEmpty()) {
+                const data = {
+                    success: false,
+                    message: Error.array()
+                }
+                response.status(400).send(data)
+                return
+            }
+            const transactionData = {
+                transaction_date, 
+                user_id: request.user.id,
+                book_id, 
+            }
+
+            const results = await transactionModel.createTransaction(transactionData)
+            if (results) {
+                const data = {
+                    success: true,
+                    message: 'Create transactoin has been success',
+                    data: transactionData
+                }
+                response.status(201).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed create transaction'
+                }
+                response.status(400).send(data)
+            }
+        }
+    },
+
+    getTransactionDetailUser: async (request, response) => {
+        const userid = request.user.id
+        const isFoundId = await transactionModel.getTransactionDetailUser( userid )
+        if (isFoundId.length > 0) {
+            const detailTransactionData = await transactionModel.getTransactionDetailUser(userid)
+            if (detailTransactionData) {
+                const data = {
+                    success: true,
+                    message: 'Detail Transaction Data',
+                    data: detailTransactionData
+                }
+                response.status(200).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed load detail Transaction'
+                }
+                response.status(401).send(data)
+            }
+        } else {
+            const data = {
+                success: false,
+                message: 'No have transaction'
             }
             response.status(400).send(data)
         }
