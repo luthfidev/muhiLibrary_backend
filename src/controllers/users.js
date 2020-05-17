@@ -2,7 +2,8 @@ const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 const fs = require('fs')
-const { APP_URL } = process.env
+const jwt = require('jsonwebtoken')
+const { APP_URL, TOKEN_SECRET, TOKEN_ALGORITMA } = process.env
 const userModel = require('../models/users')
 const pagination = require('../utils/pagination')
 
@@ -26,7 +27,18 @@ module.exports = {
         const data = {
             success: true,
             message: 'List all user data',
-            data: userData,
+            data: userData.map(data => ({ 
+                id: data.id, 
+                email: data.email, 
+                password: "**************************",
+                picture: `${APP_URL}` + data.picture,
+                name: data.name,
+                birthdate: data.birthdate,
+                gender: data.gender,
+                role: data.role,
+                created_at: data.created_at,
+                updated_at: data.updated_at
+            })),
             pageInfo: {
                 page: pagination.getPage(page),
                 totalPage,
@@ -76,7 +88,7 @@ module.exports = {
        if (!Error.isEmpty()) {
            const data = {
                success: false,
-               message: Error.array().map(item => ({[item.param]: item.msg}))
+               message: Error.array()
             }
             response.status(400).send(data)
             return
@@ -132,7 +144,7 @@ module.exports = {
             if (!Error.isEmpty()) {
                 const data = {
                     success: false,
-                    message: Error.array().map(item => ({[item.param]: item.msg}))
+                    message: Error.array()
                 }
                 response.status(422).send(data)
                 return
@@ -144,14 +156,28 @@ module.exports = {
                 birthdate,
                 gender
             }
-
+            
             const results = await userModel.updateUserDetail(userData)
             if (results) {
+                const isFoundId = await userModel.getUserDetailCondition({ id: request.user.id }) 
+                const token = jwt.sign({ id: isFoundId[0].userid, 
+                                        email: isFoundId[0].email, 
+                                        role: isFoundId[0].nameRole,
+                                        nameUser: isFoundId[0].nameUser}, 
+                                        TOKEN_SECRET, 
+                                        { expiresIn: '24h', 
+                                            algorithm: TOKEN_ALGORITMA } )
                 const data = {
                     success: true,
-                    message: `Biodata ${name} was updated`
+                    message: `Biodata ${name} was updated`,
+                    userData: {
+                        email: isFoundId[0].email,
+                        name: isFoundId[0].nameUser,
+                        role: isFoundId[0].nameRole
+                     },
+                     token: "Bearer " + token
                 }
-                response.status(201).send(data)
+                response.status(200).header('Authorization', token).send(data)
             } else {
                 const data = {
                     success: false,
