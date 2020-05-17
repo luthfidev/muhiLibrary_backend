@@ -102,7 +102,8 @@ module.exports = {
                             books.description, 
                             books.image, 
                             authors.name as authorName, 
-                            genres.name as genreName, 
+                            genres.name as genreName,
+                            books.release_date as releaseDate, 
                             book_statuses.name as nameStatus, 
                             books.created_at, 
                             books.updated_at FROM books 
