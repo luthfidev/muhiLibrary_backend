@@ -24,13 +24,6 @@ exports.bookstatus = [
             .isLength({max: 100}).withMessage('Max character 100'),
 ],
 
-exports.transactionstatus = [
-    check('name')
-            .not().isEmpty().withMessage('Name is required')
-            .isAlpha().withMessage('Name must be alpha')
-            .isLength({max: 25}).withMessage('Max character 25'),
-],
-
 exports.book = [
     check('title')
             .not().isEmpty().withMessage('Title is required')
