@@ -47,3 +47,17 @@ DB_PORT = 3306<br>
 <br>
 TOKEN_SECRET = 'must be filled'<br>
 TOKEN_ALGORITMA = HS256<br>
+
+***
+
+## API End Point
+
+```shell
+* http://localhost:5000/auth 
+* http://localhost:5000/users 
+* http://localhost:5000/books
+* http://localhost:5000/transactions
+* http://localhost:5000/genres
+* http://localhost:5000/authors
+* http://localhost:5000/bookstatuses 
+```
