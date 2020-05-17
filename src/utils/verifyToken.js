@@ -2,16 +2,21 @@ const jwt = require('jsonwebtoken')
 
 const verifyToken = (request, response, next) => {
     const bearerHeader = request.header('Authorization')
-    if (typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split('Bearer ')
-        const bearerToken = bearer[1]
-        token = bearerToken
+    if (!bearerHeader || bearerHeader.indexOf('Bearer ') === -1) {
+        const data = {
+            success: false,
+            message: 'Missing Authorization Header'
+        }
+        return response.status(401).send(data);
     }
+    const token = bearerHeader.split(' ')[1]
+    
     const data = {
         success: false,
         message: 'Access Denied'
     }
     if (!token) return response.status(401).send(data)
+    
     try {
         const verified = jwt.verify(token, process.env.TOKEN_SECRET)
         request.user = verified
