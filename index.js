@@ -5,11 +5,11 @@ const express = require('express')
 const app = express()
 app.use('/uploads', express.static('uploads'))
 const bodyparser = require('body-parser')
-app.use(bodyparser.urlencoded({ extended: false }))
-app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }))
+/* app.use(bodyparser.json()); */
 
 const cors = require('cors')
-app.use(cors())
+app.use(cors()) 
 
 app.get('/', (request, response) => {
     const data = {
