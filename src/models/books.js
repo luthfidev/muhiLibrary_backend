@@ -101,7 +101,8 @@ module.exports = {
                             authors.name as authorName, 
                             genres.name as genreName,
                             books.release_date as releaseDate, 
-                            book_statuses.name as nameStatus, 
+                            book_statuses.name as nameStatus,
+                            book_statuses.description as descriptionStatus,  
                             books.created_at, 
                             books.updated_at FROM books 
                      JOIN authors ON authors.id = books.author_id 
