@@ -30,12 +30,8 @@ module.exports = {
             data: userData.map(data => ({ 
                 id: data.id, 
                 email: data.email, 
-                password: "**************************",
-                picture: `${APP_URL}` + data.picture,
                 name: data.name,
-                birthdate: data.birthdate,
                 gender: data.gender,
-                role: data.role,
                 created_at: data.created_at,
                 updated_at: data.updated_at
             })),
