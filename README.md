@@ -57,6 +57,8 @@ TOKEN_ALGORITMA = HS256<br>
 * http://localhost:5000/users 
 * http://localhost:5000/books
 * http://localhost:5000/transactions
+  * http://localhost:5000/transactions/user
+  * http://localhost:5000/transactions/userstatus
 * http://localhost:5000/genres
 * http://localhost:5000/authors
 * http://localhost:5000/bookstatuses 
