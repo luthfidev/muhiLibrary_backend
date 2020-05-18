@@ -13,17 +13,22 @@ router.use(verify)
       .get('/userstatus/',
             transactionController.getTransactionDetailUser)
       .get('/:id',
+      checkRole('admin'),
             transactionController.getTransactionDetail) 
-      .post('/', 
+      .post('/',
+            checkRole('admin'), 
             validator.transaction,
             transactionController.createTransaction)
       .post('/user', 
+      checkRole('admin'),
             validator.userTransaction,
             transactionController.createUserTransaction)
-      .patch('/:id', 
+      .patch('/:id',
+            checkRole('admin'), 
             validator.transaction,
             transactionController.updateTransaction)
       .delete('/:id', 
+            checkRole('admin'),
             transactionController.deleteTransaction)
 
 module.exports = router
