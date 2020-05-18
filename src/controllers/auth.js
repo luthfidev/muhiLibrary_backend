@@ -15,7 +15,7 @@ module.exports = {
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error.array().map(item => ({[item.param]: item.msg}))
+                message: Error.array()
             }
             response.status(400).send(data)
             return
