@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 
 const verifyToken = (request, response, next) => {
     const bearerHeader = request.header('Authorization')
-    if (!bearerHeader || bearerHeader.indexOf('Bearer ') === -1) {
+    if (!bearerHeader || bearerHeader.indexOf(' ') === -1) {
         const data = {
             success: false,
             message: 'Missing Authorization Header'
