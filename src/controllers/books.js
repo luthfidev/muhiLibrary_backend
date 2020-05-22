@@ -1,8 +1,11 @@
 const { validationResult } = require('express-validator')
 const fs = require('fs')
+const multer = require("multer");
 const { APP_URL } = process.env
 const bookModel = require('../models/books')
 const pagination = require('../utils/pagination')
+const config = require("../utils/multer");
+const upload = config.single("image");
 
 module.exports = {
 
@@ -11,7 +14,6 @@ module.exports = {
         const condition = {
             search,
             sort
-            
         }
 
         if (request.user.nameUser === null) {
@@ -55,50 +57,65 @@ module.exports = {
     },
 
     createBook: async (request, response) => {
-        const { title, description, genre_id, author_id, release_date, status_id } = request.body
-        if (!request.file) {
+        upload(request, response, async function (error) {
+            if (error instanceof multer.MulterError) {
+              const data = {
+                  success: false,
+                  message: 'File too large'
+              }
+            return response.status(400).send(data)
+            } else if (error) {
+              const data = {
+                  success: false,
+                  message: 'Only allow jpg/jpeg, png'
+              }
+            return response.status(400).send(data)
+            }
+            try {
+                if (!request.file) {
+                  const data = {
+                      success: false,
+                      message: 'Please choose file ...'
+                  }
+                  return response.status(400).send(data)
+                } else {
+                    const { title, description, genre_id, author_id, release_date, status_id } = request.body    
+                    const image  = request.file.path
+                    
+                   
+                    const bookData = {
+                        title,
+                        description,
+                        image,
+                        genre_id,
+                        author_id,
+                        release_date,
+                        status_id
+                    }
+                    const results = await bookModel.createBook(bookData)
+                    if (results) {
+                        const data = {
+                            success: true,
+                            message: 'create book has been success',
+                            data: bookData
+                        }
+                        return response.status(201).send(data)
+                    } else {
+                        const data = {
+                            success: false,
+                            message: 'Failed create book'
+                        }
+                        return response.status(400).send(data)
+                    }
+                }
+            } catch (error) {
             const data = {
-                success: true,
-                message: `Please upload a file`
+                success: false,
+                message: 'Cannot upload file'
             }
-            response.status(400).send(data)
-        } else {    
-            const image  = request.file.path 
-            
-           const Error = await validationResult(request)
-            if (!Error.isEmpty()) {
-                const data = {
-                    success: false,
-                    message: Error.array()
-                }
-                response.status(400).send(data)
-                return
-            } 
-            const bookData = {
-                title,
-                description,
-                image,
-                genre_id,
-                author_id,
-                release_date,
-                status_id
-            }
-            const results = await bookModel.createBook(bookData)
-            if (results) {
-                const data = {
-                    success: true,
-                    message: 'create book has been success',
-                    data: bookData
-                }
-                response.status(201).send(data)
-            } else {
-                const data = {
-                    success: false,
-                    message: 'Failed create book'
-                }
-                response.status(400).send(data)
-            }
-        }
+            return response.status(400).send(data)
+          }
+        })
     },
 
     updateBook: async (request, response) => {
