@@ -4,6 +4,7 @@ const express = require('express')
 const bodyparser = require('body-parser')
 const cors = require('cors')
 const app = express()
+const PORT = process.env.PORT || 5000
 
 
 app.use(bodyparser.urlencoded({ extended: true }))
@@ -38,6 +39,6 @@ app.get('*', (request, response) => {
     response.status(400).send('Page not found')
 })
 
-app.listen(3000, '0.0.0.0', () => {
+app.listen(PORT, () => {
    // console.log(`Express app is listening on port ${APP_URL}`)
 })
