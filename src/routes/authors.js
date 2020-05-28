@@ -2,9 +2,10 @@ const router = require('express').Router()
 const validator = require('../utils/validator')
 const authorController = require('../controllers/authors')
 const checkRole = require('../utils/roles')
+const cekBiodata = require('../utils/cekBiodata')
 const verify = require('../utils/verifyToken')
 
-router.use(verify)
+router.use(verify, cekBiodata)
       .use(checkRole('admin'))
       .get('/', 
             authorController.getAllAuthors)

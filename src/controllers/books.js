@@ -14,14 +14,6 @@ module.exports = {
             
         }
 
-        if (request.user.nameUser === null) {
-            const data = {
-                success: false,
-                message: 'Please update your profile'
-            }
-            response.status(400).send(data)
-            return false
-        }
         const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
         const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
         const totalData = await bookModel.getBooksCount(condition)

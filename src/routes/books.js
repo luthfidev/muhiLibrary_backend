@@ -3,9 +3,10 @@ const bookController = require('../controllers/books')
 const validator = require('../utils/validator')
 const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
+const cekBiodata = require('../utils/cekBiodata')
 const upload = require('../utils/multer')
 
-router.use(verify)
+router.use(verify, cekBiodata)
       .get('/',
             bookController.getAllBooks)
       .post('/', 
