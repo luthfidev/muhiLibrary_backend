@@ -52,7 +52,7 @@ module.exports = {
                             email: isFound[0].email,
                             role: isFound[0].nameRole
                         },
-                        token: "Bearer " + token
+                        token: token
                     }
                     response.status(200).header('Authorization', token).send(data)
                 }

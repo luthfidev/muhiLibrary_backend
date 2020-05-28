@@ -3,19 +3,18 @@ const bookController = require('../controllers/books')
 const validator = require('../utils/validator')
 const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
+const cekBiodata = require('../utils/cekBiodata')
 const upload = require('../utils/multer')
 
-router.use(verify)
+router.use(verify, cekBiodata)
       .get('/',
             bookController.getAllBooks)
       .post('/', 
             checkRole('admin'), 
-            upload.single('image'), 
             validator.book, 
             bookController.createBook)
       .patch('/:id', 
             checkRole('admin'), 
-            upload.single('image'), 
             validator.book, 
             bookController.updateBook)
       .delete('/:id', 

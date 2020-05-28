@@ -1,11 +1,12 @@
 const router = require('express').Router()
 const checkRole = require('../utils/roles')
 const verify = require('../utils/verifyToken')
+const cekBiodata = require('../utils/cekBiodata')
 const transactionController = require('../controllers/transactions')
 const validator = require('../utils/validator')
 
 
-router.use(verify)
+router.use(verify, cekBiodata)
       .get('/',
             checkRole('admin'), 
             transactionController.getAllTransactions)

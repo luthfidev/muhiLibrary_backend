@@ -15,10 +15,11 @@ const fileFilter = (request, file, callback) => {
         return callback(new Error('Only image files are allowed!'), false);
     }
 }
-module.exports = upload = multer({ 
+
+const upload = multer({ 
     storage:  storage, 
     limits: { fileSize: 5 * 1024 * 1024 },
    fileFilter: fileFilter
 }) 
-
+module.exports = upload
 
