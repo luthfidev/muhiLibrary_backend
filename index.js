@@ -38,6 +38,6 @@ app.get('*', (request, response) => {
     response.status(400).send('Page not found')
 })
 
-app.listen(APP_PORT || 3000, () => {
-    console.log(`Express app is listening on port ${APP_URL}`)
+app.listen(3000, () => {
+   // console.log(`Express app is listening on port ${APP_URL}`)
 })
