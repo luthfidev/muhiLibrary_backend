@@ -11,12 +11,10 @@ router.use(verify, cekBiodata)
             bookController.getAllBooks)
       .post('/', 
             checkRole('admin'), 
-            upload.single('image'), 
             validator.book, 
             bookController.createBook)
       .patch('/:id', 
             checkRole('admin'), 
-            upload.single('image'), 
             validator.book, 
             bookController.updateBook)
       .delete('/:id', 
