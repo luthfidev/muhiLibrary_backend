@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 const { TOKEN_SECRET, TOKEN_ALGORITMA } = process.env
 const authModel = require('../models/auth')
+const logsModel = require('../models/logs')
 
 
 
@@ -15,11 +16,24 @@ module.exports = {
         if (!Error.isEmpty()) {
             const data = {
                 success: false,
-                message: Error.array().map(item => ({[item.param]: item.msg}))
+                message: Error.array()
             }
             response.status(400).send(data)
             return
         }
+
+        const isLoginLogs = await logsModel.getCheckLogin({ user_email: email })
+
+      if (isLoginLogs.length > 0) {
+          if (isLoginLogs[0].user_email == email) {
+                const data = {
+                    success: false,
+                    message: 'User was login another device',
+                }
+                response.status(400).send(data)
+                return false
+            } 
+      }
 
         const isFound = await authModel.getAuthCondition({ email })
         if (isFound.length > 0) {
@@ -45,6 +59,16 @@ module.exports = {
                                              TOKEN_SECRET, 
                                                 { expiresIn: '24h', 
                                                   algorithm: TOKEN_ALGORITMA } )
+                    
+                    const isLoginLogsData = {
+                        user_email: email,
+                        type: 0,
+                        description: 'login',
+                        status: 0
+                    }
+                    
+                    logsModel.createLogsLogin(isLoginLogsData)
+
                     const data = {
                         success: true,
                         message: 'Password Match',
@@ -106,6 +130,29 @@ module.exports = {
             }
             response.status(400).send(data)
         }
-    }
+    },
+
+    logOut: async (request, response) => {
+        const condition = {
+            email: request.user.email,
+            type: 0
+        }
+            const results = await logsModel.deleteLogsLogin(condition)
+
+            if (results) {
+                const data = {
+                    success: true,
+                    message: 'success logout'
+                }
+                response.status(200).send(data)
+            } else {
+                const data = {
+                    success: false,
+                    message: 'Failed to logout'
+                }
+                response.status(400).send(data)
+            }
+           
+    },
 
 }
