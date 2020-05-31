@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 
-const verifyToken = (request, response, next) => {
+
+const verifyToken = async (request, response, next) => {
     const bearerHeader = request.header('Authorization')
     if (!bearerHeader || bearerHeader.indexOf(' ') === -1) {
         const data = {
@@ -19,7 +21,7 @@ const verifyToken = (request, response, next) => {
     
     try {
         const verified = jwt.verify(token, process.env.TOKEN_SECRET)
-        request.user = verified
+        payload = verified
         next()
     } catch (error) {
         const data = {

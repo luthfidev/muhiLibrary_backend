@@ -21,7 +21,6 @@ router.use(verify, cekBiodata)
             validator.transaction,
             transactionController.createTransaction)
       .post('/user', 
-      checkRole('admin'),
             validator.userTransaction,
             transactionController.createUserTransaction)
       .patch('/:id',
