@@ -12,7 +12,8 @@ install:
 script:
 - npm test
 
-after_success:
+jobs:
+  fast_finish: true
 
 branches:
   only: 
