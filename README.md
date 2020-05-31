@@ -49,4 +49,4 @@ TOKEN_SECRET = 'must be filled'<br>
 TOKEN_ALGORITMA = HS256<br>
 
 ## heroku
-<https://muhilibrary.herokuapp.com/>
+<https://api-muhilibrary.herokuapp.com/>
