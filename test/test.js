@@ -53,9 +53,12 @@ describe('Test API Routes', function() {
                 .send({"email": 'user15@lib.com', password: "user15"})
                 .end(function(err, res) {
                 done(err);
+                process.exit(0)
             });
         });
     });
+
+  
 
 
 
