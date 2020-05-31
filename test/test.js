@@ -6,7 +6,7 @@ global.app = app;
 global.expect = chai.expect;
 global.request = supertest(app);
 
-describe('Task API Routes', function() {
+describe('Test API Routes', function() {
  /*    // This function will run before every test to clear database
     beforeEach(function(done) {
         app.db.object = {};
@@ -25,7 +25,7 @@ describe('Task API Routes', function() {
 
     // In this test it's expected a task list of two tasks
     describe('GET /', function() {
-        it('returns a list of tasks', function(done) {
+        it('returns a Muhilibray v1', function(done) {
             request.get('/')
                 .expect(200)
                 .end(function(err, res) {
