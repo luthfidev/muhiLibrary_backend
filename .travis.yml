@@ -1,7 +1,10 @@
 language: node_js
 node_js:
 - node
+
 cache: npm
+
+GITHUB_SECRET_TOKEN: $GITHUB_TOKEN
 
 install:
 - npm install
@@ -9,7 +12,7 @@ install:
 script:
 - npm test
 
-GITHUB_SECRET_TOKEN: $GITHUB_TOKEN
+after_success:
 
 branches:
   only: 
