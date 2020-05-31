@@ -11,6 +11,8 @@ const logsModel = require('../models/logs')
 module.exports = {
 
     signIn: async (request, response) => {
+        /* var current_time = Date.now() / 1000 - 1000;
+        console.log(Math.floor(current_time)) */
         const { email, password } = request.body     
         const Error = await validationResult(request)
         if (!Error.isEmpty()) {
@@ -28,7 +30,7 @@ module.exports = {
           if (isLoginLogs[0].user_email == email) {
                 const data = {
                     success: false,
-                    message: 'User was login another device',
+                    message: 'user has logged in',
                 }
                 response.status(400).send(data)
                 return false
@@ -52,12 +54,14 @@ module.exports = {
                     }
                     response.status(400).send(data)
                 } else {
-                    const token = jwt.sign({ id: isFound[0].id, 
-                                             email: isFound[0].email, 
-                                             role: isFound[0].nameRole,
-                                             nameUser: isFound[0].nameUser}, 
-                                             TOKEN_SECRET, 
-                                                { expiresIn: '24h', 
+                    payload = { 
+                        id: isFound[0].id, 
+                        email: isFound[0].email, 
+                        role: isFound[0].nameRole,
+                        nameUser: isFound[0].nameUser
+                    }
+                    const token = jwt.sign(payload, TOKEN_SECRET, 
+                                                { expiresIn: '1h', 
                                                   algorithm: TOKEN_ALGORITMA } )
                     
                     const isLoginLogsData = {
@@ -134,7 +138,7 @@ module.exports = {
 
     logOut: async (request, response) => {
         const condition = {
-            email: request.user.email,
+            email: payload.email,
             type: 0
         }
             const results = await logsModel.deleteLogsLogin(condition)
