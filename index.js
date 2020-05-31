@@ -41,7 +41,7 @@ app.get('*', (request, response) => {
 })
 
 app.listen(APP_PORT, () => {
-    console.log(`Express app is listening on port ${APP_URL}`)
+    console.log(`Server running`)
 })
 
 module.exports = app
