@@ -157,7 +157,7 @@ module.exports = {
 
     createUserTransaction: async (request, response) => {
         const { transaction_date, book_id} = request.body
-            if (request.user.nameUser === null) {
+            if (payload.nameUser === null) {
                 const data = {
                     success: false,
                     message: 'Please update your profile'
@@ -176,7 +176,7 @@ module.exports = {
             }
             const transactionData = {
                 transaction_date, 
-                user_id: request.user.id,
+                user_id: payload.id,
                 book_id, 
             }
 
@@ -239,7 +239,7 @@ module.exports = {
     },
 
     getTransactionDetailUser: async (request, response) => {
-        const userid = request.user.id
+        const userid = payload.id
         const isFoundId = await transactionModel.getTransactionDetailUser( userid )
         if (isFoundId.length > 0) {
             const detailTransactionData = await transactionModel.getTransactionDetailUser(userid)
