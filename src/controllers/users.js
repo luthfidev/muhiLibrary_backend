@@ -147,7 +147,7 @@ module.exports = {
             }
             
             const userData = {
-                user_id: request.user.id,
+                user_id: payload.id,
                 name,
                 picture,
                 birthdate,
@@ -156,13 +156,15 @@ module.exports = {
             
             const results = await userModel.updateUserDetail(userData)
             if (results) {
-                const isFoundId = await userModel.getUserDetailCondition({ id: request.user.id }) 
-                const token = jwt.sign({ id: isFoundId[0].userid, 
-                                        email: isFoundId[0].email, 
-                                        role: isFoundId[0].nameRole,
-                                        nameUser: isFoundId[0].nameUser}, 
-                                        TOKEN_SECRET, 
-                                        { expiresIn: '24h', 
+                const isFoundId = await userModel.getUserDetailCondition({ id: payload.id }) 
+                payload = { 
+                    id: isFound[0].id, 
+                    email: isFound[0].email, 
+                    role: isFound[0].nameRole,
+                    nameUser: isFound[0].nameUser
+                }
+                const token = jwt.sign(payload, TOKEN_SECRET, 
+                                        { expiresIn: '1h', 
                                             algorithm: TOKEN_ALGORITMA } )
                 const data = {
                     success: true,
