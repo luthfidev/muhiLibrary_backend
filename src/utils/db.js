@@ -13,7 +13,7 @@ connection.connect(function(error) {
     if (error) {
       return console.log('DB not connect')
     }
-    console.log('DB is connect')
+   console.log('DB is connect')
 })
 
 module.exports = connection

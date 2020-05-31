@@ -19,7 +19,7 @@ const verifyToken = async (request, response, next) => {
     
     try {
         const verified = jwt.verify(token, process.env.TOKEN_SECRET)
-        const payload = verified
+        const payload = verified    
         next()
     } catch (error) {
         const data = {
