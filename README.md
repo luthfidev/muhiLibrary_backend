@@ -50,3 +50,18 @@ TOKEN_ALGORITMA = HS256<br>
 
 ## heroku
 <https://api-muhilibrary.herokuapp.com/>
+
+## API End Point
+
+```shell
+* https://api-muhilibrary.herokuapp.com/auth/signin
+* https://api-muhilibrary.herokuapp.com/auth/signup
+* https://api-muhilibrary.herokuapp.com/users 
+* https://api-muhilibrary.herokuapp.com/books
+* https://api-muhilibrary.herokuapp.com/transactions
+  - https://api-muhilibrary.herokuapp.com/transactions/user
+  - https://api-muhilibrary.herokuapp.com/transactions/userstatus
+* https://api-muhilibrary.herokuapp.com/genres
+* https://api-muhilibrary.herokuapp.com/authors
+* https://api-muhilibrary.herokuapp.com/bookstatuses 
+```
