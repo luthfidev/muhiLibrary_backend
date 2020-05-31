@@ -10,12 +10,12 @@ describe('Check pages', function() {
                   
         })
     })
-    it('invalid Token because must be login', function(done) {
+   /*  it('invalid Token because must be login', function(done) {
         request('https://api-muhilibrary.herokuapp.com//books', function(error, response, body) {
             expect(response.statusCode).to.equal(401)
             done()     
         })
-    })
+    }) */
 
   })
 
