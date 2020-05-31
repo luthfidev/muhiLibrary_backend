@@ -50,18 +50,20 @@ DB_PORT = 3306<br>
 TOKEN_SECRET = 'must be filled'<br>
 TOKEN_ALGORITMA = HS256<br>
 
-***
+## heroku
+<https://api-muhilibrary.herokuapp.com/>
 
 ## API End Point
 
 ```shell
-* http://localhost:5000/auth 
-* http://localhost:5000/users 
-* http://localhost:5000/books
-* http://localhost:5000/transactions
-  - http://localhost:5000/transactions/user
-  - http://localhost:5000/transactions/userstatus
-* http://localhost:5000/genres
-* http://localhost:5000/authors
-* http://localhost:5000/bookstatuses 
+* https://api-muhilibrary.herokuapp.com/auth/signin
+* https://api-muhilibrary.herokuapp.com/auth/signup
+* https://api-muhilibrary.herokuapp.com/users 
+* https://api-muhilibrary.herokuapp.com/books
+* https://api-muhilibrary.herokuapp.com/transactions
+  - https://api-muhilibrary.herokuapp.com/transactions/user
+  - https://api-muhilibrary.herokuapp.com/transactions/userstatus
+* https://api-muhilibrary.herokuapp.com/genres
+* https://api-muhilibrary.herokuapp.com/authors
+* https://api-muhilibrary.herokuapp.com/bookstatuses 
 ```
