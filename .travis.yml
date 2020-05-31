@@ -11,10 +11,9 @@ script:
 
 GITHUB_SECRET_TOKEN: $GITHUB_TOKEN
 
-# branches:
-#  only:
-#   - deploy_heroku
-#   - master
+branches:
+  only: 
+    - master
 
 # after_success:
 #   - "curl -o /tmp/travis-automerge https://raw.githubusercontent.com/cdown/travis-automerge/master/travis-automerge"
