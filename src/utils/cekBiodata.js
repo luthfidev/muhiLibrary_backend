@@ -1,6 +1,6 @@
 const cekBiodata = (request, response, next) => {
 
-    if (request.user.nameUser === null) {
+    if (payload.nameUser === null) {
         const data = {
             success: false,
             message: 'Please update your profile'

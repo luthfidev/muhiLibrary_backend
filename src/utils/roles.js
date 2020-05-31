@@ -4,7 +4,7 @@
   const permit = (...allowed) => {
     const isAllowed = role => allowed.indexOf(role) > -1;
     return (request, response, next) => {
-      if (request.user && isAllowed(request.user.role)) {
+      if (payload && isAllowed(payload.role)) {
         next(); 
        } else {
         const data = {
