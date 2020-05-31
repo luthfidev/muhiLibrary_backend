@@ -12,9 +12,6 @@ install:
 script:
 - npm test
 
-jobs:
-  fast_finish: true
-
 branches:
   only: 
     - master
