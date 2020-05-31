@@ -9,7 +9,7 @@ router.post('/signin',
       .post('/signup', 
             validator.signUp, 
             authController.signUp)
-      .get('/logout',
+      .delete('/logout',
             verify,  
             authController.logOut)
 
