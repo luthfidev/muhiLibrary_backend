@@ -54,7 +54,7 @@ module.exports = {
                     }
                     response.status(400).send(data)
                 } else {
-                    payload = { 
+                   const payload = { 
                         id: isFound[0].id, 
                         email: isFound[0].email, 
                         role: isFound[0].nameRole,

@@ -11,21 +11,6 @@ const logsModel = require('../models/logs')
 module.exports = {
 
     getAllBooks: async (request, response) => {
-    /*     await setInterval(() => {
-            const condition = {
-                email: request.user.email,
-                type: 0
-            }
-            let isLoginLogs = logsModel.deleteLogsLogin(condition)
-          }, 1000); */
-       /*  let current_time = Date.now() / 1000 - 1000
-        if (request.user.exp > current_time) {
-            const condition = {
-                email: request.user.email,
-                type: 0
-            }
-            let isLoginLogs = await logsModel.deleteLogsLogin(condition)
-        } */
         const { page, limit, search, sort } = request.query
         const condition = {
             search,
