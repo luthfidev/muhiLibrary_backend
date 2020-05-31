@@ -158,10 +158,10 @@ module.exports = {
             if (results) {
                 const isFoundId = await userModel.getUserDetailCondition({ id: payload.id }) 
                 payload = { 
-                    id: isFound[0].id, 
-                    email: isFound[0].email, 
-                    role: isFound[0].nameRole,
-                    nameUser: isFound[0].nameUser
+                    id: isFoundId[0].id, 
+                    email: isFoundId[0].email, 
+                    role: isFoundId[0].nameRole,
+                    nameUser: isFoundId[0].nameUser
                 }
                 const token = jwt.sign(payload, TOKEN_SECRET, 
                                         { expiresIn: '1h', 
