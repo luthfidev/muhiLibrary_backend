@@ -1,7 +1,6 @@
 const db = require('../utils/db')
 
 module.exports = {
-
   getAuthCondition: (data) => {
     const sql = `SELECT users.id, 
                             users.email, 

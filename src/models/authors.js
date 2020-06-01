@@ -1,7 +1,6 @@
 const db = require('../utils/db')
 
 module.exports = {
-
   getAuthorsCount: (data) => {
     const sql = `SELECT COUNT(*) as total FROM authors
                      WHERE name LIKE '%${data.search || ''}%' 
@@ -77,5 +76,4 @@ module.exports = {
       })
     })
   }
-
 }

@@ -1,7 +1,6 @@
 const db = require('../utils/db')
 
 module.exports = {
-
   getBooksCount: (data) => {
     const sql = `SELECT COUNT(books.id) as total FROM books 
                      JOIN authors ON authors.id = books.author_id 
@@ -118,5 +117,4 @@ module.exports = {
       })
     })
   }
-
 }

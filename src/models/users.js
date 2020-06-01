@@ -1,7 +1,6 @@
 const db = require('../utils/db')
 
 module.exports = {
-
   getUsersCount: (data) => {
     const sql = `SELECT COUNT(users.id) as total FROM users 
                      JOIN roles on roles.id = users.role_id 

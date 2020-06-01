@@ -1,7 +1,6 @@
 const db = require('../utils/db')
 
 module.exports = {
-
   getCheckLogin: (email) => {
     const sql = `SELECT logs.user_email,
                             logs.type FROM logs
@@ -39,5 +38,4 @@ module.exports = {
       })
     })
   }
-
 }
