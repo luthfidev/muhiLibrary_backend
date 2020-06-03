@@ -1,16 +1,18 @@
 const router = require('express').Router()
 const authController = require('../controllers/auth')
-const validator = require('../utils/validator')
 const verify = require('../utils/verifyToken')
+const { authValidationRules, validate } = require('../utils/validators')
 
 router.post('/signin',
-            validator.signIn,  
-            authController.signIn)
-      .post('/signup', 
-            validator.signUp, 
-            authController.signUp)
-      .delete('/logout',
-            verify,  
-            authController.logOut)
+  authValidationRules(),
+  validate,
+  authController.signIn)
+  .post('/signup',
+    authValidationRules(),
+    validate,
+    authController.signUp)
+  .delete('/logout',
+    verify,
+    authController.logOut)
 
 module.exports = router
