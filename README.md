@@ -1,6 +1,6 @@
 # API muhilibrary_backend
  
-[![Build Status](https://travis-ci.org/luthfidev/muhilibrary-backend.svg?branch=master)](https://travis-ci.org/luthfidev/muhilibrary-backend) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![Heroku](https://heroku-badge.herokuapp.com/?app=heroku-badge)]
+[![Build Status](https://travis-ci.org/luthfidev/muhilibrary-backend.svg?branch=master)](https://travis-ci.org/luthfidev/muhilibrary-backend) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 
 This library muhi API to make transactions to borrow books or look for books register members
