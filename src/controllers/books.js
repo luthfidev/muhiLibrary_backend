@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator')
 const fs = require('fs')
 const multer = require('multer')
 const { APP_URL } = process.env
@@ -48,7 +47,7 @@ module.exports = {
     response.status(200).send(data)
   },
 
-  createBook: async (request, response) => {
+  createBook: (request, response) => {
     upload(request, response, async function (error) {
       if (error instanceof multer.MulterError) {
         const data = {
@@ -71,17 +70,17 @@ module.exports = {
           }
           return response.status(400).send(data)
         } else {
-          const { title, description, genreId, authorId, releaseDate, statusId } = request.body
+          const { title, description, genreid, authorid, releasedate, statusid } = request.body
           const image = request.file.path
 
           const bookData = {
             title,
             description,
             image,
-            genreId,
-            authorId,
-            releaseDate,
-            statusId
+            genre_id: genreid,
+            author_id: authorid,
+            release_date: releasedate,
+            status_id: statusid
           }
           const results = await bookModel.createBook(bookData)
           if (results) {
@@ -111,7 +110,7 @@ module.exports = {
 
   updateBook: async (request, response) => {
     const { id } = request.params
-    const { title, description, genreId, authorId } = request.body
+    const { title, description, genreid, authorid } = request.body
     const image = request.file.path
     if (!request.file) {
       const data = {
@@ -120,21 +119,12 @@ module.exports = {
       }
       response.status(400).send(data)
     } else {
-      const Error = await validationResult(request)
-      if (!Error.isEmpty()) {
-        const data = {
-          success: false,
-          message: Error.array()
-        }
-        response.status(422).send(data)
-        return
-      }
       const checkId = await bookModel.getBookByCondition({ id: parseInt(id) })
       if (checkId.length > 0) {
         if (checkId[0].image !== image) {
           await fs.unlinkSync(checkId[0].image)
           const bookData = [
-            { title, description, image, genreId, authorId },
+            { title, description, image, genre_id: genreid, author_id: authorid },
             { id: parseInt(id) }
           ]
           const results = await bookModel.updateBook(bookData)
