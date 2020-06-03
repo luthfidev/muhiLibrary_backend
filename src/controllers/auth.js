@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
@@ -10,18 +9,7 @@ module.exports = {
 
   signIn: async (request, response) => {
     const { email, password } = request.body
-    const Error = await validationResult(request)
-    if (!Error.isEmpty()) {
-      const data = {
-        success: false,
-        message: Error.array()
-      }
-      response.status(400).send(data)
-      return
-    }
-
     const isLoginLogs = await logsModel.getCheckLogin({ user_email: email })
-
     if (isLoginLogs.length > 0) {
       if (isLoginLogs[0].user_email === email) {
         const data = {
@@ -61,16 +49,13 @@ module.exports = {
               expiresIn: '1h',
               algorithm: TOKEN_ALGORITMA
             })
-
           const isLoginLogsData = {
             user_email: email,
             type: 0,
             description: 'login',
             status: 0
           }
-
           logsModel.createLogsLogin(isLoginLogsData)
-
           const data = {
             success: true,
             message: 'Password Match',
@@ -94,15 +79,6 @@ module.exports = {
 
   signUp: async (request, response) => {
     const { email, password } = request.body
-    const Error = await validationResult(request)
-    if (!Error.isEmpty()) {
-      const data = {
-        success: false,
-        message: Error.array()
-      }
-      response.status(400).send(data)
-      return
-    }
     const passwordHash = await bcrypt.hash(password, saltRounds)
     const isExist = await authModel.getAuthCondition({ email })
     if (isExist.length < 1) {
@@ -141,7 +117,6 @@ module.exports = {
       type: 0
     }
     const results = await logsModel.deleteLogsLogin(condition)
-
     if (results) {
       const data = {
         success: true,
