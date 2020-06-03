@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator')
 const { APP_URL } = process.env
 const authorModel = require('../models/authors')
 const pagination = require('../utils/pagination')
@@ -39,15 +38,6 @@ module.exports = {
   createAuthor: async (request, response) => {
     const { name, description } = request.body
 
-    const Error = await validationResult(request)
-    if (!Error.isEmpty()) {
-      const data = {
-        success: false,
-        message: Error.array()
-      }
-      response.status(400).send(data)
-      return
-    }
     const authorData = {
       name,
       description
@@ -72,15 +62,7 @@ module.exports = {
   updateAuthor: async (request, response) => {
     const { id } = request.params
     const { name, description } = request.body
-    const Error = await validationResult(request)
-    if (!Error.isEmpty()) {
-      const data = {
-        success: false,
-        message: Error.array()
-      }
-      response.status(400).send(data)
-      return
-    }
+
     const checkId = await authorModel.getAuthorByCondition({ id: parseInt(id) })
     if (checkId.length > 0) {
       const authorData = [
