@@ -3,13 +3,16 @@ const checkRole = require('../utils/roles')
 const verify = require('../utils/verifyToken')
 const cekBiodata = require('../utils/cekBiodata')
 const transactionController = require('../controllers/transactions')
-const validator = require('../utils/validator')
+const {
+  transactionValidationRules,
+  transactionUserValidationRules,
+  validate
+} = require('../utils/validators')
 
 router.use(verify, cekBiodata)
   .get('/',
     checkRole('admin'),
     transactionController.getAllTransactions)
-
   .get('/userstatus/',
     transactionController.getTransactionDetailUser)
   .get('/:id',
@@ -17,14 +20,17 @@ router.use(verify, cekBiodata)
     transactionController.getTransactionDetail)
   .post('/',
     checkRole('admin'),
-    validator.transaction,
+    transactionValidationRules(),
+    validate,
     transactionController.createTransaction)
   .post('/user',
-    validator.userTransaction,
+    transactionUserValidationRules(),
+    validate,
     transactionController.createUserTransaction)
   .patch('/:id',
     checkRole('admin'),
-    validator.transaction,
+    transactionValidationRules(),
+    validate,
     transactionController.updateTransaction)
   .delete('/:id',
     checkRole('admin'),
