@@ -3,17 +3,19 @@ const genreController = require('../controllers/genres')
 const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
 const cekBiodata = require('../utils/cekBiodata')
-const validator = require('../utils/validator')
+const { genreValidationRules, validate } = require('../utils/validators')
 
 router.use(verify, cekBiodata)
   .use(checkRole('admin'))
   .get('/',
     genreController.getAllGenres)
   .post('/',
-    validator.genre,
+    genreValidationRules(),
+    validate,
     genreController.createGenre)
   .patch('/:id',
-    validator.genre,
+    genreValidationRules(),
+    validate,
     genreController.updateGenre)
   .delete('/:id',
     genreController.deleteGenre)
