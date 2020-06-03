@@ -1,13 +1,15 @@
 const router = require('express').Router()
 const authController = require('../controllers/auth')
-const validator = require('../utils/validator')
 const verify = require('../utils/verifyToken')
+const { authValidationRules, validate } = require('../utils/validators')
 
 router.post('/signin',
-  validator.signIn,
+  authValidationRules(),
+  validate,
   authController.signIn)
   .post('/signup',
-    validator.signUp,
+    authValidationRules(),
+    validate,
     authController.signUp)
   .delete('/logout',
     verify,
