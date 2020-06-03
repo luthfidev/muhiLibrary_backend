@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const usersController = require('../controllers/users')
-const validator = require('../utils/validator')
 const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
 const upload = require('../utils/multer')
@@ -11,7 +10,6 @@ router.use(verify)
     usersController.getAllUsers)
   .post('/',
     checkRole('admin'),
-    validator.signUp,
     usersController.createUser)
   .delete('/:id',
     checkRole('admin'),
@@ -20,7 +18,6 @@ router.use(verify)
     usersController.getDetailUser)
   .patch('/biodata',
     upload.single('picture'),
-    validator.updateUserDetail,
     usersController.updateUserDetail)
 
 module.exports = router
