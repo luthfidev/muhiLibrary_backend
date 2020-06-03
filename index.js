@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { APP_PORT } = process.env || 5000
+const { APP_PORT } = process.env || process.PORT || 5000
 const express = require('express')
 const bodyparser = require('body-parser')
 const cors = require('cors')
