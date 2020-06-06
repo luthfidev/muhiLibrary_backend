@@ -14,7 +14,6 @@ module.exports = {
       search,
       sort
     }
-
     const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
     const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
     const totalData = await bookModel.getBooksCount(condition)
