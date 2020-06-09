@@ -36,7 +36,7 @@ module.exports = {
             success: false,
             message: 'Password not match'
           }
-          response.status(400).send(data)
+          response.status(401).send(data)
         } else {
           const payload = {
             id: isFound[0].id,

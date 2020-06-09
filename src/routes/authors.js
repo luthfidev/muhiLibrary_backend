@@ -5,13 +5,10 @@ const cekBiodata = require('../utils/cekBiodata')
 const verify = require('../utils/verifyToken')
 const { authorValidationRules, validate } = require('../utils/validators')
 
-router.use(verify, cekBiodata)
-  .use(checkRole('admin'))
-  .get('/',
+
+router.get('/',
     authorController.getAllAuthors)
   .post('/',
-    authorValidationRules(),
-    validate,
     authorController.createAuthor)
   .patch('/:id',
     authorValidationRules(),

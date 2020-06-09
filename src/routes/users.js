@@ -4,9 +4,7 @@ const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
 const upload = require('../utils/multer')
 
-router.use(verify)
-  .get('/',
-    checkRole('admin'),
+  router.get('/',
     usersController.getAllUsers)
   .post('/',
     checkRole('admin'),

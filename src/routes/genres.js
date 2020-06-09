@@ -5,9 +5,9 @@ const checkRole = require('../utils/roles')
 const cekBiodata = require('../utils/cekBiodata')
 const { genreValidationRules, validate } = require('../utils/validators')
 
-router.use(verify, cekBiodata)
-  .use(checkRole('admin'))
-  .get('/',
+
+
+router.get('/',
     genreController.getAllGenres)
   .post('/',
     genreValidationRules(),

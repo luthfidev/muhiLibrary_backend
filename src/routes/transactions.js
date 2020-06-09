@@ -9,9 +9,8 @@ const {
   validate
 } = require('../utils/validators')
 
-router.use(verify, cekBiodata)
-  .get('/',
-    checkRole('admin'),
+
+ router.get('/',
     transactionController.getAllTransactions)
   .get('/userstatus/',
     transactionController.getTransactionDetailUser)

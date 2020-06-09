@@ -6,10 +6,10 @@ const cors = require('cors')
 const app = express()
 const helmet = require('helmet')
 
-app.use(bodyparser.urlencoded({ extended: true }))
+
+app.use(bodyparser.json())
 app.use('/uploads', express.static('uploads'))
 app.use(cors())
-app.use(helmet())
 
 app.get('/', (request, response) => {
   const data = {
