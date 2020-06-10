@@ -8,6 +8,7 @@ const helmet = require('helmet')
 
 
 app.use(bodyparser.json())
+app.use(bodyparser.urlencoded({ extended: true }))
 app.use('/uploads', express.static('uploads'))
 app.use(cors())
 
