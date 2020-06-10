@@ -10,12 +10,8 @@ const { genreValidationRules, validate } = require('../utils/validators')
 router.get('/',
     genreController.getAllGenres)
   .post('/',
-    genreValidationRules(),
-    validate,
     genreController.createGenre)
   .patch('/:id',
-    genreValidationRules(),
-    validate,
     genreController.updateGenre)
   .delete('/:id',
     genreController.deleteGenre)
