@@ -11,8 +11,6 @@ router.get('/',
   .post('/',
     authorController.createAuthor)
   .patch('/:id',
-    authorValidationRules(),
-    validate,
     authorController.updateAuthor)
   .delete('/:id',
     authorController.deleteAuthor)
