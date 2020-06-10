@@ -7,10 +7,8 @@ const upload = require('../utils/multer')
   router.get('/',
     usersController.getAllUsers)
   .post('/',
-    checkRole('admin'),
     usersController.createUser)
   .delete('/:id',
-    checkRole('admin'),
     usersController.deleteUser)
   .get('/detail/:id',
     usersController.getDetailUser)
