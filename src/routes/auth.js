@@ -6,8 +6,6 @@ const { authValidationRules, validate } = require('../utils/validators')
 router.post('/',
   authController.signIn)
   .post('/signup',
-    authValidationRules(),
-    validate,
     authController.signUp)
   .delete('/logout',
     verify,
