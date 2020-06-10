@@ -18,21 +18,12 @@ const {
     checkRole('admin'),
     transactionController.getTransactionDetail)
   .post('/',
-    checkRole('admin'),
-    transactionValidationRules(),
-    validate,
     transactionController.createTransaction)
   .post('/user',
-    transactionUserValidationRules(),
-    validate,
     transactionController.createUserTransaction)
   .patch('/:id',
-    checkRole('admin'),
-    transactionValidationRules(),
-    validate,
     transactionController.updateTransaction)
   .delete('/:id',
-    checkRole('admin'),
     transactionController.deleteTransaction)
 
 module.exports = router
