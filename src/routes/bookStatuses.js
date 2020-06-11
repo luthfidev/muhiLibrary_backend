@@ -4,9 +4,7 @@ const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
 const cekBiodata = require('../utils/cekBiodata')
 
-router.use(verify, cekBiodata)
-  .use(checkRole('admin'))
-  .get('/',
+router.get('/',
     bookStatuses.getAllBookStatuses)
   .post('/',
     bookStatuses.createBookStatus)

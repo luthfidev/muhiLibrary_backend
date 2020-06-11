@@ -19,6 +19,7 @@ module.exports = {
   },
 
   getUserCondition: (data) => {
+    console.log(data)
     const sql = 'SELECT * FROM users WHERE ?'
     return new Promise((resolve, reject) => {
       db.query(sql, data, (error, results) => {

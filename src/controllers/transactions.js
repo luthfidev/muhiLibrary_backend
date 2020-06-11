@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator')
+
 const { APP_URL } = process.env
 const transactionModel = require('../models/transactions')
 const userModel = require('../models/users')
@@ -38,26 +38,18 @@ module.exports = {
   },
 
   createTransaction: async (request, response) => {
-    const { transactionDate, userId, bookId, statusId } = request.body
+    const { transactiondate, userid, bookid, statusid } = request.body
 
-    const isFound = await userModel.getUserCondition({ id: userId })
+    const isFound = await userModel.getUserCondition({ id: userid })
     if (isFound.length > 0) {
-      const Error = await validationResult(request)
-      if (!Error.isEmpty()) {
-        const data = {
-          success: false,
-          message: Error.array()
-        }
-        response.status(400).send(data)
-        return
-      }
       const transactionData = {
-        transactionDate,
-        userId,
-        bookId,
-        statusId
+        transaction_date: transactiondate,
+        user_id: userid,
+        book_id: bookid,
+        status_id: statusid
 
       }
+      
 
       const results = await transactionModel.createTransaction(transactionData)
       if (results) {
