@@ -36,7 +36,8 @@ module.exports = {
     const sql = `SELECT books.id, 
                             books.title, 
                             books.image, 
-                            genres.name as genreName, 
+                            genres.name as genreName,
+                            books.description as description,
                             book_statuses.name as nameStatus, 
                             books.created_at, 
                             books.updated_at FROM books 

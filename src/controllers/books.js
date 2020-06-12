@@ -29,6 +29,7 @@ module.exports = {
         id: data.id,
         title: data.title,
         image: `${APP_URL}` + data.image,
+        description: data.description,
         genreName: data.genreName,
         nameStatus: data.nameStatus,
         created_at: data.created_at,
