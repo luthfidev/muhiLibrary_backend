@@ -5,11 +5,11 @@ const storage = multer.diskStorage({
     callback(null, './uploads/')
   },
   filename: function (request, file, callback) {
-    callback(null, Date.now() + '_' + file.originalname)
+    callback(null, Date.now() + '_' + file.originalname.toLowerCase())
   }
 })
 const fileFilter = (request, file, callback) => {
-  if (file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+  if (file.originalname.toLowerCase().match(/\.(jpg|jpeg|png|gif)$/)) {
     callback(null, true)
   } else {
     return callback(new Error('Only image files are allowed!'), false)

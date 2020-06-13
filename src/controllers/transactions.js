@@ -156,15 +156,15 @@ module.exports = {
       response.status(400).send(data)
       return false
     } else {
-      const Error = await validationResult(request)
-      if (!Error.isEmpty()) {
-        const data = {
-          success: false,
-          message: Error.array()
-        }
-        response.status(400).send(data)
-        return
-      }
+      // const Error = await validationResult(request)
+      // if (!Error.isEmpty()) {
+      //   const data = {
+      //     success: false,
+      //     message: Error.array()
+      //   }
+      //   response.status(400).send(data)
+      //   return
+      // }
       const id = request.payload.id
       const transactionData = {
         transaction_date: transactiondate,

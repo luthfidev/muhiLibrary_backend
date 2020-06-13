@@ -35,9 +35,14 @@ module.exports = {
   getAllBooks: (start, end, data) => {
     const sql = `SELECT books.id, 
                             books.title, 
-                            books.image, 
+                            books.image,
+                            books.release_date as releaseDate,
+                            genres.id as genreId,
                             genres.name as genreName,
+                            authors.id as authorId,
+                            authors.name as authorName,
                             books.description as description,
+                            book_statuses.id as nameStatusId, 
                             book_statuses.name as nameStatus, 
                             books.created_at, 
                             books.updated_at FROM books 

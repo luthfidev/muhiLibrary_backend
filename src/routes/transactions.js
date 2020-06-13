@@ -20,6 +20,8 @@ const {
   .post('/',
     transactionController.createTransaction)
   .post('/user',
+    verify,
+    cekBiodata,
     transactionController.createUserTransaction)
   .patch('/:id',
     transactionController.updateTransaction)

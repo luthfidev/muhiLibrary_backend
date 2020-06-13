@@ -1,4 +1,4 @@
-const fs = require('fs')
+// const fs = require('fs')
 const multer = require('multer')
 const { APP_URL } = process.env
 const bookModel = require('../models/books')
@@ -28,9 +28,14 @@ module.exports = {
       data: bookData.map(data => ({
         id: data.id,
         title: data.title,
+        releaseDate: data.releaseDate,
         image: `${APP_URL}` + data.image,
         description: data.description,
+        authorId: data.authorId,
+        authorName: data.authorName,
+        genreId: data.genreId,
         genreName: data.genreName,
+        nameStatusId: data.nameStatusId,
         nameStatus: data.nameStatus,
         created_at: data.created_at,
         updated_at: data.updated_at
@@ -109,54 +114,69 @@ module.exports = {
   },
 
   updateBook: async (request, response) => {
-    const { id } = request.params
-    const { title, description, genreid, authorid } = request.body
-    const image = request.file.path
-    if (!request.file) {
-      const data = {
-        success: true,
-        message: 'Please upload a file'
+    upload(request, response, async function (error) {
+      if (error instanceof multer.MulterError) {
+        const data = {
+          success: false,
+          message: 'File too large'
+        }
+        return response.status(400).send(data)
+      } else if (error) {
+        const data = {
+          success: false,
+          message: 'Only allow jpg/jpeg, png'
+        }
+        return response.status(400).send(data)
       }
-      response.status(400).send(data)
-    } else {
-      const checkId = await bookModel.getBookByCondition({ id: parseInt(id) })
-      if (checkId.length > 0) {
-        if (checkId[0].image !== image) {
-          await fs.unlinkSync(checkId[0].image)
-          const bookData = [
-            { title, description, image, genre_id: genreid, author_id: authorid },
-            { id: parseInt(id) }
-          ]
-          const results = await bookModel.updateBook(bookData)
-          if (results) {
-            const data = {
-              success: true,
-              message: 'book has been update',
-              data: bookData[0]
+      try {
+        if (!request.file) {
+          const data = {
+            success: false,
+            message: 'Please choose file ...'
+          }
+          return response.status(400).send(data)
+        } else {
+          const { id } = request.params
+          const { title, description, genreid, authorid, releasedate, statusid } = request.body
+          const image = request.file.path
+          const checkId = await bookModel.getBookByCondition({ id: parseInt(id) })
+          if (checkId.length > 0) {
+            /*  await fs.unlinkSync(checkId[0].image) */
+            const bookData = [
+              { title, description, image, genre_id: genreid, author_id: authorid, release_date: releasedate, status_id: statusid },
+              { id: parseInt(id) }
+            ]
+            const results = await bookModel.updateBook(bookData)
+            if (results) {
+              const data = {
+                success: true,
+                message: 'book has been update',
+                data: bookData[0]
+              }
+              response.status(201).send(data)
+            } else {
+              const data = {
+                success: false,
+                message: 'Failed update book'
+              }
+              response.status(401).send(data)
             }
-            response.status(201).send(data)
           } else {
             const data = {
               success: false,
-              message: 'Failed update book'
+              message: `book with ${id} not found`
             }
-            response.status(401).send(data)
+            response.status(400).send(data)
           }
-        } else {
-          const data = {
-            success: false,
-            message: `book with ${id} not found`
-          }
-          response.status(400).send(data)
         }
-      } else {
+      } catch (error) {
         const data = {
           success: false,
-          message: `No image ${checkId[0].image} for delete, and delete your book to create new book`
+          message: 'Cannot upload file'
         }
-        response.status(400).send(data)
+        return response.status(400).send(data)
       }
-    }
+    })
   },
 
   deleteBook: async (request, response) => {
@@ -165,7 +185,7 @@ module.exports = {
     const checkId = await bookModel.getBookByCondition(_id)
 
     if (checkId.length > 0) {
-      fs.unlinkSync(checkId[0].image)
+      // fs.unlinkSync(checkId[0].image)
       const results = await bookModel.deleteBook(_id)
       if (results) {
         const data = {
