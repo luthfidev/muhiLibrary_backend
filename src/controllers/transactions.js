@@ -49,8 +49,6 @@ module.exports = {
         status_id: statusid
 
       }
-      
-
       const results = await transactionModel.createTransaction(transactionData)
       if (results) {
         const data = {
@@ -76,6 +74,38 @@ module.exports = {
   },
 
   updateTransaction: async (request, response) => {
+    const { id } = request.params
+    const { statusid } = request.body
+    const checkid = await transactionModel.getTransactionByCondition({ id: parseInt(id) })
+    if (checkid.length > 0) {
+      const transactionData = [
+        { status_id: statusid },
+        { id: parseInt(id) }
+      ]
+      const results = await transactionModel.updateTransactionStatus(transactionData)
+      if (results) {
+        const data = {
+          success: true,
+          message: 'Transaction has been updated',
+          data: transactionData[0]
+        }
+        response.status(201).send(data)
+      } else {
+        const data = {
+          success: false,
+          message: 'Failed create transaction'
+        }
+        response.status(400).send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        message: `Transaction with id ${id} not found`
+      }
+      response.status(400).send(data)
+    }
+  },
+  /*  updateTransaction: async (request, response) => {
     const { id } = request.params
     const { transactionDate, userId, bookId, statusId } = request.body
     const Error = await validationResult(request)
@@ -115,7 +145,7 @@ module.exports = {
       }
       response.status(400).send(data)
     }
-  },
+  }, */
 
   deleteTransaction: async (request, response) => {
     const { id } = request.params

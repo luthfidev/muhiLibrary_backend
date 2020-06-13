@@ -117,6 +117,7 @@ module.exports = {
   },
 
   createTransaction: (data) => {
+    console.log(data)
     const sql = 'INSERT INTO transactions SET ?'
     return new Promise((resolve, reject) => {
       db.query(sql, data, (error, results) => {
@@ -132,6 +133,19 @@ module.exports = {
     const sql = 'UPDATE transactions SET ? WHERE ?'
     return new Promise((resolve, reject) => {
       db.query(sql, data, (error, results) => {
+        if (error) {
+          reject(Error(error))
+        }
+        resolve(results.affectedRows)
+      })
+    })
+  },
+
+  updateTransactionStatus: (data) => {
+    console.log([data[0].status_id, data[1].id])
+    const sql = 'UPDATE transactions SET status_id = ? WHERE id = ?'
+    return new Promise((resolve, reject) => {
+      db.query(sql, [data[0].status_id, data[1].id], (error, results) => {
         if (error) {
           reject(Error(error))
         }

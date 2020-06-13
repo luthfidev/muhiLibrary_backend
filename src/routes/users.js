@@ -4,8 +4,8 @@ const verify = require('../utils/verifyToken')
 const checkRole = require('../utils/roles')
 const upload = require('../utils/multer')
 
-  router.get('/',
-    usersController.getAllUsers)
+router.get('/',
+  usersController.getAllUsers)
   .post('/',
     usersController.createUser)
   .delete('/:id',

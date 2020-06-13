@@ -9,9 +9,8 @@ const {
   validate
 } = require('../utils/validators')
 
-
- router.get('/',
-    transactionController.getAllTransactions)
+router.get('/',
+  transactionController.getAllTransactions)
   .get('/userstatus/',
     transactionController.getTransactionDetailUser)
   .get('/:id',
