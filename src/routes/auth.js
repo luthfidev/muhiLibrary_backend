@@ -4,6 +4,8 @@ const verify = require('../utils/verifyToken')
 const { authValidationRules, validate } = require('../utils/validators')
 
 router.post('/',
+  authValidationRules(),
+  validate,
   authController.signIn)
   .post('/signup',
     authController.signUp)
