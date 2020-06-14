@@ -184,7 +184,6 @@ module.exports = {
         message: 'Please update your profile'
       }
       response.status(400).send(data)
-      return false
     } else {
       // const Error = await validationResult(request)
       // if (!Error.isEmpty()) {
