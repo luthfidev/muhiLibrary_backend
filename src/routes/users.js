@@ -10,9 +10,10 @@ router.get('/',
     usersController.createUser)
   .delete('/:id',
     usersController.deleteUser)
-  .get('/detail/:id',
+  .get('/:id',
     usersController.getDetailUser)
   .patch('/biodata',
+    verify,
     upload.single('picture'),
     usersController.updateUserDetail)
 
