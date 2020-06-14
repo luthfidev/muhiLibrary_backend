@@ -50,6 +50,7 @@ module.exports = {
                      JOIN genres ON genres.id = books.genre_id
                      JOIN book_statuses ON book_statuses.id = books.status_id
                      WHERE books.title LIKE '%${data.search || ''}%' 
+                     OR  genres.name LIKE '${data.search || ''}%' 
                      OR book_statuses.name LIKE '${data.search || ''}%' 
                      ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
     return new Promise((resolve, reject) => {
