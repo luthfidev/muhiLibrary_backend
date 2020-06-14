@@ -11,7 +11,8 @@ const {
 
 router.get('/',
   transactionController.getAllTransactions)
-  .get('/userstatus/',
+  .get('/userstatus',
+    verify,
     transactionController.getTransactionDetailUser)
   .get('/:id',
     checkRole('admin'),
