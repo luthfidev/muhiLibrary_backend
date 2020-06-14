@@ -58,6 +58,7 @@ module.exports = {
                             users.email, 
                             user_details.name,    
                             user_details.gender,
+                            roles.name as role,
                             users.created_at,
                             users.updated_at FROM users 
                      JOIN roles on roles.id = users.role_id 
