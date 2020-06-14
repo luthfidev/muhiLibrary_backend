@@ -30,6 +30,7 @@ module.exports = {
         id: data.id,
         email: data.email,
         name: data.name,
+        nameRole: data.role,
         gender: data.gender,
         created_at: data.created_at,
         updated_at: data.updated_at
@@ -133,17 +134,7 @@ module.exports = {
     } else {
       const { name, birthdate, gender } = request.body
       const picture = request.file.path
-
-      const Error = await validationResult(request)
-      if (!Error.isEmpty()) {
-        const data = {
-          success: false,
-          message: Error.array()
-        }
-        response.status(422).send(data)
-        return
-      }
-
+      console.log(request.payload)
       const id = request.payload.id
       const userData = {
         user_id: id,
