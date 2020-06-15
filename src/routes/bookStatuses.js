@@ -5,7 +5,7 @@ const checkRole = require('../utils/roles')
 const cekBiodata = require('../utils/cekBiodata')
 
 router.get('/',
-    bookStatuses.getAllBookStatuses)
+   bookStatuses.getAllBookStatuses)
   .post('/',
     bookStatuses.createBookStatus)
   .patch('/:id',

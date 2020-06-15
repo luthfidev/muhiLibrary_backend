@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 const jwt = require('jsonwebtoken')
@@ -77,17 +76,7 @@ module.exports = {
   },
 
   createUser: async (request, response) => {
-    const { email, roleId } = request.body
-
-    const Error = await validationResult(request)
-    if (!Error.isEmpty()) {
-      const data = {
-        success: false,
-        message: Error.array()
-      }
-      response.status(400).send(data)
-      return
-    }
+    const { email, roleid } = request.body
 
     const password = await bcrypt.hash(request.body.password, saltRounds)
 
@@ -96,7 +85,7 @@ module.exports = {
       const userData = {
         email,
         password,
-        roleId
+        role_id: roleid
       }
 
       const results = await userModel.createUser(userData)
@@ -156,13 +145,14 @@ module.exports = {
         }
         const token = jwt.sign(payload, TOKEN_SECRET,
           {
-            expiresIn: '1h',
+            expiresIn: '24h',
             algorithm: TOKEN_ALGORITMA
           })
         const data = {
           success: true,
           message: `Biodata ${name} was updated`,
           userData: {
+            id: isFoundId[0].userid,
             email: isFoundId[0].email,
             name: isFoundId[0].nameUser,
             role: isFoundId[0].nameRole
