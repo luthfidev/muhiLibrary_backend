@@ -11,6 +11,8 @@ const {
 
 router.get('/',
   transactionController.getAllTransactions)
+  .get('/chart',
+    transactionController.getChartTransactions)
   .get('/userstatus',
     verify,
     transactionController.getTransactionDetailUser)
