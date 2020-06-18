@@ -37,6 +37,16 @@ module.exports = {
     response.status(200).send(data)
   },
 
+  getChartTransactions: async (request, response) => {
+    const transactionData = await transactionModel.getChartTransactions()
+    const data = {
+      success: true,
+      message: 'Chart Borrow',
+      data: transactionData
+    }
+    response.status(200).send(data)
+  },
+
   createTransaction: async (request, response) => {
     const { transactiondate, userid, bookid, statusid } = request.body
 
