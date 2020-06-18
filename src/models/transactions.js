@@ -116,6 +116,24 @@ module.exports = {
     })
   },
 
+  getChartTransactions: () => {
+    const sql = `SELECT transactions.id, transactions.transaction_date,
+                        COUNT(IF(transaction_statuses.name = 'Pending', 1, NULL)) 'Pending',
+                        COUNT(IF(transaction_statuses.name = 'Return the Book', 1, NULL)) 'Return the Book',
+                        COUNT(IF(transaction_statuses.name = 'Borrowed', 1, NULL)) 'Borrowed'
+                  FROM transactions
+                  JOIN transaction_statuses ON transaction_statuses.id = transactions.status_id
+                  GROUP BY transactions.transaction_date`
+    return new Promise((resolve, reject) => {
+      db.query(sql, (error, results) => {
+        if (error) {
+          reject(Error(error))
+        }
+        resolve(results)
+      })
+    })
+  },
+
   createTransaction: (data) => {
     console.log(data)
     const sql = 'INSERT INTO transactions SET ?'
