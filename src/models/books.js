@@ -64,7 +64,7 @@ module.exports = {
   },
 
   createBook: (data) => {
-    const sql = 'INSERT INTO books SET ?'
+    const sql = 'INSERT INTO books SET ? '
     return new Promise((resolve, reject) => {
       db.query(sql, data, (error, results) => {
         if (error) {
