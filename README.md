@@ -51,6 +51,9 @@ DB_PORT = 3306<br>
 TOKEN_SECRET = 'must be filled'<br>
 TOKEN_ALGORITMA = HS256<br>
 
+## docker 
+https://hub.docker.com/r/126401/backend_muhilibrary
+
 ## heroku
 <https://api-muhilibrary.herokuapp.com/>
 
