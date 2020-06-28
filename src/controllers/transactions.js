@@ -270,16 +270,34 @@ module.exports = {
   },
 
   getTransactionDetailUser: async (request, response) => {
-    console.log(request.payload.id)
     const id = request.payload.id
-    const isFoundId = await transactionModel.getTransactionDetailUser(id)
+    const { page, limit, search, sort } = request.query
+    const condition = {
+      search,
+      sort
+    }
+    const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
+    const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
+    const totalData = await transactionModel.getTransactionsCountUser(id, condition)
+    const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
+    const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
+    const nextLink = pagination.getNextLink(pagination.getPage(page), totalPage, request.query)
+    const isFoundId = await transactionModel.getTransactionDetailUser(id, sliceStart, sliceEnd, condition)
     if (isFoundId.length > 0) {
-      const detailTransactionData = await transactionModel.getTransactionDetailUser(id)
+      const detailTransactionData = await transactionModel.getTransactionDetailUser(id, sliceStart, sliceEnd, condition)
       if (detailTransactionData) {
         const data = {
           success: true,
           message: 'Detail Transaction Data',
-          data: detailTransactionData
+          data: detailTransactionData,
+          pageInfo: {
+            page: pagination.getPage(page),
+            totalPage,
+            perPage: pagination.getPerPage(limit),
+            totalData,
+            nextLink: nextLink && `${APP_URL}transactions?${nextLink}`,
+            prevLink: prevLink && `${APP_URL}transactions?${prevLink}`
+          }
         }
         response.status(200).send(data)
       } else {

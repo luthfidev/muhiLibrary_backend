@@ -13,7 +13,29 @@ module.exports = {
     })
   },
 
-  getTransactionDetailUser: (id) => {
+  getTransactionsCountUser: (id, data) => {
+    const sql = `SELECT COUNT(transactions.id) as total FROM transactions 
+                     JOIN transaction_statuses ON transaction_statuses.id = transactions.status_id
+                     JOIN users ON users.id = transactions.user_id
+                     JOIN books ON books.id = transactions.book_id
+                     JOIN genres ON genres.id = books.genre_id
+                     JOIN authors ON authors.id = books.author_id
+                     JOIN user_details ON user_details.user_id = users.id
+                     WHERE books.title LIKE '%${data.search || ''}%
+                     AND transactions.user_id = ${id}' 
+                     OR transaction_statuses.name LIKE '${data.search || ''}%' 
+                     ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'}`
+    return new Promise((resolve, reject) => {
+      db.query(sql, (error, results) => {
+        if (error) {
+          reject(Error(error).total)
+        }
+        resolve(results[0].total)
+      })
+    })
+  },
+
+  getTransactionDetailUser: (id, start, end, data) => {
     const sql = `SELECT transactions.id, 
                         transactions.transaction_date, 
                         users.email, 
@@ -30,7 +52,10 @@ module.exports = {
                 JOIN genres ON genres.id = books.genre_id
                 JOIN authors ON authors.id = books.author_id
                 JOIN user_details ON user_details.user_id = users.id 
-                WHERE transactions.user_id = ?`
+                WHERE transactions.user_id = ?
+                AND books.title LIKE '%${data.search || ''}%'
+                AND transaction_statuses.name LIKE '${data.search || ''}%' 
+                ORDER BY transactions.transaction_date ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
     return new Promise((resolve, reject) => {
       db.query(sql, id, (error, results) => {
         if (error) {
@@ -105,7 +130,7 @@ module.exports = {
                      JOIN user_details ON user_details.user_id = users.id 
                      WHERE books.title LIKE '%${data.search || ''}%'
                      OR transaction_statuses.name LIKE '${data.search || ''}%' 
-                     ORDER BY books.title ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
+                     ORDER BY transactions.transaction_date ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
     return new Promise((resolve, reject) => {
       db.query(sql, (error, results) => {
         if (error) {
@@ -118,12 +143,12 @@ module.exports = {
 
   getChartTransactions: () => {
     const sql = `SELECT transactions.id, transactions.transaction_date,
-                        COUNT(IF(transaction_statuses.name = 'Pending', 1, NULL)) 'Pending',
-                        COUNT(IF(transaction_statuses.name = 'Return the Book', 1, NULL)) 'Return the Book',
-                        COUNT(IF(transaction_statuses.name = 'Borrowed', 1, NULL)) 'Borrowed'
+                        COUNT(IF(transaction_statuses.name = 'Pending', 1, NULL)) 'pending',
+                        COUNT(IF(transaction_statuses.name = 'Return the Book', 1, NULL)) 'return_the_book',
+                        COUNT(IF(transaction_statuses.name = 'Borrowed', 1, NULL)) 'borrowed'
                   FROM transactions
                   JOIN transaction_statuses ON transaction_statuses.id = transactions.status_id
-                  GROUP BY transactions.transaction_date`
+                  GROUP BY MONTH(transactions.transaction_date)`
     return new Promise((resolve, reject) => {
       db.query(sql, (error, results) => {
         if (error) {

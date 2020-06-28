@@ -11,6 +11,7 @@ router.get('/',
   .delete('/:id',
     usersController.deleteUser)
   .get('/:id',
+    verify,
     usersController.getDetailUser)
   .patch('/biodata',
     verify,

@@ -76,6 +76,7 @@ module.exports = {
   },
 
   updateBook: (data) => {
+    console.log(data)
     const sql = 'UPDATE books SET ? WHERE ?'
     return new Promise((resolve, reject) => {
       db.query(sql, data, (error, results) => {
@@ -104,9 +105,12 @@ module.exports = {
                             books.title, 
                             books.description, 
                             books.image, 
+                            authors.id as authorId, 
                             authors.name as authorName, 
+                            genres.id as genreId,
                             genres.name as genreName,
-                            books.release_date as releaseDate, 
+                            books.release_date as releaseDate,
+                            book_statuses.id as nameStatusId, 
                             book_statuses.name as nameStatus,
                             book_statuses.description as descriptionStatus,  
                             books.created_at, 

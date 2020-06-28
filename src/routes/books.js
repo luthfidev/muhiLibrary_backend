@@ -7,8 +7,8 @@ const checkRole = require('../utils/roles')
 router.get('/',
   bookController.getAllBooks)
   .post('/',
-    // verify,
-    // checkRole('admin'),
+    verify,
+    checkRole('admin'),
     bookController.createBook)
   .patch('/:id',
     verify,
