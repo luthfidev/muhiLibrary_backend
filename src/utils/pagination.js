@@ -19,6 +19,7 @@ module.exports = {
     }
   },
   getNextLink: (page, totalPage, currentQuery) => {
+    page = parseInt(page)
     if (page < totalPage) {
       const generatePage = {
         page: page + 1
@@ -29,6 +30,7 @@ module.exports = {
     }
   },
   getPrevLink: (page, currentQuery) => {
+     page = parseInt(page)
     if (page > 1) {
       const generatePage = {
         page: page - 1

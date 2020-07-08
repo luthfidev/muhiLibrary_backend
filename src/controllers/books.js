@@ -12,15 +12,14 @@ module.exports = {
     const { page, limit, search, sort } = request.query
     const condition = {
       search,
-      sort
+      sort,
     }
     const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
-    const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit))
+    const sliceEnd = (pagination.getPage(limit) * pagination.getPerPage(limit))
     const totalData = await bookModel.getBooksCount(condition)
     const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
     const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
     const nextLink = pagination.getNextLink(pagination.getPage(page), totalPage, request.query)
-
     const bookData = await bookModel.getAllBooks(sliceStart, sliceEnd, condition)
     const data = {
       success: true,
