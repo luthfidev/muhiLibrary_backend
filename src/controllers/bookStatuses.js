@@ -11,8 +11,8 @@ module.exports = {
       sort
     }
 
-    const sliceStart = pagination.getPage(page) * pagination.getPerPage(limit) - pagination.getPerPage(limit)
-    const sliceEnd = (pagination.getPage(limit) * pagination.getPerPage(limit))
+    const sliceStart = (pagination.getPage(page) * pagination.getPerPage(limit)) - pagination.getPerPage(limit)
+    const sliceEnd = (pagination.getPage(limit) * pagination.getPerPage(limit)) - sliceStart
     const totalData = await bookStatusModel.getBookStatusesCount(condition)
     const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
     const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
