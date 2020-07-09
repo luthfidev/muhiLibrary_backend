@@ -53,8 +53,7 @@ module.exports = {
                 JOIN authors ON authors.id = books.author_id
                 JOIN user_details ON user_details.user_id = users.id 
                 WHERE transactions.user_id = ?
-                AND books.title LIKE '%${data.search || ''}%'
-                OR transaction_statuses.name LIKE '${data.search || ''}%' 
+                AND transaction_statuses.name LIKE '${data.search || ''}%' 
                 ORDER BY transactions.transaction_date ${parseInt(data.sort) ? 'DESC' : 'ASC'} LIMIT ${end} OFFSET ${start}`
     return new Promise((resolve, reject) => {
       db.query(sql, id, (error, results) => {
