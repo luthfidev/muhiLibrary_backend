@@ -17,5 +17,9 @@ router.get('/',
     verify,
     upload.single('picture'),
     usersController.updateUserDetail)
+  .patch('/upload/:id',
+    verify,
+    upload.single('picture'),
+    usersController.uploadImageUser)
 
 module.exports = router

@@ -121,6 +121,19 @@ module.exports = {
     })
   },
 
+  uploadImageUser: (data) => {
+    console.log([data.picture, data.user_id.id])
+    const sql = 'UPDATE user_details SET picture = ? WHERE user_id = ? '
+    return new Promise((resolve, reject) => {
+      db.query(sql, [data.picture, data.user_id.id], (error, results) => {
+        if (error) {
+          reject(Error(error))
+        }
+        resolve(true)
+      })
+    })
+  },
+
   deleteDetailUser: (data) => {
     const sql = 'DELETE FROM users WHERE ?'
     return new Promise((resolve, reject) => {

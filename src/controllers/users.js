@@ -114,6 +114,54 @@ module.exports = {
   },
 
   updateUserDetail: async (request, response) => {
+    const { name, birthdate, gender } = request.body
+    const picture = request.file.path
+    const id = request.payload.id
+    const userData = {
+      user_id: id,
+      name,
+      picture,
+      birthdate,
+      gender
+    }
+
+    const results = await userModel.updateUserDetail(userData)
+    if (results) {
+      const id = request.payload.id
+      const isFoundId = await userModel.getUserDetailCondition(id)
+      const payload = {
+        id: isFoundId[0].userid,
+        email: isFoundId[0].email,
+        role: isFoundId[0].nameRole,
+        nameUser: isFoundId[0].nameUser
+      }
+      const token = jwt.sign(payload, TOKEN_SECRET,
+        {
+          expiresIn: '24h',
+          algorithm: TOKEN_ALGORITMA
+        })
+      const data = {
+        success: true,
+        message: `Biodata ${name} was updated`,
+        userData: {
+          id: isFoundId[0].userid,
+          email: isFoundId[0].email,
+          name: isFoundId[0].nameUser,
+          role: isFoundId[0].nameRole
+        },
+        token: token
+      }
+      response.status(200).header('Authorization', token).send(data)
+    } else {
+      const data = {
+        success: false,
+        message: 'Failed create biodata'
+      }
+      response.status(400).send(data)
+    }
+  },
+
+  uploadImageUser: async (request, response) => {
     if (!request.file) {
       const data = {
         success: false,
@@ -121,22 +169,17 @@ module.exports = {
       }
       response.status(400).send(data)
     } else {
-      const { name, birthdate, gender } = request.body
       const picture = request.file.path
-      console.log(request.payload)
-      const id = request.payload.id
+      const user_id = request.params
       const userData = {
-        user_id: id,
-        name,
         picture,
-        birthdate,
-        gender
+        user_id
       }
-
-      const results = await userModel.updateUserDetail(userData)
+      console.log(userData)
+      const results = await userModel.uploadImageUser(userData)
       if (results) {
-        const id = request.payload.id
-        const isFoundId = await userModel.getUserDetailCondition(id)
+        const user_id = request.payload.id
+        const isFoundId = await userModel.getUserDetailCondition(user_id)
         const payload = {
           id: isFoundId[0].userid,
           email: isFoundId[0].email,
@@ -150,7 +193,7 @@ module.exports = {
           })
         const data = {
           success: true,
-          message: `Biodata ${name} was updated`,
+          message: 'Biodata was updated',
           userData: {
             id: isFoundId[0].userid,
             email: isFoundId[0].email,
