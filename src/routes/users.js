@@ -15,7 +15,6 @@ router.get('/',
     usersController.getDetailUser)
   .patch('/biodata',
     verify,
-    upload.single('picture'),
     usersController.updateUserDetail)
   .patch('/upload/:id',
     verify,
