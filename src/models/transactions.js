@@ -120,6 +120,7 @@ module.exports = {
                             transactions.transaction_date, 
                             user_details.user_id as userid, 
                             user_details.name,
+                            user_details.picture,
                             books.id as bookid, 
                             books.title, 
                             transaction_statuses.name as statusName FROM transactions 
