@@ -4,7 +4,7 @@ const { body, validationResult } = require('express-validator')
 const authValidationRules = () => {
   return [
     body('email').isEmail().withMessage('Must be Email'),
-    body('password').isLength({ min: 5 })
+    body('password').isLength({ min: 2 }).withMessage('Min password 2 character')
   ]
 }
 

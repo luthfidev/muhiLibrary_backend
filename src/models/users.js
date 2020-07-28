@@ -110,9 +110,10 @@ module.exports = {
   },
 
   updateUserDetail: (data) => {
-    const sql = 'REPLACE INTO user_details SET ? '
+    console.log(data)
+    const sql = 'UPDATE user_details SET name = ?, gender = ?, birthdate = ? WHERE user_id = ? '
     return new Promise((resolve, reject) => {
-      db.query(sql, data, (error, results) => {
+      db.query(sql, [data.name, data.gender, data.birthdate, data.user_id], (error, results) => {
         if (error) {
           reject(Error(error))
         }
