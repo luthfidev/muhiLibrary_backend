@@ -8,6 +8,8 @@ router.post('/signin',
   validate,
   authController.signIn)
   .post('/signup',
+    authValidationRules(),
+    validate,
     authController.signUp)
   .delete('/logout',
     verify,

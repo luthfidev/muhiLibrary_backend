@@ -115,47 +115,6 @@ module.exports = {
       response.status(400).send(data)
     }
   },
-  /*  updateTransaction: async (request, response) => {
-    const { id } = request.params
-    const { transactionDate, userId, bookId, statusId } = request.body
-    const Error = await validationResult(request)
-    if (!Error.isEmpty()) {
-      const data = {
-        success: false,
-        message: Error.array()
-      }
-      response.status(400).send(data)
-      return
-    }
-    const checkId = await transactionModel.getTransactionByCondition({ id: parseInt(id) })
-    if (checkId.length > 0) {
-      const transactionData = [
-        { transactionDate, userId, bookId, statusId },
-        { id: parseInt(id) }
-      ]
-      const results = await transactionModel.updateTransaction(transactionData)
-      if (results) {
-        const data = {
-          success: true,
-          message: 'Transaction has been updated',
-          data: transactionData[0]
-        }
-        response.status(201).send(data)
-      } else {
-        const data = {
-          success: false,
-          message: 'Failed create transaction'
-        }
-        response.status(400).send(data)
-      }
-    } else {
-      const data = {
-        success: false,
-        message: `Transaction with id ${id} not found`
-      }
-      response.status(400).send(data)
-    }
-  }, */
 
   deleteTransaction: async (request, response) => {
     const { id } = request.params
@@ -237,7 +196,7 @@ module.exports = {
       if (transactionData) {
         const data = {
           success: true,
-          message: 'Detail book',
+          message: 'Detail transaction',
           data: transactionData.map(data => ({
             id: data.id,
             transaction_date: data.transaction_date,
@@ -276,7 +235,7 @@ module.exports = {
       search,
       sort
     }
-    const sliceStart = (pagination.getPage(page) * pagination.getPerPage(limit) )- pagination.getPerPage(limit)
+    const sliceStart = (pagination.getPage(page) * pagination.getPerPage(limit)) - pagination.getPerPage(limit)
     const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit)) - sliceStart
     const totalData = await transactionModel.getTransactionsCountUser(id, condition)
     const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
