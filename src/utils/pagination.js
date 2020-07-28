@@ -30,7 +30,7 @@ module.exports = {
     }
   },
   getPrevLink: (page, currentQuery) => {
-     page = parseInt(page)
+    page = parseInt(page)
     if (page > 1) {
       const generatePage = {
         page: page - 1

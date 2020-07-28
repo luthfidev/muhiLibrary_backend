@@ -1,6 +1,6 @@
-# Update Authors
+# Update Genres
 
-Update authors with token required
+Update genres with token required
 
 **URL** : `/genres`
 

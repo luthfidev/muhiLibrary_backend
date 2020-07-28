@@ -196,7 +196,7 @@ module.exports = {
       if (transactionData) {
         const data = {
           success: true,
-          message: 'Detail book',
+          message: 'Detail transaction',
           data: transactionData.map(data => ({
             id: data.id,
             transaction_date: data.transaction_date,
@@ -235,7 +235,7 @@ module.exports = {
       search,
       sort
     }
-    const sliceStart = (pagination.getPage(page) * pagination.getPerPage(limit) )- pagination.getPerPage(limit)
+    const sliceStart = (pagination.getPage(page) * pagination.getPerPage(limit)) - pagination.getPerPage(limit)
     const sliceEnd = (pagination.getPage(page) * pagination.getPerPage(limit)) - sliceStart
     const totalData = await transactionModel.getTransactionsCountUser(id, condition)
     const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))

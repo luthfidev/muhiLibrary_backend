@@ -189,12 +189,12 @@ module.exports = {
           response.status(400).send(data)
         } else {
           const picture = request.file.path
-          const user_id = request.params
+          const userid = request.params
           const userData = {
             picture,
-            user_id
+            userid
           }
-          const isFoundId = await userModel.getUserDetailCondition(userData.user_id)
+          const isFoundId = await userModel.getUserDetailCondition(userData.userid)
           if (isFoundId) {
             await userModel.uploadImageUser(userData)
             // const isFoundId = await userModel.getUserDetailCondition(user_id)

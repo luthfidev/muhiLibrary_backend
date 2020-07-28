@@ -123,10 +123,9 @@ module.exports = {
   },
 
   uploadImageUser: (data) => {
-    console.log([data.picture, data.user_id.id])
     const sql = 'UPDATE user_details SET picture = ? WHERE user_id = ? '
     return new Promise((resolve, reject) => {
-      db.query(sql, [data.picture, data.user_id.id], (error, results) => {
+      db.query(sql, [data.picture, data.userid], (error, results) => {
         if (error) {
           reject(Error(error))
         }

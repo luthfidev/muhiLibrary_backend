@@ -1,6 +1,6 @@
-# Delete Users 
+# Delete Books 
 
-Delete the users.
+Delete the books.
 
 **URL** : `/books/:id`
 

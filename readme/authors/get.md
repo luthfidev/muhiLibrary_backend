@@ -77,7 +77,7 @@ All can see list authors
 ```json
 {
     "success": true,
-    "message": "List All Authorss",
+    "message": "List All Authors",
     "data": [],
     "pageInfo": {
         "page": 1,
