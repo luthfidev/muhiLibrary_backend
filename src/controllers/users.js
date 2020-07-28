@@ -113,7 +113,7 @@ module.exports = {
     }
   },
 
- /* updateUserDetail: async (request, response) => {
+  /* updateUserDetail: async (request, response) => {
     const { name, birthdate, gender } = request.body
     const picture = request.file.path
     const id = request.payload.id
@@ -159,7 +159,7 @@ module.exports = {
       }
       response.status(400).send(data)
     }
-  },*/
+  }, */
 
   updateUserDetail: async (request, response) => {
     const { name, birthdate, gender } = request.body
