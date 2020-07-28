@@ -3,11 +3,11 @@ const checkRole = require('../utils/roles')
 const verify = require('../utils/verifyToken')
 const cekBiodata = require('../utils/cekBiodata')
 const transactionController = require('../controllers/transactions')
-const {
-  transactionValidationRules,
-  transactionUserValidationRules,
-  validate
-} = require('../utils/validators')
+// const {
+//   transactionValidationRules,
+//   transactionUserValidationRules,
+//   validate
+// } = require('../utils/validators')
 
 router.get('/',
   transactionController.getAllTransactions)
@@ -17,6 +17,7 @@ router.get('/',
     verify,
     transactionController.getTransactionDetailUser)
   .get('/:id',
+    verify,
     checkRole('admin'),
     transactionController.getTransactionDetail)
   .post('/',
