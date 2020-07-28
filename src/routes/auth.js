@@ -3,7 +3,7 @@ const authController = require('../controllers/auth')
 const verify = require('../utils/verifyToken')
 const { authValidationRules, validate } = require('../utils/validators')
 
-router.post('/',
+router.post('/signin',
   authValidationRules(),
   validate,
   authController.signIn)

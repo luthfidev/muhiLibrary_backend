@@ -12,11 +12,10 @@ module.exports = {
     const { page, limit, search, sort } = request.query
     const condition = {
       search,
-      sort,
+      sort
     }
     const sliceStart = (pagination.getPage(page) * pagination.getPerPage(limit)) - pagination.getPerPage(limit)
     const sliceEnd = pagination.getPage(page) * pagination.getPerPage(limit) - sliceStart
-     console.log(sliceEnd)
     const totalData = await bookModel.getBooksCount(condition)
     const totalPage = Math.ceil(totalData / pagination.getPerPage(limit))
     const prevLink = pagination.getPrevLink(pagination.getPage(page), request.query)
@@ -66,49 +65,49 @@ module.exports = {
           message: 'Only allow jpg/jpeg, png'
         }
         return response.status(400).send(data)
-        /*    }
+      }
       try {
         if (!request.file) {
           const data = {
             success: false,
             message: 'Please choose file ...'
           }
-          return response.status(400).send(data) */
-      } else {
-        const { title, description, genreid, authorid, releasedate, statusid } = request.body
-        const image = request.file.path
-        const bookData = {
-          title,
-          description,
-          image,
-          genre_id: genreid,
-          author_id: authorid,
-          release_date: releasedate,
-          status_id: statusid
-        }
-        const results = await bookModel.createBook(bookData)
-        if (results) {
-          const data = {
-            success: true,
-            message: 'create book has been success',
-            data: bookData
-          }
-          return response.status(201).send(data)
-        } else {
-          const data = {
-            success: false,
-            message: 'Failed create book'
-          }
           return response.status(400).send(data)
+        } else {
+          const { title, description, genreid, authorid, releasedate, statusid } = request.body
+          const image = request.file.path
+          const bookData = {
+            title,
+            description,
+            image,
+            genre_id: genreid,
+            author_id: authorid,
+            release_date: releasedate,
+            status_id: statusid
+          }
+          const results = await bookModel.createBook(bookData)
+          if (results) {
+            const data = {
+              success: true,
+              message: 'create book has been success',
+              data: bookData
+            }
+            return response.status(201).send(data)
+          } else {
+            const data = {
+              success: false,
+              message: 'Failed create book'
+            }
+            return response.status(400).send(data)
+          }
         }
-      }
-      /*  } catch (error) {
+      } catch (error) {
         const data = {
           success: false,
           message: 'Cannot upload file'
         }
         return response.status(400).send(data)
-      } */
+      }
     })
   },
 
