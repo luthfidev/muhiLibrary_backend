@@ -50,7 +50,7 @@ describe('Test API Routes', function () {
       request.post('/auth/signin')
         .set('Connection', 'keep alive')
         .set('Content-Type', 'application/json')
-        .send({ email: 'user15@lib.com', password: 'user15' })
+        .send({ email: 'usertest@lib.com', password: 'usertest' })
         .end(function (err, res) {
           done(err)
           process.exit(0)
