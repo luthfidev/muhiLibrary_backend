@@ -1,9 +1,9 @@
 # API muhilibrary_backend
  
-[![Build Status](https://travis-ci.org/luthfidev/muhilibrary-backend.svg?branch=master)](https://travis-ci.org/luthfidev/muhilibrary-backend) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-![Docker Pulls](https://img.shields.io/docker/pulls/126401/backend_muhilibrary?style=plastic)
+[![Build Status](https://travis-ci.org/luthfidev/muhilibrary-backend.svg?branch=master)](https://travis-ci.org/luthfidev/muhilibrary-backend) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+![Docker Pulls](https://img.shields.io/docker/pulls/126401/backend_muhilibrary?style=plastic) [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-This library muhi API to make transactions to borrow books or look for books register members
+This library muhi API to make transactions to borrow books or look for books register only.
 
 ***
 
@@ -35,7 +35,7 @@ npm start
 ```
 ***
 
-## configuration
+## Configuration
 
 change .envDefault to .env, and you can modified according to your specifications.
 
@@ -51,23 +51,50 @@ DB_PORT = 3306<br>
 TOKEN_SECRET = 'must be filled'<br>
 TOKEN_ALGORITMA = HS256<br>
 
-## docker 
+## Docker 
 https://hub.docker.com/r/126401/backend_muhilibrary
 
-## heroku
+## Heroku
 <https://api-muhilibrary.herokuapp.com/>
 
 ## API End Point
+### Auth
+* [Auth For Signin](readme/signin.md) : `POST /auth/signin`
+* [Auth For Signup](readme/signup.md) : `POST /auth/signup`
 
-```shell
-* https://api-muhilibrary.herokuapp.com/auth/signin
-* https://api-muhilibrary.herokuapp.com/auth/signup
-* https://api-muhilibrary.herokuapp.com/users 
-* https://api-muhilibrary.herokuapp.com/books
-* https://api-muhilibrary.herokuapp.com/transactions
-  - https://api-muhilibrary.herokuapp.com/transactions/user
-  - https://api-muhilibrary.herokuapp.com/transactions/userstatus
-* https://api-muhilibrary.herokuapp.com/genres
-* https://api-muhilibrary.herokuapp.com/authors
-* https://api-muhilibrary.herokuapp.com/bookstatuses 
-```
+### User
+* [Show List User](readme/users/get.md) : `GET /users`
+* [Created User](readme/users/post.md) : `POST /users`
+* [Update User](readme/users/patch.md) : `PATCH /users/:id`
+* [Delete User](readme/users/delete.md) : `DELETE /users/:id`
+* [Upload Avatar User](readme/users/patchavatar.md) : `PATCH /users/upload/:id`
+
+### Book
+* [Show List Book](readme/books/get.md) : `GET /books`
+* [Created Book](readme/books/post.md) : `POST /books`
+* [Update Book](readme/books/patch.md) : `PATCH /books/:id`
+* [Delete Book](readme/books/delete.md) : `DELETE /books/:id`
+
+### Genre
+* [Show List Book](readme/genres/get.md) : `GET /genres`
+* [Created Book](readme/genres/post.md) : `POST /genres`
+* [Update Book](readme/genres/patch.md) : `PATCH /genres/:id`
+* [Delete Book](readme/genres/delete.md) : `DELETE /genres/:id`
+
+### Author
+* [Show List Book](readme/authors/get.md) : `GET /authors`
+* [Created Book](readme/authors/post.md) : `POST /authors`
+* [Update Book](readme/authors/patch.md) : `PATCH /authors/:id`
+* [Delete Book](readme/authors/delete.md) : `DELETE /authors/:id`
+
+### Transaction Admin
+* [Show List Transaction](readme/transactions/get.md) : `GET /transactions`
+* [Created Transaction](readme/transactions/post.md) : `POST /transactions`
+* [Update Transaction](readme/transactions/patch.md) : `PATCH /transactions/:id`
+* [Delete Transaction](readme/transactions/delete.md) : `DELETE /transactions/:id`
+
+### Transaction User
+* [Show History trabsaction](readme/transactions/user/get.md) : `GET /transactions/userstatus`
+* [Borrow Book](readme/transactions/user/post.md) : `POST /transactions/user`
+* [Update Transaction for cancel only](readme/transactions/user/patch.md) : `PATCH /transactions/:id`
+

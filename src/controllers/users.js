@@ -1,9 +1,12 @@
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 const jwt = require('jsonwebtoken')
+const multer = require('multer')
 const { APP_URL, TOKEN_SECRET, TOKEN_ALGORITMA } = process.env
 const userModel = require('../models/users')
 const pagination = require('../utils/pagination')
+const config = require('../utils/multer')
+const upload = config.single('picture')
 
 module.exports = {
 
@@ -93,7 +96,10 @@ module.exports = {
         const data = {
           success: true,
           message: 'User has been created success',
-          data: userData
+          data: {
+            email: userData.email,
+            role_id: userData.role_id
+          }
         }
         response.status(201).send(data)
       } else {
@@ -159,64 +165,66 @@ module.exports = {
     }
   },
 
-  uploadImageUser: async (request, response) => {
-    if (!request.file) {
-      const data = {
-        success: false,
-        message: 'Please upload a file'
-      }
-      response.status(400).send(data)
-    } else {
-      const picture = request.file.path
-      const user_id = request.params
-      const userData = {
-        picture,
-        user_id
-      }
-      console.log(userData)
-      const results = await userModel.uploadImageUser(userData)
-      if (results) {
-        const user_id = request.payload.id
-        const isFoundId = await userModel.getUserDetailCondition(user_id)
-        const payload = {
-          id: isFoundId[0].userid,
-          email: isFoundId[0].email,
-          role: isFoundId[0].nameRole,
-          nameUser: isFoundId[0].nameUser
-        }
-        const token = jwt.sign(payload, TOKEN_SECRET,
-          {
-            expiresIn: '24h',
-            algorithm: TOKEN_ALGORITMA
-          })
-        const data = {
-          success: true,
-          message: 'Biodata was updated',
-          userData: {
-            id: isFoundId[0].userid,
-            email: isFoundId[0].email,
-            name: isFoundId[0].nameUser,
-            role: isFoundId[0].nameRole
-          },
-          token: token
-        }
-        response.status(200).header('Authorization', token).send(data)
-      } else {
+  uploadImageUser: (request, response) => {
+    upload(request, response, async function (error) {
+      if (error instanceof multer.MulterError) {
         const data = {
           success: false,
-          message: 'Failed create biodata'
+          message: 'File too large'
         }
-        response.status(400).send(data)
+        return response.status(400).send(data)
+      } else if (error) {
+        const data = {
+          success: false,
+          message: 'Only allow jpg/jpeg, png'
+        }
+        return response.status(400).send(data)
       }
-    }
+      try {
+        if (!request.file) {
+          const data = {
+            success: false,
+            message: 'Please upload a file'
+          }
+          response.status(400).send(data)
+        } else {
+          const picture = request.file.path
+          const userid = request.params
+          const userData = {
+            picture,
+            userid
+          }
+          const isFoundId = await userModel.getUserDetailCondition(userData.userid)
+          if (isFoundId) {
+            await userModel.uploadImageUser(userData)
+            // const isFoundId = await userModel.getUserDetailCondition(user_id)
+            const data = {
+              success: true,
+              message: 'Upload success'
+            }
+            response.status(200).send(data)
+          } else {
+            const data = {
+              success: false,
+              message: 'Failed create Upload'
+            }
+            response.status(400).send(data)
+          }
+        }
+      } catch (error) {
+        const data = {
+          success: false,
+          message: 'Cannot upload file'
+        }
+        return response.status(400).send(data)
+      }
+    })
   },
 
   deleteUser: async (request, response) => {
     const { id } = request.params
     const _id = { id: parseInt(id) }
-
     const checkId = await userModel.getUserDetailCondition(_id)
-    console.log(checkId)
     if (checkId.length > 0) {
       //   fs.unlinkSync(checkId[0].picture)
 
@@ -237,9 +245,9 @@ module.exports = {
     } else {
       const data = {
         success: false,
-        message: 'Not data for delete'
+        message: 'Not user for delete'
       }
-      response.status(400).send(data)
+      response.status(404).send(data)
     }
   }
 
