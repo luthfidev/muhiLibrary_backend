@@ -2,13 +2,13 @@
 
 Created transactions
 
-**URL** : `/transactions`
+**URL** : `/transactions/user`
 
 **Method** : `POST`
 
 **Auth required** : YES
 
-**Permissions required** : YES (admin || user)
+**Permissions required** : YES (user)
 
 **Data constraints**
 
@@ -34,9 +34,8 @@ Created transactions
     "message": "Create transactoin has been success",
     "data": {
         "transaction_date": "2020-12-12",
-        "user_id": "4",
-        "book_id": "99",
-        "status_id": "3"
+        "user_id": 6,
+        "book_id": "102"
     }
 }
 ```
@@ -54,10 +53,9 @@ Created transactions
 }
 ```
 
-**Condition** : if not admin OR user.
+**Condition** : if not user.
 
 **Code** : `400 BAD REQUEST`
-
 
 ```json
 {

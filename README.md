@@ -94,7 +94,7 @@ https://hub.docker.com/r/126401/backend_muhilibrary
 * [Delete Transaction](readme/transactions/delete.md) : `DELETE /transactions/:id`
 
 ### Transaction User
-* [Show List Transaction](readme/transactions/get.md) : `GET /transactions`
-* [Created Transaction](readme/transactions/post.md) : `POST /transactions`
-* [Update Transaction for cancel only](readme/transactions/patch.md) : `PATCH /transactions/:id`
+* [Show History trabsaction](readme/transactions/user/get.md) : `GET /transactions/userstatus`
+* [Borrow Book](readme/transactions/user/post.md) : `POST /transactions/user`
+* [Update Transaction for cancel only](readme/transactions/user/patch.md) : `PATCH /transactions/:id`
 
