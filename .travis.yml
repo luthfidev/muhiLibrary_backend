@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+- node
+
+cache: npm
+
+GITHUB_SECRET_TOKEN: $GITHUB_TOKEN
+
+install:
+- npm install
+
+script:
+- npm run test
+
+branches:
+  only: 
+    - master
+
+# after_success:
+#   - "curl -o /tmp/travis-automerge https://raw.githubusercontent.com/cdown/travis-automerge/master/travis-automerge"
+#   - "chmod a+x /tmp/travis-automerge"
+#   - "BRANCHES_TO_MERGE_REGEX='^master' BRANCH_TO_MERGE_INTO=deploy_heroku GITHUB_REPO=cdown/srt /tmp/travis-automerge"
+
+# deploy:
+#   provider: heroku
+#   api_key: $HEROKU_TOKEN
+#   on: deploy_heroku
