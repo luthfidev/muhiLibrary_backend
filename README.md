@@ -35,7 +35,7 @@ npm start
 ```
 ***
 
-## configuration
+## Configuration
 
 change .envDefault to .env, and you can modified according to your specifications.
 
@@ -51,23 +51,43 @@ DB_PORT = 3306<br>
 TOKEN_SECRET = 'must be filled'<br>
 TOKEN_ALGORITMA = HS256<br>
 
-## docker 
+## Docker 
 https://hub.docker.com/r/126401/backend_muhilibrary
 
-## heroku
+## Heroku
 <https://api-muhilibrary.herokuapp.com/>
 
 ## API End Point
+### Auth
+* [Auth For Signin](readme/signin.md) : `POST /auth/signin`
+* [Auth For Signup](readme/signup.md) : `POST /auth/signup`
 
-```shell
-* https://api-muhilibrary.herokuapp.com/auth/signin
-* https://api-muhilibrary.herokuapp.com/auth/signup
-* https://api-muhilibrary.herokuapp.com/users 
-* https://api-muhilibrary.herokuapp.com/books
-* https://api-muhilibrary.herokuapp.com/transactions
-  - https://api-muhilibrary.herokuapp.com/transactions/user
-  - https://api-muhilibrary.herokuapp.com/transactions/userstatus
-* https://api-muhilibrary.herokuapp.com/genres
-* https://api-muhilibrary.herokuapp.com/authors
-* https://api-muhilibrary.herokuapp.com/bookstatuses 
-```
+### User
+* [Show List User](readme/users/get.md) : `GET /users`
+* [Created User](readme/users/post.md) : `POST /users`
+* [Update User](readme/users/patch.md) : `PATCH /users/:id`
+* [Delete User](readme/users/delete.md) : `DELETE /users/:id`
+
+### Book
+* [Show List Book](readme/books/get.md) : `GET /books`
+* [Created Book](readme/books/post.md) : `POST /books`
+* [Update Book](readme/books/patch.md) : `PATCH /books/:id`
+* [Delete Book](readme/books/delete.md) : `DELETE /books/:id`
+
+### Genre
+* [Show List Book](readme/genres/get.md) : `GET /genres`
+* [Created Book](readme/genres/post.md) : `POST /genres`
+* [Update Book](readme/genres/patch.md) : `PATCH /genres/:id`
+* [Delete Book](readme/genres/delete.md) : `DELETE /genres/:id`
+
+### Author
+* [Show List Book](readme/authors/get.md) : `GET /authors`
+* [Created Book](readme/authors/post.md) : `POST /authors`
+* [Update Book](readme/authors/patch.md) : `PATCH /authors/:id`
+* [Delete Book](readme/authors/delete.md) : `DELETE /authors/:id`
+
+### Transaction
+* [Show List Transaction](readme/transactions/get.md) : `GET /transactions`
+* [Created Transaction](readme/transactions/post.md) : `POST /transactions`
+* [Update Transaction](readme/transactions/patch.md) : `PATCH /transactions/:id`
+* [Delete Transaction](readme/transactions/delete.md) : `DELETE /transactions/:id`

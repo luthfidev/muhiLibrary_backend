@@ -5,8 +5,12 @@ const checkRole = require('../utils/roles')
 const upload = require('../utils/multer')
 
 router.get('/',
+  verify,
+  checkRole('admin'),
   usersController.getAllUsers)
   .post('/',
+    verify,
+    checkRole('admin'),
     usersController.createUser)
   .delete('/:id',
     usersController.deleteUser)

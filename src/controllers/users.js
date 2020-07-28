@@ -93,7 +93,10 @@ module.exports = {
         const data = {
           success: true,
           message: 'User has been created success',
-          data: userData
+          data: {
+            email: userData.email,
+            role_id: userData.role_id
+          }
         }
         response.status(201).send(data)
       } else {
