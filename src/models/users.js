@@ -44,7 +44,7 @@ module.exports = {
                      JOIN user_details on user_details.user_id = users.id
                      WHERE users.id = ?`
     return new Promise((resolve, reject) => {
-      db.query(sql, data, (error, results) => {
+      db.query(sql, data.id, (error, results) => {
         if (error) {
           reject(Error(error))
         }
@@ -136,6 +136,7 @@ module.exports = {
   },
 
   deleteDetailUser: (data) => {
+    console.log(data)
     const sql = 'DELETE FROM users WHERE ?'
     return new Promise((resolve, reject) => {
       db.query(sql, data, (error, results) => {

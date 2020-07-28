@@ -1,8 +1,8 @@
-# Create Users
+# Create Authors
 
-Created user for admin only
+Created author for admin only
 
-**URL** : `/users`
+**URL** : `/authors`
 
 **Method** : `POST`
 
@@ -15,15 +15,13 @@ Created user for admin only
 ```json
 {
     "name": "[name in plain text]",
-    "email": "[valid email address]",
-    "password": "[password in plain text]",
-    "roleid": "[enum (1 isAdmin || 2 isUser)]"
+    "description": "[description in plain text]",
 }
 ```
 
 ## Success Responses
 
-**Condition** : Admin can create users.
+**Condition** : Admin can create authors.
 
 **Code** : `201 CREATED`
 
@@ -31,10 +29,10 @@ Created user for admin only
 ```json
 {
     "success": true,
-    "message": "User has been created success",
+    "message": "Create author book has ben success",
     "data": {
-        "email": "dalbosd@lib.com",
-        "role_id": "2"
+        "name": "Santoso",
+        "description": "Comedyan"
     }
 }
 ```

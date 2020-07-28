@@ -1,9 +1,9 @@
 # API muhilibrary_backend
  
-[![Build Status](https://travis-ci.org/luthfidev/muhilibrary-backend.svg?branch=master)](https://travis-ci.org/luthfidev/muhilibrary-backend) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-![Docker Pulls](https://img.shields.io/docker/pulls/126401/backend_muhilibrary?style=plastic)
+[![Build Status](https://travis-ci.org/luthfidev/muhilibrary-backend.svg?branch=master)](https://travis-ci.org/luthfidev/muhilibrary-backend) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+![Docker Pulls](https://img.shields.io/docker/pulls/126401/backend_muhilibrary?style=plastic) [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-This library muhi API to make transactions to borrow books or look for books register members
+This library muhi API to make transactions to borrow books or look for books register only.
 
 ***
 
@@ -67,6 +67,7 @@ https://hub.docker.com/r/126401/backend_muhilibrary
 * [Created User](readme/users/post.md) : `POST /users`
 * [Update User](readme/users/patch.md) : `PATCH /users/:id`
 * [Delete User](readme/users/delete.md) : `DELETE /users/:id`
+* [Upload Avatar User](readme/users/patchavatar.md) : `PATCH /users/upload/:id`
 
 ### Book
 * [Show List Book](readme/books/get.md) : `GET /books`
@@ -86,8 +87,14 @@ https://hub.docker.com/r/126401/backend_muhilibrary
 * [Update Book](readme/authors/patch.md) : `PATCH /authors/:id`
 * [Delete Book](readme/authors/delete.md) : `DELETE /authors/:id`
 
-### Transaction
+### Transaction Admin
 * [Show List Transaction](readme/transactions/get.md) : `GET /transactions`
 * [Created Transaction](readme/transactions/post.md) : `POST /transactions`
 * [Update Transaction](readme/transactions/patch.md) : `PATCH /transactions/:id`
 * [Delete Transaction](readme/transactions/delete.md) : `DELETE /transactions/:id`
+
+### Transaction User
+* [Show List Transaction](readme/transactions/get.md) : `GET /transactions`
+* [Created Transaction](readme/transactions/post.md) : `POST /transactions`
+* [Update Transaction for cancel only](readme/transactions/patch.md) : `PATCH /transactions/:id`
+

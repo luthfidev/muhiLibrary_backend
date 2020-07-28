@@ -13,6 +13,7 @@ router.get('/',
     checkRole('admin'),
     usersController.createUser)
   .delete('/:id',
+    verify,
     usersController.deleteUser)
   .get('/:id',
     verify,
@@ -22,7 +23,6 @@ router.get('/',
     usersController.updateUserDetail)
   .patch('/upload/:id',
     verify,
-    upload.single('picture'),
     usersController.uploadImageUser)
 
 module.exports = router

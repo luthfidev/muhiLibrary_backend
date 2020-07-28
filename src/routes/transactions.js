@@ -17,6 +17,7 @@ router.get('/',
     verify,
     transactionController.getTransactionDetailUser)
   .get('/:id',
+    verify,
     checkRole('admin'),
     transactionController.getTransactionDetail)
   .post('/',

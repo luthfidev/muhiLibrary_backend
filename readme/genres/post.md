@@ -1,8 +1,8 @@
-# Create Users
+# Create Genres
 
-Created user for admin only
+Created genre for admin only
 
-**URL** : `/users`
+**URL** : `/genres`
 
 **Method** : `POST`
 
@@ -14,16 +14,13 @@ Created user for admin only
 
 ```json
 {
-    "name": "[name in plain text]",
-    "email": "[valid email address]",
-    "password": "[password in plain text]",
-    "roleid": "[enum (1 isAdmin || 2 isUser)]"
+    "name": "[name in plain text]"
 }
 ```
 
 ## Success Responses
 
-**Condition** : Admin can create users.
+**Condition** : Admin can create genres.
 
 **Code** : `201 CREATED`
 
@@ -31,10 +28,9 @@ Created user for admin only
 ```json
 {
     "success": true,
-    "message": "User has been created success",
+    "message": "Create genre has ben success",
     "data": {
-        "email": "dalbosd@lib.com",
-        "role_id": "2"
+        "name": "Action"
     }
 }
 ```
